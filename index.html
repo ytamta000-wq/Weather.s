@@ -197,7 +197,8 @@ function sunE() { const { sr, ss, n, t } = sunI(); let r; if (t >= 0 && t <= 1) 
 const SK = [[-1, [2, 3, 9], [5, 8, 20]], [-.2, [4, 6, 18], [20, 16, 40]], [-.05, [20, 22, 58], [110, 50, 60]], [.03, [55, 65, 125], [255, 125, 45]], [.2, [70, 125, 205], [255, 190, 125]], [.5, [50, 125, 215], [150, 205, 255]], [1, [35, 110, 220], [135, 200, 255]]];
 function sky(e) { e = clamp(e, -1, 1); let a = SK[0], b = SK[1]; for (let i = 1; i < SK.length; i++) if (e <= SK[i][0]) { a = SK[i - 1]; b = SK[i]; break; } const k = clamp((e - a[0]) / (b[0] - a[0]), 0, 1), m = (x, y) => x.map((v, j) => v + (y[j] - v) * k); return [m(a[1], b[1]), m(a[2], b[2])]; }
 const SYN = 29.530588853, NM = Date.UTC(2000, 0, 6, 18, 14), LUN = 24.84 * 36e5, phase = ms => (((ms - NM) / 864e5 / SYN) % 1 + 1) % 1;
-function moonI() { const { sr, ss, n } = sunI(), ph = phase(Date.now()), dl = ss - sr, mr = sr + ph * LUN; let dt = ((n - mr) % LUN + LUN) % LUN, t = dt / dl; if (t > 1) t = dt > dl + (LUN - dl) / 2 ? (dt - LUN) / dl : 1 + (dt - dl) / dl; return { ph, t, up: t >= 0 && t <= 1, mr, ms: mr + dl, ill: (1 - Math.cos(2 * Math.PI * ph)) / 2, south: place.lat < 0 }; }
+function moonI() { const { sr, ss, n } = sunI(), R = W.moon, ph = R && R.ph != null ? R.ph : phase(Date.now()); let dl = ss - sr, mr = sr + ph * LUN; let dt = ((n - mr) % LUN + LUN) % LUN, t = dt / dl; if (t > 1) t = dt > dl + (LUN - dl) / 2 ? (dt - LUN) / dl : 1 + (dt - dl) / dl; if (R && R.rise != null && R.set != null) { const D = 864e5, len = ((R.set - R.rise) % D + D) % D || D / 2, dd = ((n - R.rise) % D + D) % D; t = dd <= len ? dd / len : (dd - len < (D - len) / 2 ? 1 + (dd - len) / len : -(D - dd) / len); mr = R.rise; dl = len; }
+  return { ph, t, up: t >= 0 && t <= 1, mr, ms: mr + dl, real: !!(R && R.rise != null), ill: (1 - Math.cos(2 * Math.PI * ph)) / 2, south: place.lat < 0 }; }
 const MARIA = [[-.2, -.35, .26, .5], [.15, -.28, .17, .5], [.3, -.05, .2, .45], [.55, .1, .14, .4], [.66, -.24, .09, .5], [-.25, .35, .18, .4], [-.62, 0, .3, .42], [-.55, .3, .09, .4], [0, -.72, .2, .3]];
 function moonSprite(ph, S = 170) { /* real sphere shading: texture + terminator from phase */
   const c = document.createElement('canvas'); c.width = c.height = S; const x = c.getContext('2d'), im = x.createImageData(S, S), psi = 2 * Math.PI * ph, sn = Math.sin(psi), cs = Math.cos(psi), r = S / 2;
@@ -233,13 +234,17 @@ function drawSky() {
   $('sunS').textContent = up ? t('sUp').replace('{x}', dur(I.ss - n)) : n < I.sr ? t('sDn').replace('{x}', dur(I.sr - n)) : t('sSet').replace('{x}', dur(I.sr + 864e5 - n));
   $('sunK').innerHTML = K(t('rise'), hmm(I.sr)) + K(t('nn'), hmm((I.sr + I.ss) / 2)) + K(t('set'), hmm(I.ss)) + K(t('dl'), dur(I.ss - I.sr)) + K(t('gold'), hmm(I.ss - 36e5)) + K(t('nl'), dur(864e5 - (I.ss - I.sr)));
   scene($('sunC'), 'sun'); scene($('moonC'), 'moon');
-  const nm = t('phn')[Math.floor(((MI.ph + 1 / 16) % 1) * 8)], bc = $('moonB').getContext('2d'); bc.clearRect(0, 0, 190, 190);
+  const pi = p => p < .03 || p >= .97 ? 0 : p < .22 ? 1 : p < .28 ? 2 : p < .47 ? 3 : p < .53 ? 4 : p < .72 ? 5 : p < .78 ? 6 : 7, nm = t('phn')[pi(MI.ph)], bc = $('moonB').getContext('2d'); bc.clearRect(0, 0, 190, 190);
   const q = bc.createRadialGradient(95, 95, 40, 95, 95, 95); q.addColorStop(0, 'rgba(220,230,255,.25)'); q.addColorStop(1, 'rgba(220,230,255,0)'); bc.fillStyle = q; bc.fillRect(0, 0, 190, 190); putMoon(bc, MSP, 95, 95, 150, MI.south);
   $('moonS').textContent = `${nm} · ${Math.round(MI.ill * 100)}% ${t('lit')} · ${MI.up ? t('ab') : t('bl')}`;
   $('moonN').innerHTML = `<div style="font-size:1.25rem">${nm}</div><div class="sub">${t('age')} ${(MI.ph * SYN).toFixed(1)} d · ${MI.south ? 'S' : 'N'}</div>`;
-  $('moonK').innerHTML = K(t('mr'), hmm(MI.mr)) + K(t('lit'), Math.round(MI.ill * 100) + '%') + K(t('ms'), hmm(MI.ms)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
+  $('moonK').innerHTML = K(MI.real ? t('mr').replace(' ≈', '') : t('mr'), hmm(MI.mr)) + K(t('lit'), Math.round(MI.ill * 100) + '%') + K(MI.real ? t('ms').replace(' ≈', '') : t('ms'), hmm(MI.ms)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
 }
 setInterval(() => { if (W) drawSky(); }, 30000);
+async function moonReal() {
+  try { const w = W.w, off = w.utc_offset_seconds, a = Math.abs(off), j = await getJSON(`https://api.met.no/weatherapi/sunrise/3.0/moon?lat=${place.lat.toFixed(3)}&lon=${place.lon.toFixed(3)}&date=${w.current.time.slice(0, 10)}&offset=${off < 0 ? '-' : '+'}${pad(Math.floor(a / 3600))}:${pad(Math.floor(a % 3600 / 60))}`), p = j.properties, ms = x => x && x.time ? Date.parse(x.time) + off * 1000 : null;
+    W.moon = { rise: ms(p.moonrise), set: ms(p.moonset), ph: p.moonphase != null ? p.moonphase / 360 : null }; drawSky(); } catch (e) { }
+}
 
 /* weather state -> particles */
 function setFx() {
@@ -346,7 +351,7 @@ function render() {
   tips(w, q, d, i);
   $('hourly').innerHTML = Array.from({ length: 24 }, (_, j) => i + j).map(n => `<div class="hr"><div class="sub">${hourLabel(w.hourly.time[n])}</div>${icon(w.hourly.weather_code[n], w.hourly.is_day[n])}<div style="color:${tc(w.hourly.temperature_2m[n])}">${Math.round(w.hourly.temperature_2m[n])}°</div><div class="sub">${w.hourly.precipitation_probability[n]}%</div></div>`).join('');
   $('daily').innerHTML = Array.from({ length: 7 }, (_, j) => d + j).map(n => `<div class="dy"><span>${dayLabel(w.daily.time[n])}</span>${icon(w.daily.weather_code[n], 1)}<span class="sub">${w.daily.precipitation_probability_max[n]}%</span><span><b style="font-weight:500;color:${tc(w.daily.temperature_2m_max[n])}">${Math.round(w.daily.temperature_2m_max[n])}°</b> / <span style="color:${tc(w.daily.temperature_2m_min[n])}">${Math.round(w.daily.temperature_2m_min[n])}°</span></span></div>`).join('');
-  $('cmpOut').innerHTML = ''; drawDash(RANGE); drawSky(); radar();
+  $('cmpOut').innerHTML = ''; drawDash(RANGE); drawSky(); radar(); moonReal();
 }
 function tips(w, q, d, i) {
   const c = w.current, h = w.hourly, k = kind(c.weather_code), tp = c.temperature_2m, fl = c.apparent_temperature, hu = c.relative_humidity_2m, wi = c.wind_speed_10m, gu = c.wind_gusts_10m || wi, uv = h.uv_index[i] || 0, uvm = w.daily.uv_index_max[d], vis = (h.visibility[i] || 1e5) / 1000;
