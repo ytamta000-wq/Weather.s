@@ -84,6 +84,26 @@ html:not([data-th=white]) .base{filter:invert(1) hue-rotate(180deg) brightness(.
 [data-th=white] .tip,[data-th=white] #sug{background:#fff;color:#0f1420;border-color:rgba(0,0,0,.15)}
 [data-th=white] .g{color:#119953}[data-th=white] .r{color:#d63a3a}
 [data-th=white] .up{box-shadow:0 22px 50px rgba(0,0,0,.22)}
+
+*{-webkit-tap-highlight-color:transparent}
+body{touch-action:manipulation}
+button,select,input,.win,.grid div,.kpis div,.tp,.cb,canvas,svg{outline:0}
+button:focus,select:focus{outline:0}
+.win,.grid div,.kpis div,.tp,.tabs button,.ic2,.brand{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input{-webkit-user-select:text;user-select:text}
+::selection{background:rgba(150,150,150,.35)}
+#thw{position:relative}
+.ic2{width:40px;height:40px;padding:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.18);display:grid;place-items:center}
+.ic2 svg{width:22px;height:22px;display:block}
+.ic2.on{background:#fff;color:#000}
+#thp{position:absolute;right:0;top:48px;z-index:60;display:none;gap:8px;padding:8px;border-radius:999px;background:rgba(14,14,14,.96);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 40px rgba(0,0,0,.5)}
+#thp.open{display:flex}
+[data-th=white] .ic2{background:rgba(0,0,0,.06);color:#0f1420;border-color:rgba(0,0,0,.15)}
+[data-th=white] .ic2.on{background:#0f1420;color:#fff}
+[data-th=white] #thp{background:#fff;border-color:rgba(0,0,0,.14);box-shadow:0 14px 40px rgba(0,0,0,.18)}
+.vz{position:relative;overflow:hidden}
+.vzc{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.vzi{position:relative;z-index:1}
 </style>
 </head>
 <body>
@@ -91,7 +111,7 @@ html:not([data-th=white]) .base{filter:invert(1) hue-rotate(180deg) brightness(.
 <div class="wrap">
   <div class="win row" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
   <div id="sug"></div>
-  <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><select id="theme"></select><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option></select></div></div>
+  <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option></select></div></div>
   <div id="msg" class="sub"></div>
   <main id="app" hidden>
     <section class="win" id="aqi"></section>
@@ -234,11 +254,11 @@ function drawSky() {
   $('sunS').textContent = up ? t('sUp').replace('{x}', dur(I.ss - n)) : n < I.sr ? t('sDn').replace('{x}', dur(I.sr - n)) : t('sSet').replace('{x}', dur(I.sr + 864e5 - n));
   $('sunK').innerHTML = K(t('rise'), hmm(I.sr)) + K(t('nn'), hmm((I.sr + I.ss) / 2)) + K(t('set'), hmm(I.ss)) + K(t('dl'), dur(I.ss - I.sr)) + K(t('gold'), hmm(I.ss - 36e5)) + K(t('nl'), dur(864e5 - (I.ss - I.sr)));
   scene($('sunC'), 'sun'); scene($('moonC'), 'moon');
-  const pi = p => p < .03 || p >= .97 ? 0 : p < .22 ? 1 : p < .28 ? 2 : p < .47 ? 3 : p < .53 ? 4 : p < .72 ? 5 : p < .78 ? 6 : 7, nm = t('phn')[pi(MI.ph)], bc = $('moonB').getContext('2d'); bc.clearRect(0, 0, 190, 190);
+  const pi = p => p < .02 || p >= .98 ? 0 : p < .23 ? 1 : p < .27 ? 2 : p < .48 ? 3 : p < .52 ? 4 : p < .73 ? 5 : p < .77 ? 6 : 7, nm = t('phn')[pi(MI.ph)], bc = $('moonB').getContext('2d'); bc.clearRect(0, 0, 190, 190);
   const q = bc.createRadialGradient(95, 95, 40, 95, 95, 95); q.addColorStop(0, 'rgba(220,230,255,.25)'); q.addColorStop(1, 'rgba(220,230,255,0)'); bc.fillStyle = q; bc.fillRect(0, 0, 190, 190); putMoon(bc, MSP, 95, 95, 150, MI.south);
   $('moonS').textContent = `${nm} · ${Math.round(MI.ill * 100)}% ${t('lit')} · ${MI.up ? t('ab') : t('bl')}`;
   $('moonN').innerHTML = `<div style="font-size:1.25rem">${nm}</div><div class="sub">${t('age')} ${(MI.ph * SYN).toFixed(1)} d · ${MI.south ? 'S' : 'N'}</div>`;
-  $('moonK').innerHTML = K(MI.real ? t('mr').replace(' ≈', '') : t('mr'), hmm(MI.mr)) + K(t('lit'), Math.round(MI.ill * 100) + '%') + K(MI.real ? t('ms').replace(' ≈', '') : t('ms'), hmm(MI.ms)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
+  $('moonK').innerHTML = K(MI.real ? t('mr').replace(' ≈', '') : t('mr'), hmm(MI.mr)) + K(t('ill'), Math.round(MI.ill * 100) + '%') + K(MI.real ? t('ms').replace(' ≈', '') : t('ms'), hmm(MI.ms)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
 }
 setInterval(() => { if (W) drawSky(); }, 30000);
 async function moonReal() {
@@ -400,8 +420,8 @@ async function series(n) {
   const h = W.big.hourly; let i = h.time.findIndex(x => x.startsWith(key)); if (i < 0) i = h.time.length - 1;
   const sl = (k, a, b) => h[k].slice(a, b).map(v => v == null ? 0 : v), sm = a => a.reduce((x, y) => x + y, 0);
   if (n === 1) { const a = Math.max(i - 23, 0); return { lb: h.time.slice(a, i + 1).map(x => x.slice(11, 16)), hi: sl('temperature_2m', a, i + 1), lo: null, rain: sl('precipitation', a, i + 1), snow: sl('snowfall', a, i + 1), wind: sl('wind_speed_10m', a, i + 1), pr: sl('pressure_msl', a, i + 1) }; }
-  const e = Math.floor(i / 24), o = { lb: [], hi: [], lo: [], rain: [], snow: [], wind: [], pr: [] };
-  for (let d = Math.max(e - n + 1, 0); d <= e; d++) { const a = d * 24, b = Math.min(a + 24, i + 1), tt = sl('temperature_2m', a, b), P = sl('pressure_msl', a, b); o.lb.push(h.time[a].slice(5)); o.hi.push(Math.max(...tt)); o.lo.push(Math.min(...tt)); o.rain.push(sm(sl('precipitation', a, b))); o.snow.push(sm(sl('snowfall', a, b))); o.wind.push(Math.max(...sl('wind_speed_10m', a, b))); o.pr.push(sm(P) / P.length); }
+  const MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], e = Math.floor(i / 24), o = { lb: [], hi: [], lo: [], rain: [], snow: [], wind: [], pr: [] };
+  for (let d = Math.max(e - n + 1, 0); d <= e; d++) { const a = d * 24, b = Math.min(a + 24, i + 1), tt = sl('temperature_2m', a, b), P = sl('pressure_msl', a, b); o.lb.push(+h.time[a].slice(8, 10) + ' ' + MN[+h.time[a].slice(5, 7) - 1]); o.hi.push(Math.max(...tt)); o.lo.push(Math.min(...tt)); o.rain.push(sm(sl('precipitation', a, b))); o.snow.push(sm(sl('snowfall', a, b))); o.wind.push(Math.max(...sl('wind_speed_10m', a, b))); o.pr.push(sm(P) / P.length); }
   return o;
 }
 function chart(box, lb, ser, type, u, m0) {
@@ -425,14 +445,77 @@ async function drawDash(n) {
   try {
     const S = await series(n), lo = S.lo || S.hi, sm = a => a.reduce((x, y) => x + y, 0), mean = (sm(S.hi) + sm(lo)) / (S.hi.length * 2), mxT = Math.max(...S.hi), mnT = Math.min(...lo), tr = sm(S.rain), ts = sm(S.snow), rd = S.rain.filter(x => x > (n === 1 ? .1 : 1)).length;
     const kp = [[t('kavg'), Math.round(mean) + '°', tc(mean)], [t('kmax'), Math.round(mxT) + '°', tc(mxT)], [t('kmin'), Math.round(mnT) + '°', tc(mnT)], [t('ktr'), tr.toFixed(1) + ' mm', '', rd + ' ' + (n === 1 ? t('rdh') : t('rdd'))], [t('kts'), ts.toFixed(1) + ' cm'], [t('kw'), Math.round(Math.max(...S.wind)) + ' km/h']];
-    const win = (id, ti, de, ex = '') => `<section class="win"><h3>${ti}</h3><div class="sub">${de || ''}</div>${ex}<div class="cb" id="${id}"></div></section>`, pos = clamp((mean + 40) / 82, 0, 1) * 98;
+    const win = (id, ti, de, ex = '', vk = '') => `<section class="win vz"><canvas class="vzc" data-k="${vk}"></canvas><div class="vzi"><h3>${ti}</h3><div class="sub">${de || ''}</div>${ex}<div class="cb" id="${id}"></div></div></section>`, pos = clamp((mean + 40) / 82, 0, 1) * 98;
     o.innerHTML = `<section class="win"><div class="kpis">${kp.map(x => `<div><small>${x[0]}</small><b style="color:${x[2] || 'inherit'}">${x[1]}</b>${x[3] ? `<small>${x[3]}</small>` : ''}</div>`).join('')}</div></section>`
-      + win('c1', t('cT'), t('cTd'), `<div class="tbar" style="background:${TG}"><i style="left:${pos}%"></i></div>`) + win('c2', t('cR'), tr > 0 ? tr.toFixed(1) + ' mm' : t('noRain')) + win('c4', t('snow'), ts > 0 ? ts.toFixed(1) + ' cm' : t('noSnow')) + win('c3', t('cW'), 'km/h') + win('c5', t('press'), Math.round(S.pr[S.pr.length - 1]) + ' hPa');
+      + win('c1', t('cT'), t('cTd'), `<div class="tbar" style="background:${TG}"><i style="left:${pos}%"></i></div>`, 'temp') + win('c2', t('cR'), tr > 0 ? tr.toFixed(1) + ' mm' : t('noRain'), '', 'rain') + win('c4', t('snow'), ts > 0 ? ts.toFixed(1) + ' cm' : t('noSnow'), '', 'snow') + win('c3', t('cW'), 'km/h', '', 'wind') + win('c5', t('press'), Math.round(S.pr[S.pr.length - 1]) + ' hPa', '', 'press');
+    VZD = { tc: tc(mean), mean, wind: Math.max(...S.wind) }; vzInit();
     chart($('c1'), S.lb, S.lo ? [{ d: S.hi, cf: tc, n: t('hi') }, { d: S.lo, cf: tc, n: t('lo') }] : [{ d: S.hi, cf: tc, n: t('temp') }], 'band', '°', 3);
     chart($('c2'), S.lb, [{ d: S.rain, c: '#2f8bff' }], 'bar', ' mm', n === 1 ? 1 : 5); chart($('c4'), S.lb, [{ d: S.snow, c: '#8fc4ff' }], 'bar', ' cm', n === 1 ? 1 : 5);
     chart($('c3'), S.lb, [{ d: S.wind, c: '#2fd6a8' }], 'band', ' km/h', 6); chart($('c5'), S.lb, [{ d: S.pr, c: '#a17cff' }], 'band', ' hPa', 4);
   } catch (e) { o.innerHTML = `<div class="win err">${e.message}</div>`; }
 }
+/* ---------- live backgrounds inside the dashboard cards ---------- */
+let VZD = { tc: 'rgb(250,150,60)', mean: 25, wind: 10 };
+const VZ = new Set(), VIS = new WeakSet(), vio = window.IntersectionObserver ? new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? VIS.add(e.target) : VIS.delete(e.target)), { rootMargin: '120px' }) : null;
+const ca = (c, a) => c.replace('rgb(', 'rgba(').replace(')', ',' + a + ')');
+function vzInit() { VZ.forEach(c => { if (!c.isConnected) { VZ.delete(c); vio && vio.unobserve(c); } }); document.querySelectorAll('.vzc').forEach(c => { c.__s = null; VZ.add(c); if (vio) vio.observe(c); else VIS.add(c); }); }
+function vzMake(k, w, h) {
+  const R = Math.random, a = [];
+  if (k === 'rain') { const n = Math.min(280, Math.round(w * h / 420)); for (let i = 0; i < n; i++) { const far = i % 3 === 0; a.push({ x: R() * (w + 80), y: R() * h, v: far ? 9 + R() * 4 : 17 + R() * 9, l: far ? 7 + R() * 7 : 14 + R() * 14, al: far ? .18 + R() * .1 : .36 + R() * .3, lw: far ? .8 : 1.4 }); } }
+  else if (k === 'snow') { const n = Math.min(80, Math.round(w * h / 1900)); for (let i = 0; i < n; i++) a.push({ x: R() * w, y: R() * h, v: .5 + R() * 1.1, r: 1 + R() * 2.3, ph: R() * 7, rot: R() * 7, al: .55 + R() * .4 }); }
+  else if (k === 'temp') { for (let i = 0; i < 28; i++) a.push({ x: R() * w, y: R() * h, v: .15 + R() * .45, r: 4 + R() * 13, al: .04 + R() * .09, ph: R() * 7 }); }
+  return { w, h, a, rip: [], wt: 0 };
+}
+function vzDraw(c, ms, dt) {
+  const dpr = Math.min(devicePixelRatio || 1, 2), w = c.clientWidth, h = c.clientHeight; if (!w || !h) return;
+  let S = c.__s; if (!S || S.w !== w || S.h !== h) { c.width = w * dpr; c.height = h * dpr; S = c.__s = vzMake(c.dataset.k, w, h); }
+  const x = c.getContext('2d'), k = c.dataset.k, lt = TH === 'white'; x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
+  let g;
+  if (k === 'rain') { /* always heavy rain, whatever the data says */
+    g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, lt ? 'rgba(70,95,140,.18)' : 'rgba(60,85,125,.30)'); g.addColorStop(.5, 'rgba(0,0,0,0)'); g.addColorStop(1, lt ? 'rgba(40,110,210,.14)' : 'rgba(60,140,255,.16)'); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    const col = lt ? '35,90,190' : '170,208,255', sl = -.22;
+    S.a.forEach(p => {
+      x.strokeStyle = `rgba(${col},${p.al})`; x.lineWidth = p.lw; x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(p.x + sl * p.l, p.y + p.l); x.stroke();
+      p.y += p.v * dt; p.x += sl * p.v * dt;
+      if (p.y > h) { if (p.v > 15 && S.rip.length < 22 && Math.random() < .35) S.rip.push({ x: p.x, y: h - 3 - Math.random() * 18, r: 1, a: .5 }); p.y = -p.l; p.x = Math.random() * (w + 80); }
+    });
+    S.rip = S.rip.filter(q => q.a > .02); x.lineWidth = 1; S.rip.forEach(q => { x.strokeStyle = `rgba(${col},${q.a})`; x.beginPath(); x.ellipse(q.x, q.y, q.r, q.r * .35, 0, 0, 7); x.stroke(); q.r += .5 * dt; q.a *= Math.pow(.94, dt); });
+  } else if (k === 'snow') { /* snowflakes */
+    g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, lt ? 'rgba(120,150,190,.14)' : 'rgba(150,170,200,.12)'); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    const col = lt ? '100,135,185' : '255,255,255';
+    S.a.forEach(p => {
+      const px = p.x + Math.sin(ms / 1100 + p.ph) * 14;
+      x.fillStyle = `rgba(${col},${p.al * .14})`; x.beginPath(); x.arc(px, p.y, p.r * 2.4, 0, 7); x.fill();
+      if (p.r > 2) { x.strokeStyle = `rgba(${col},${p.al})`; x.lineWidth = 1; const L2 = p.r * 2.1; x.beginPath(); for (let j = 0; j < 3; j++) { const an = p.rot + j * Math.PI / 3; x.moveTo(px - Math.cos(an) * L2, p.y - Math.sin(an) * L2); x.lineTo(px + Math.cos(an) * L2, p.y + Math.sin(an) * L2); } x.stroke(); }
+      else { x.fillStyle = `rgba(${col},${p.al})`; x.beginPath(); x.arc(px, p.y, p.r, 0, 7); x.fill(); }
+      p.y += p.v * dt; p.rot += .01 * dt; if (p.y > h + 6) { p.y = -6; p.x = Math.random() * w; }
+    });
+    x.fillStyle = lt ? 'rgba(190,210,235,.55)' : 'rgba(235,242,255,.28)'; x.beginPath(); x.moveTo(0, h); for (let i = 0; i <= w; i += 8) x.lineTo(i, h - 7 - 3 * Math.sin(i * .03) - 2 * Math.sin(i * .09 + 1)); x.lineTo(w, h); x.fill();
+  } else if (k === 'wind') { /* curved, flowing wave lines */
+    const sp = .5 + clamp(VZD.wind, 0, 70) / 35, col = lt ? '0,140,110' : '47,214,168', n = 8; S.wt += .012 * sp * dt; x.lineCap = 'round';
+    for (let i = 0; i < n; i++) {
+      const by = h * (.1 + .8 * i / (n - 1)), A = 10 + 14 * ((i * 37) % 7) / 7, f1 = .012 + (i % 3) * .004, f2 = .031 + (i % 4) * .006, ph = i * 1.7, sd = 1 + (i % 3) * .3;
+      x.beginPath(); for (let px = -4; px <= w + 4; px += 5) { const yy = by + A * Math.sin(px * f1 - S.wt * sd + ph) + A * .45 * Math.sin(px * f2 - S.wt * 1.7 * sd + ph * 2); px === -4 ? x.moveTo(px, yy) : x.lineTo(px, yy); }
+      x.setLineDash([]); x.strokeStyle = `rgba(${col},.10)`; x.lineWidth = 1.2; x.stroke();
+      x.setLineDash([70 + (i % 3) * 30, 90 + (i % 2) * 40]); x.lineDashOffset = -ms * .05 * sp * sd; x.strokeStyle = `rgba(${col},${.28 + (i % 3) * .07})`; x.lineWidth = 1.8; x.stroke();
+    }
+    x.setLineDash([]);
+  } else if (k === 'temp') { /* glow in the temperature colour, warm bokeh or frost sparkles */
+    const c0 = VZD.tc, cold = VZD.mean <= 8;
+    g = x.createRadialGradient(w * .5, h * 1.05, 10, w * .5, h * 1.05, Math.max(w, h) * .9); g.addColorStop(0, ca(c0, .30)); g.addColorStop(1, ca(c0, 0)); x.fillStyle = g; x.fillRect(0, 0, w, h);
+    S.a.forEach(p => {
+      if (cold) { const tw = .2 + .8 * Math.abs(Math.sin(ms / 600 + p.ph)), z = 1 + p.r / 8; x.strokeStyle = `rgba(${lt ? '70,120,190' : '215,238,255'},${tw * .8})`; x.lineWidth = 1; x.beginPath(); x.moveTo(p.x - z, p.y); x.lineTo(p.x + z, p.y); x.moveTo(p.x, p.y - z); x.lineTo(p.x, p.y + z); x.stroke(); }
+      else { x.fillStyle = ca(c0, p.al); x.beginPath(); x.arc(p.x + Math.sin(ms / 2500 + p.ph) * 8, p.y, p.r, 0, 7); x.fill(); x.strokeStyle = ca(c0, p.al * 1.8); x.lineWidth = 1; x.stroke(); p.y -= p.v * dt; if (p.y < -p.r) { p.y = h + p.r; p.x = Math.random() * w; } }
+    });
+  } else if (k === 'press') { /* slow breathing isobars */
+    const col = lt ? '104,70,210' : '161,124,255', cx = w * .72 + Math.sin(ms / 9000) * 18, cy = h * .5 + Math.cos(ms / 11000) * 12, tt = ms / 1000;
+    g = x.createRadialGradient(cx, cy, 0, cx, cy, 90); g.addColorStop(0, `rgba(${col},.22)`); g.addColorStop(1, `rgba(${col},0)`); x.fillStyle = g; x.fillRect(0, 0, w, h); x.lineWidth = 1.2;
+    for (let r = 0; r < 7; r++) { const base = 26 + r * 30; x.strokeStyle = `rgba(${col},${.30 - r * .035})`; x.beginPath(); for (let j = 0; j <= 72; j++) { const th = j / 72 * 6.2832, rr = base * (1 + .07 * Math.sin(3 * th + tt * .35 + r) + .04 * Math.sin(5 * th - tt * .5 + r * 2)), px = cx + Math.cos(th) * rr * 1.35, py = cy + Math.sin(th) * rr * .8; j ? x.lineTo(px, py) : x.moveTo(px, py); } x.closePath(); x.stroke(); }
+  }
+}
+let vzLast = 0;
+(function vzLoop(ms) { requestAnimationFrame(vzLoop); const dt = clamp((ms - vzLast) / 16.67, .3, 3); vzLast = ms; if (document.hidden) return; VZ.forEach(c => { if (!c.isConnected) { VZ.delete(c); return; } if (VIS.has(c)) { if (RM) { if (!c.__s) vzDraw(c, ms, 0); } else vzDraw(c, ms, dt); } }); })(0);
+
 /* ---------- radar ---------- */
 let MAP = null, RL = null, MK = null;
 async function radar() {
@@ -468,8 +551,21 @@ $('go').onclick = () => { const v = $('q').value.trim(); if (v) load(v); };
 $('q').onkeydown = e => { if (e.key === 'Enter') $('go').click(); };
 $('cmpb').onclick = compare; $('q2').onkeydown = e => { if (e.key === 'Enter') compare(); };
 $('lang').onchange = e => { L = e.target.value; try { localStorage.setItem('lang', L); } catch (x) { } applyLang(); };
-function buildTheme() { const s = $('theme'); s.innerHTML = t('th').map((n, i) => `<option value="${['dots', 'white', 'green', 'sky'][i]}">${n}</option>`).join(''); s.value = TH; }
-$('theme').onchange = e => { TH = e.target.value; document.documentElement.dataset.th = TH; try { localStorage.setItem('theme', TH); } catch (x) { } };
+const THK = ['dots', 'white', 'green', 'sky'], SV = (b, f = 'none') => `<svg viewBox="0 0 24 24" fill="${f}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${b}</svg>`;
+const THI = {
+  dots: SV('<g fill="currentColor" stroke="none"><circle cx="6" cy="6" r="1.7"/><circle cx="12" cy="4.5" r="1.2"/><circle cx="18" cy="7" r="1.7"/><circle cx="4.5" cy="13" r="1.2"/><circle cx="12" cy="12" r="2.1"/><circle cx="19.5" cy="14" r="1.2"/><circle cx="8" cy="19.5" r="1.7"/><circle cx="16" cy="19" r="1.2"/></g>'),
+  white: SV('<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>'),
+  green: SV('<path d="M12 3l4.5 6.5h-2.8L17.5 15h-11l3.8-5.5H7.5z"/><path d="M12 15v6"/>'),
+  sky: SV('<circle cx="12" cy="14" r="4"/><path d="M12 4v2.5M4.6 8l1.8 1.6M19.4 8l-1.8 1.6M2 19h20"/>')
+};
+T.en.ill = 'Illumination'; T.hi.ill = 'रोशनी';
+function buildTheme() {
+  const nm = t('th'), i = THK.indexOf(TH); $('thb').innerHTML = THI[TH]; $('thb').setAttribute('aria-label', nm[i]); $('thb').title = nm[i];
+  $('thp').innerHTML = THK.map((k, j) => `<button class="ic2${k === TH ? ' on' : ''}" data-k="${k}" aria-label="${nm[j]}" title="${nm[j]}">${THI[k]}</button>`).join('');
+}
+$('thb').onclick = e => { e.stopPropagation(); $('thp').classList.toggle('open'); };
+$('thp').onclick = e => { const b = e.target.closest('button'); if (!b) return; TH = b.dataset.k; document.documentElement.dataset.th = TH; try { localStorage.setItem('theme', TH); } catch (x) { } buildTheme(); $('thp').classList.remove('open'); };
+document.addEventListener('click', e => { if (!e.target.closest('#thw')) $('thp').classList.remove('open'); });
 try { TH = localStorage.getItem('theme') || 'dots'; } catch (e) { } document.documentElement.dataset.th = TH;
 let tm; const sug = $('sug');
 function pick(r) { sug.innerHTML = ''; r.slice(0, 8).forEach(p => { const d = document.createElement('div'); d.innerHTML = `${p.name}<br><small>${p.sub || ''}</small>`; d.onclick = () => { sug.style.display = 'none'; $('q').value = p.name.split(',')[0]; load(p); }; sug.appendChild(d); }); sug.style.display = r.length ? 'block' : 'none'; }
