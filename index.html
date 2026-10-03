@@ -104,6 +104,61 @@ input{-webkit-user-select:text;user-select:text}
 .vz{position:relative;overflow:hidden}
 .vzc{position:absolute;left:0;top:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .vzi{position:relative;z-index:1}
+
+/* ===== v4 ===== */
+.tools{margin:4px 2px 0;gap:8px;flex-wrap:wrap}
+.seg2{display:inline-flex;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);padding:3px}
+.seg2 button{padding:7px 12px;background:transparent;color:inherit;border-radius:999px;font-size:.78rem;font-weight:600}
+.seg2 button.on{background:#fff;color:#000}
+#bell{margin-left:auto}
+.favs{display:none;gap:8px;overflow-x:auto;padding:10px 2px 2px}
+.chip{flex:none;display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);font-size:.82rem;font-weight:500}
+.chip.on{background:#fff;color:#000}
+.chip button{padding:0;background:transparent;color:inherit;border-radius:0;font-size:.82rem;font-weight:500}
+.chip .cx{margin-left:9px;opacity:.55;font-size:1rem;line-height:1}
+.ic3{width:34px;height:34px;padding:0;border-radius:50%;background:rgba(255,255,255,.08);color:inherit;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;font-size:16px;line-height:1}
+.ic3 svg{width:17px;height:17px;display:block}
+.ic3.on{color:#ffc83d}
+.spin svg{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#sug2{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;background:rgba(14,14,14,.97);border:1px solid rgba(255,255,255,.14);border-radius:20px;overflow:hidden;display:none}
+#sug2 div{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.08);cursor:pointer}#sug2 small{opacity:.55}
+#cmpW{position:relative;z-index:20}
+#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;background:#000;color:#fff;padding:11px 18px;border-radius:999px;font-size:.88rem;z-index:100;transition:.3s;pointer-events:none;max-width:90vw;text-align:center;border:1px solid rgba(255,255,255,.2)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.ncr{display:flex;gap:12px;align-items:center}.nci{font-size:2rem}.ncr b{font-size:1.05rem;font-weight:500}
+.ncb{display:flex;align-items:flex-end;gap:2px;height:44px;margin-top:12px}
+.ncb i{flex:1;display:block;background:rgba(255,255,255,.12);border-radius:2px}.ncb i.w{background:#4da3ff}
+.ncl{display:flex;justify-content:space-between;font-size:.7rem;opacity:.55;margin-top:4px}
+.als{margin-top:10px}.okw{margin-top:10px}
+.al{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:18px;margin-top:8px;border:1px solid}
+.al.lv1{background:rgba(255,170,40,.14);border-color:rgba(255,170,40,.45)}
+.al.lv2{background:rgba(255,70,70,.16);border-color:rgba(255,70,70,.5)}
+.al .ai{font-size:1.5rem;line-height:1.1}.al b{font-weight:600}
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.gc{text-align:center;min-width:0}.gc svg{width:100%;max-width:170px;height:auto;display:block;margin:0 auto}
+.gv{font-size:1.7rem;font-weight:300;margin-top:2px}.gv span{font-size:.85rem;opacity:.6}
+.arw,.ndl{transition:transform 1.3s cubic-bezier(.2,.9,.2,1)}
+.wob{animation:wob 2.6s ease-in-out infinite;transform-origin:80px 80px}
+@keyframes wob{0%,100%{transform:rotate(calc(var(--wa) * -1))}50%{transform:rotate(var(--wa))}}
+#pendC{width:100%;height:270px;display:block}
+.ck{text-align:center;font-size:2.8rem;font-weight:200;font-variant-numeric:tabular-nums;letter-spacing:.02em;line-height:1.1;cursor:pointer}
+.ck #ckS{color:#dcf56e}
+.ck small{display:inline;font-size:1rem;opacity:.7;margin-left:8px;letter-spacing:.1em}
+.ck .co{animation:blink 1s steps(2,start) infinite;opacity:.6}
+@keyframes blink{50%{opacity:.15}}
+[data-th=white] .ck #ckS{color:#3b7400}
+[data-th=white] #toast{background:#0f1420}
+[data-th=white] #sug2{background:#fff;color:#0f1420;border-color:rgba(0,0,0,.15)}
+[data-th=white] .ic3{background:rgba(0,0,0,.06);color:#0f1420;border-color:rgba(0,0,0,.14)}
+[data-th=white] .ic3.on{color:#d49200}
+[data-th=white] .seg2{border-color:rgba(0,0,0,.15);background:rgba(0,0,0,.04)}
+[data-th=white] .seg2 button{background:transparent;color:#0f1420}
+[data-th=white] .seg2 button.on{background:#0f1420;color:#fff}
+[data-th=white] .chip{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.12)}
+[data-th=white] .chip.on{background:#0f1420;color:#fff}
+[data-th=white] .chip button{background:transparent;color:inherit}
+[data-th=white] .ncb i{background:rgba(0,0,0,.1)}[data-th=white] .ncb i.w{background:#2f6fe0}
 </style>
 </head>
 <body>
@@ -112,17 +167,27 @@ input{-webkit-user-select:text;user-select:text}
   <div class="win row" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
   <div id="sug"></div>
   <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option></select></div></div>
+  <div class="tools row" id="tools"><div class="seg2" id="uT"><button data-u="C">°C</button><button data-u="F">°F</button></div><div class="seg2" id="uS"><button data-u="kmh">km/h</button><button data-u="mph">mph</button></div><button id="bell" class="ic2" aria-label="Alerts"></button></div>
+  <div class="favs" id="favs"></div>
   <div id="msg" class="sub"></div>
   <main id="app" hidden>
+    <section class="win" id="alrt"></section>
     <section class="win" id="aqi"></section>
     <section class="win" id="hero"></section>
     <section class="win">
       <div class="tabs" id="ftabs"><button class="on" data-v="hourly" data-i="hourly"></button><button data-v="daily" data-i="week"></button></div>
       <div class="strip" id="hourly"></div><div id="daily" hidden style="margin-top:10px"></div>
     </section>
-    <section class="win">
+    <section class="win" id="gaugeW"><h3 data-i="gauge"></h3><div class="gg"><div class="gc" id="cmpsC"></div><div class="gc" id="uvC"></div></div></section>
+    <section class="win" id="clkW">
+      <div class="row" style="justify-content:space-between"><h3 data-i="clk"></h3><span class="sub" id="ckZ"></span></div>
+      <canvas id="pendC"></canvas>
+      <div class="ck" id="ck"><span id="ckH"></span><span class="co">:</span><span id="ckM"></span><span class="co">:</span><span id="ckS"></span><small id="ckA"></small></div>
+      <div class="sub" style="text-align:center;margin-top:4px" id="ckD"></div>
+    </section>
+    <section class="win" id="cmpW">
       <h3 data-i="cmp"></h3>
-      <div class="row"><input id="q2" data-p="cph"><button id="cmpb" data-i="cbtn"></button></div>
+      <div class="row" style="position:relative"><input id="q2" data-p="cph" autocomplete="off"><button id="cmpb" data-i="cbtn"></button><div id="sug2"></div></div>
       <div id="cmpOut"></div>
     </section>
     <h3 style="margin:22px 4px 0" data-i="dash"></h3>
@@ -169,6 +234,29 @@ Object.assign(T.hi, { th: ['काले डॉट्स', 'सफ़ेद', '�
   radar: 'लाइव बारिश रडार', radarS: 'आपकी जगह के आसपास का ताज़ा रडार', rf: 'रडार अभी उपलब्ध नहीं है', dl: 'दिन की लंबाई', nn: 'सूर्य शिखर', gold: 'गोल्डन आवर', nl: 'रात की लंबाई', lit: 'रोशन', age: 'आयु', mr: 'चंद्रोदय ≈', ms: 'चंद्रास्त ≈', nf2: 'अगली पूर्णिमा', nn2: 'अगली अमावस्या', ab: 'क्षितिज के ऊपर', bl: 'क्षितिज के नीचे',
   sUp: 'सूरज निकला है · सूर्यास्त में {x}', sDn: 'सूर्योदय में {x}', sSet: 'सूरज डूब चुका · सूर्योदय में {x}', phn: ['अमावस्या', 'शुक्ल पक्ष की पतली कला', 'पहली तिमाही', 'बढ़ता चाँद', 'पूर्णिमा', 'घटता चाँद', 'आख़िरी तिमाही', 'कृष्ण पक्ष की पतली कला'],
   noSnow: 'इस अवधि में बर्फबारी नहीं', noRain: 'इस अवधि में बारिश नहीं', tipsD: 'आपकी जगह के अभी के मौसम के अनुसार', tt: ['कपड़े', 'बाहर और व्यायाम', 'ड्राइविंग और सफ़र', 'सेहत', 'धूप और त्वचा', 'खाना और पानी', 'हवा और साँस', 'घर और सुरक्षा', 'शाम और नींद'] });
+
+/* ===== v4: units, escaping, new texts ===== */
+const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+let U = { t: 'C', s: 'kmh' }; try { U = Object.assign(U, JSON.parse(localStorage.getItem('units')) || {}); } catch (e) { }
+const cT = c => U.t === 'F' ? c * 9 / 5 + 32 : c, cS = k => U.s === 'mph' ? k * 0.621371 : k, uS = () => U.s === 'mph' ? 'mph' : 'km/h';
+const dT = c => Math.round(cT(c)) + '°', dTu = c => dT(c) + U.t, dD = d => Math.round(U.t === 'F' ? d * 1.8 : d) + '°', sp1 = k => U.s === 'mph' ? (k * 0.621371).toFixed(1) : k;
+Object.assign(T.en, { updNow: 'Updated just now', updAgo: 'Updated {n} min ago', mn: 'min', hh: 'h', now: 'Now',
+  ncStart: 'Rain starts in {x}', ncNow: 'Rain is starting now', ncEnd: 'Rain ends in about {x}', ncLong: 'Rain continues for the next 6 hours', ncNone: 'No rain in the next 6 hours', ncSub: 'next 6 hours, 15-minute data',
+  lv: { light: 'Light rain', moderate: 'Moderate rain', heavy: 'Heavy rain' }, noWarn: 'No weather warnings right now',
+  gauge: 'Wind & UV', from: 'From {d}', uvMax: 'Max today {v}', clk: 'Local time', lt: 'Local time',
+  bf: ['Calm', 'Light air', 'Light breeze', 'Gentle breeze', 'Moderate breeze', 'Fresh breeze', 'Strong breeze', 'Near gale', 'Gale', 'Strong gale', 'Storm', 'Violent storm', 'Hurricane'],
+  uvl: ['Low', 'Moderate', 'High', 'Very high', 'Extreme'], uva: ['No protection needed', 'Sunglasses; SPF 30 if out for long', 'SPF 30+, hat, shade at noon', 'SPF 50, cover up, avoid 11 am to 4 pm', 'Stay in at midday, full protection'],
+  nOn: 'Alerts are on', nOff: 'Alerts are off', nBlock: 'Notifications are blocked. Allow them in your browser settings.', nSup: 'This browser does not support notifications', nTitle: 'Weather∞ alerts are on', nBody: 'You will get rain and weather warnings while this site is open.', nOnTip: 'Turn on alerts', nOffTip: 'Turn off alerts',
+  shSaved: 'Image saved. Send it on WhatsApp.', favOn: 'City saved', favOff: 'City removed', refFail: 'Could not refresh. Check your internet.' });
+Object.assign(T.hi, { updNow: 'अभी अपडेट हुआ', updAgo: '{n} मिनट पहले अपडेट हुआ', mn: 'मिनट', hh: 'घंटे', now: 'अभी',
+  ncStart: 'बारिश {x} में शुरू होगी', ncNow: 'बारिश अभी शुरू हो रही है', ncEnd: 'बारिश लगभग {x} में रुकेगी', ncLong: 'अगले 6 घंटे बारिश जारी रहेगी', ncNone: 'अगले 6 घंटे बारिश नहीं', ncSub: 'अगले 6 घंटे, 15 मिनट का डेटा',
+  lv: { light: 'हल्की बारिश', moderate: 'मध्यम बारिश', heavy: 'भारी बारिश' }, noWarn: 'अभी कोई मौसम चेतावनी नहीं',
+  gauge: 'हवा और UV', from: '{d} से', uvMax: 'आज अधिकतम {v}', clk: 'स्थानीय समय', lt: 'स्थानीय समय',
+  bf: ['शांत', 'हल्की हवा', 'हल्का झोंका', 'मंद हवा', 'मध्यम हवा', 'ताज़ी हवा', 'तेज़ हवा', 'अति तेज़ हवा', 'आँधी', 'तेज़ आँधी', 'तूफ़ान', 'भीषण तूफ़ान', 'चक्रवात'],
+  uvl: ['कम', 'मध्यम', 'ज़्यादा', 'बहुत ज़्यादा', 'अत्यधिक'], uva: ['बचाव की ज़रूरत नहीं', 'धूप का चश्मा; ज़्यादा देर बाहर हों तो SPF 30', 'SPF 30+, टोपी, दोपहर में छाँव', 'SPF 50, ढके कपड़े, 11 से 4 बजे तक बचें', 'दोपहर में घर के अंदर, पूरा बचाव'],
+  nOn: 'अलर्ट चालू हैं', nOff: 'अलर्ट बंद हैं', nBlock: 'नोटिफिकेशन बंद हैं। ब्राउज़र सेटिंग में इन्हें चालू करें।', nSup: 'यह ब्राउज़र नोटिफिकेशन सपोर्ट नहीं करता', nTitle: 'Weather∞ अलर्ट चालू हैं', nBody: 'साइट खुली रहने तक आपको बारिश और मौसम की चेतावनी मिलेगी।', nOnTip: 'अलर्ट चालू करें', nOffTip: 'अलर्ट बंद करें',
+  shSaved: 'इमेज सेव हो गई। इसे WhatsApp पर भेजें।', favOn: 'शहर सेव हुआ', favOff: 'शहर हटाया गया', refFail: 'रिफ्रेश नहीं हो सका। इंटरनेट जाँचें।' });
+const tcU = v => tc(U.t === 'F' ? (v - 32) * 5 / 9 : v);
 
 async function getJSON(u) { const r = await fetch(u); if (!r.ok) throw new Error('Server error ' + r.status); return r.json(); }
 const TS = [[-40, [110, 80, 255]], [-20, [60, 130, 255]], [0, [70, 200, 235]], [12, [90, 220, 140]], [22, [235, 220, 70]], [32, [250, 150, 60]], [42, [240, 70, 60]]], rg = a => `rgb(${a.map(Math.round)})`;
@@ -343,7 +431,7 @@ async function find(q) {
 }
 async function findCity(q) { const r = await find(q); if (!r.length) throw new Error(t('nf')); return r[0]; }
 async function getWeather(p) {
-  const f = getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover&hourly=temperature_2m,weather_code,precipitation_probability,is_day,dew_point_2m,visibility,uv_index&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto&past_days=1&forecast_days=8`);
+  const f = getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability,is_day,dew_point_2m,visibility,uv_index,precipitation,wind_gusts_10m,apparent_temperature,snowfall&minutely_15=precipitation&forecast_minutely_15=24&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto&past_days=1&forecast_days=8`);
   const a = getJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${p.lat}&longitude=${p.lon}&current=us_aqi,pm2_5,pm10`).catch(() => null);
   const [w, q] = await Promise.all([f, a]); return { w, q };
 }
@@ -351,7 +439,7 @@ const hourNow = w => w.hourly.time.findIndex(x => x.startsWith(w.current.time.sl
 const todayIdx = w => w.daily.time.indexOf(w.current.time.slice(0, 10));
 
 /* ---------- render ---------- */
-function render() {
+function render(soft) {
   const { w, q } = W, c = w.current, i = hourNow(w), d = todayIdx(w), k = kind(c.weather_code), tp = Math.round(c.temperature_2m);
   if (q && q.current && q.current.us_aqi != null) {
     const v = q.current.us_aqi, [col, tx] = aqiInfo(v);
@@ -364,14 +452,16 @@ function render() {
   }
   setFx(k, c.is_day, f);
   const rp = w.daily.precipitation_probability_max[d];
-  $('hero').innerHTML = `<div class="city">${place.name}</div><div class="hero"><div class="big" style="color:${tc(tp)}">${tp}°</div><div class="right">${icon(c.weather_code, c.is_day)}${t('c')[k]}<div class="sub">${fmtDate(c.time)} · ${c.time.slice(11)}</div></div></div><div class="grid">${[
-    [t('feels'), Math.round(c.apparent_temperature) + '°C'], [t('hum'), c.relative_humidity_2m + '%'], [t('wind'), c.wind_speed_10m + ' km/h'], [t('press'), Math.round(c.pressure_msl) + ' hPa'],
-    [t('pop'), rp + '%'], [t('uv'), w.daily.uv_index_max[d]], [t('rise'), w.daily.sunrise[d].slice(11)], [t('set'), w.daily.sunset[d].slice(11)], [t('gust'), Math.round(c.wind_gusts_10m) + ' km/h'], [t('rn'), c.rain + ' mm'], [t('sn'), c.snowfall + ' cm'], [t('cl'), c.cloud_cover + '%'], [t('dew'), Math.round(w.hourly.dew_point_2m[i]) + '°C'], [t('vis'), (w.hourly.visibility[i] / 1000).toFixed(1) + ' km']
+  $('hero').innerHTML = `<div class="row" style="justify-content:space-between"><div class="city">${place.name}</div><div class="row" style="gap:6px"><button class="ic3" id="star" aria-label="Save city">☆</button><button class="ic3" id="shareb" aria-label="Share">${SHARE_IC}</button><button class="ic3" id="refb" aria-label="Refresh">${REF_IC}</button></div></div><div class="sub" id="updT" style="margin:-2px 0 8px"></div><div class="hero"><div class="big" style="color:${tc(tp)}">${dT(c.temperature_2m)}</div><div class="right">${icon(c.weather_code, c.is_day)}${t('c')[k]}<div class="sub">${fmtDate(c.time)} · ${c.time.slice(11)}</div></div></div><div class="grid">${[
+    [t('feels'), dTu(c.apparent_temperature)], [t('hum'), c.relative_humidity_2m + '%'], [t('wind'), sp1(c.wind_speed_10m) + ' ' + uS()], [t('press'), Math.round(c.pressure_msl) + ' hPa'],
+    [t('pop'), rp + '%'], [t('uv'), w.daily.uv_index_max[d]], [t('rise'), w.daily.sunrise[d].slice(11)], [t('set'), w.daily.sunset[d].slice(11)], [t('gust'), Math.round(cS(c.wind_gusts_10m)) + ' ' + uS()], [t('rn'), c.rain + ' mm'], [t('sn'), c.snowfall + ' cm'], [t('cl'), c.cloud_cover + '%'], [t('dew'), dTu(w.hourly.dew_point_2m[i])], [t('vis'), (w.hourly.visibility[i] / 1000).toFixed(1) + ' km']
   ].map(x => `<div><small>${x[0]}</small>${x[1]}</div>`).join('')}</div>`;
   tips(w, q, d, i);
-  $('hourly').innerHTML = Array.from({ length: 24 }, (_, j) => i + j).map(n => `<div class="hr"><div class="sub">${hourLabel(w.hourly.time[n])}</div>${icon(w.hourly.weather_code[n], w.hourly.is_day[n])}<div style="color:${tc(w.hourly.temperature_2m[n])}">${Math.round(w.hourly.temperature_2m[n])}°</div><div class="sub">${w.hourly.precipitation_probability[n]}%</div></div>`).join('');
-  $('daily').innerHTML = Array.from({ length: 7 }, (_, j) => d + j).map(n => `<div class="dy"><span>${dayLabel(w.daily.time[n])}</span>${icon(w.daily.weather_code[n], 1)}<span class="sub">${w.daily.precipitation_probability_max[n]}%</span><span><b style="font-weight:500;color:${tc(w.daily.temperature_2m_max[n])}">${Math.round(w.daily.temperature_2m_max[n])}°</b> / <span style="color:${tc(w.daily.temperature_2m_min[n])}">${Math.round(w.daily.temperature_2m_min[n])}°</span></span></div>`).join('');
-  $('cmpOut').innerHTML = ''; drawDash(RANGE); drawSky(); radar(); moonReal();
+  $('hourly').innerHTML = Array.from({ length: 24 }, (_, j) => i + j).map(n => `<div class="hr"><div class="sub">${hourLabel(w.hourly.time[n])}</div>${icon(w.hourly.weather_code[n], w.hourly.is_day[n])}<div style="color:${tc(w.hourly.temperature_2m[n])}">${dT(w.hourly.temperature_2m[n])}</div><div class="sub">${w.hourly.precipitation_probability[n]}%</div></div>`).join('');
+  $('daily').innerHTML = Array.from({ length: 7 }, (_, j) => d + j).map(n => `<div class="dy"><span>${dayLabel(w.daily.time[n])}</span>${icon(w.daily.weather_code[n], 1)}<span class="sub">${w.daily.precipitation_probability_max[n]}%</span><span><b style="font-weight:500;color:${tc(w.daily.temperature_2m_max[n])}">${dT(w.daily.temperature_2m_max[n])}</b> / <span style="color:${tc(w.daily.temperature_2m_min[n])}">${dT(w.daily.temperature_2m_min[n])}</span></span></div>`).join('');
+  if (soft && CMP) renderCmp(); else { CMP = null; $('cmpOut').innerHTML = ''; }
+  drawDash(RANGE); drawSky(); if (!soft) { radar(); moonReal(); }
+  extras();
 }
 function tips(w, q, d, i) {
   const c = w.current, h = w.hourly, k = kind(c.weather_code), tp = c.temperature_2m, fl = c.apparent_temperature, hu = c.relative_humidity_2m, wi = c.wind_speed_10m, gu = c.wind_gusts_10m || wi, uv = h.uv_index[i] || 0, uvm = w.daily.uv_index_max[d], vis = (h.visibility[i] || 1e5) / 1000;
@@ -396,21 +486,28 @@ function tips(w, q, d, i) {
   if (day) A(8, ['Sunset at ' + ss + ': golden light for a walk', 'सूर्यास्त ' + ss + ' पर: टहलने के लिए सुनहरी रोशनी']); else if (tp >= 28) A(8, ['Shower before bed, light sheet and fan', 'सोने से पहले नहाएँ, हल्की चादर और पंखा'], ['Heavy dinner late at night', 'रात को देर से भारी खाना']); else if (tp <= 12) A(8, ['Warm blanket and socks', 'गर्म कंबल और मोज़े'], ['Sleeping with wet hair', 'गीले बालों में सोना']); else A(8, ['A comfortable night for sleep', 'सोने के लिए आरामदायक रात']);
   if (!day && cl < 40 && !wet) A(8, ['Stargazing: moon ' + ill + '% lit', 'तारे देखें: चाँद ' + ill + '% रोशन']);
   const ic = ['👕', '🏃', '🚗', '🩺', '🧴', '💧', '😮‍💨', '🏠', '🌙'], pm = q && q.current ? q.current.pm2_5 : '-';
-  const det = [`${t('feels')} ${r(fl)}° · ${t('wind')} ${wi} km/h`, `${t('temp')} ${r(tp)}° · AQI ${aqi || '-'} · ${t('pop')} ${pp}%`, `${t('vis')} ${vis.toFixed(1)} km · ${t('wind')} ${wi} km/h`, `${t('hum')} ${hu}% · ${t('feels')} ${r(fl)}° · Δ ${r(sp)}°`, `${t('uv')} ${uv.toFixed(1)} (max ${uvm})`, `${t('temp')} ${r(tp)}° · ${t('hum')} ${hu}%`, `AQI ${aqi || '-'} · PM2.5 ${pm}`, `${t('wind')} ${wi} · ${t('gust')} ${r(gu)} km/h · ${t('rn')} ${c.rain} mm`, `${t('set')} ${ss} · ${t('moon')} ${ill}% ${t('lit')}`];
+  const det = [`${t('feels')} ${dT(fl)} · ${t('wind')} ${sp1(wi)} ${uS()}`, `${t('temp')} ${dT(tp)} · AQI ${aqi || '-'} · ${t('pop')} ${pp}%`, `${t('vis')} ${vis.toFixed(1)} km · ${t('wind')} ${sp1(wi)} ${uS()}`, `${t('hum')} ${hu}% · ${t('feels')} ${dT(fl)} · Δ ${dD(sp)}`, `${t('uv')} ${uv.toFixed(1)} (max ${uvm})`, `${t('temp')} ${dT(tp)} · ${t('hum')} ${hu}%`, `AQI ${aqi || '-'} · PM2.5 ${pm}`, `${t('wind')} ${sp1(wi)} · ${t('gust')} ${Math.round(cS(gu))} ${uS()} · ${t('rn')} ${c.rain} mm`, `${t('set')} ${ss} · ${t('moon')} ${ill}% ${t('lit')}`];
   const hr = probs.findIndex(p => p >= 50), nx = hr === 0 ? t('n0') : hr > 0 ? t('nN').replace('{n}', hr) : t('nX'), li = a => a.length ? a.map(x => `<li>${x}</li>`).join('') : `<li>${L === 'hi' ? 'कोई खास परहेज़ नहीं' : 'Nothing special'}</li>`;
   $('tips').innerHTML = `<h3>${t('tips')}</h3><div class="sub">${nx} · ${t('tipsD')}</div><div class="tpg">${S.map((x, j) => `<div class="tp"><h4>${ic[j]} ${t('tt')[j]}</h4><small>${det[j]}</small><b class="g">${t('yes')}</b><ul>${li(x.y)}</ul><b class="r">${t('no')}</b><ul>${li(x.n)}</ul></div>`).join('')}</div>`;
 }
 const summ = o => { const w = o.w, c = w.current, d = todayIdx(w); return { tp: c.temperature_2m, fl: c.apparent_temperature, hu: c.relative_humidity_2m, wi: c.wind_speed_10m, ra: w.daily.precipitation_probability_max[d], uv: w.daily.uv_index_max[d], aq: o.q && o.q.current ? o.q.current.us_aqi : null }; };
+let CMP = null;
 async function compare() {
-  const name = $('q2').value.trim(); if (!name) return; $('cmpOut').innerHTML = `<div class="sub">${t('load')}</div>`;
+  const name = $('q2').value.trim(); if (!name) return; $('sug2').style.display = 'none'; $('cmpOut').innerHTML = `<div class="sub">${t('load')}</div>`;
   try {
-    const p = await findCity(name), B = await getWeather(p), a = summ(W), b = summ(B), r = Math.round;
-    const cell = (v, col, u) => `<td style="color:${col || 'inherit'}">${v == null ? '-' : v + (u || '')}</td>`, ac = v => v == null ? '' : aqiInfo(v)[0];
-    $('cmpOut').innerHTML = `<table><tr><th></th><th>${place.name.split(',')[0]}</th><th>${p.name.split(',')[0]}</th></tr>
-      <tr><td>${t('temp')}</td>${cell(r(a.tp), tc(a.tp), '°')}${cell(r(b.tp), tc(b.tp), '°')}</tr><tr><td>${t('feels')}</td>${cell(r(a.fl), tc(a.fl), '°')}${cell(r(b.fl), tc(b.fl), '°')}</tr>
-      <tr><td>${t('hum')}</td>${cell(a.hu, '', '%')}${cell(b.hu, '', '%')}</tr><tr><td>${t('wind')}</td>${cell(a.wi, '', ' km/h')}${cell(b.wi, '', ' km/h')}</tr>
-      <tr><td>${t('pop')}</td>${cell(a.ra, '', '%')}${cell(b.ra, '', '%')}</tr><tr><td>${t('uv')}</td>${cell(a.uv)}${cell(b.uv)}</tr><tr><td>AQI</td>${cell(a.aq, ac(a.aq))}${cell(b.aq, ac(b.aq))}</tr></table>`;
+    const p = CMPSEL && CMPSEL.name.split(',')[0] === name ? CMPSEL : await findCity(name), B = await getWeather(p);
+    CMP = { p, B }; renderCmp();
   } catch (e) { $('cmpOut').innerHTML = `<div class="err">${e.message}</div>`; }
+}
+function renderCmp() {
+  if (!CMP) return; const { p, B } = CMP, a = summ(W), b = summ(B), r = Math.round;
+  const cell = (v, col, u) => `<td style="color:${col || 'inherit'}">${v == null ? '-' : v + (u || '')}</td>`, ac = v => v == null ? '' : aqiInfo(v)[0];
+  const lt = o => { const d = new Date(Date.now() + (o.w.utc_offset_seconds || 0) * 1000), h = d.getUTCHours(); return H24 ? pad(h) + ':' + pad(d.getUTCMinutes()) : pad(h % 12 || 12) + ':' + pad(d.getUTCMinutes()) + ' ' + (h < 12 ? 'AM' : 'PM'); };
+  $('cmpOut').innerHTML = `<table><tr><th></th><th>${esc(place.name.split(',')[0])}</th><th>${esc(p.name.split(',')[0])}</th></tr>
+      <tr><td>${t('lt')}</td>${cell(lt(W))}${cell(lt(B))}</tr>
+      <tr><td>${t('temp')}</td>${cell(r(cT(a.tp)), tc(a.tp), '°')}${cell(r(cT(b.tp)), tc(b.tp), '°')}</tr><tr><td>${t('feels')}</td>${cell(r(cT(a.fl)), tc(a.fl), '°')}${cell(r(cT(b.fl)), tc(b.fl), '°')}</tr>
+      <tr><td>${t('hum')}</td>${cell(a.hu, '', '%')}${cell(b.hu, '', '%')}</tr><tr><td>${t('wind')}</td>${cell(sp1(a.wi), '', ' ' + uS())}${cell(sp1(b.wi), '', ' ' + uS())}</tr>
+      <tr><td>${t('pop')}</td>${cell(a.ra, '', '%')}${cell(b.ra, '', '%')}</tr><tr><td>${t('uv')}</td>${cell(a.uv)}${cell(b.uv)}</tr><tr><td>AQI</td>${cell(a.aq, ac(a.aq))}${cell(b.aq, ac(b.aq))}</tr></table>`;
 }
 
 /* ---------- dashboard ---------- */
@@ -444,14 +541,14 @@ async function drawDash(n) {
   RANGE = n; const o = $('dash'); o.innerHTML = `<div class="win sub">${t('load')}</div>`;
   try {
     const S = await series(n), lo = S.lo || S.hi, sm = a => a.reduce((x, y) => x + y, 0), mean = (sm(S.hi) + sm(lo)) / (S.hi.length * 2), mxT = Math.max(...S.hi), mnT = Math.min(...lo), tr = sm(S.rain), ts = sm(S.snow), rd = S.rain.filter(x => x > (n === 1 ? .1 : 1)).length;
-    const kp = [[t('kavg'), Math.round(mean) + '°', tc(mean)], [t('kmax'), Math.round(mxT) + '°', tc(mxT)], [t('kmin'), Math.round(mnT) + '°', tc(mnT)], [t('ktr'), tr.toFixed(1) + ' mm', '', rd + ' ' + (n === 1 ? t('rdh') : t('rdd'))], [t('kts'), ts.toFixed(1) + ' cm'], [t('kw'), Math.round(Math.max(...S.wind)) + ' km/h']];
+    const kp = [[t('kavg'), dT(mean), tc(mean)], [t('kmax'), dT(mxT), tc(mxT)], [t('kmin'), dT(mnT), tc(mnT)], [t('ktr'), tr.toFixed(1) + ' mm', '', rd + ' ' + (n === 1 ? t('rdh') : t('rdd'))], [t('kts'), ts.toFixed(1) + ' cm'], [t('kw'), Math.round(cS(Math.max(...S.wind))) + ' ' + uS()]];
     const win = (id, ti, de, ex = '', vk = '') => `<section class="win vz"><canvas class="vzc" data-k="${vk}"></canvas><div class="vzi"><h3>${ti}</h3><div class="sub">${de || ''}</div>${ex}<div class="cb" id="${id}"></div></div></section>`, pos = clamp((mean + 40) / 82, 0, 1) * 98;
     o.innerHTML = `<section class="win"><div class="kpis">${kp.map(x => `<div><small>${x[0]}</small><b style="color:${x[2] || 'inherit'}">${x[1]}</b>${x[3] ? `<small>${x[3]}</small>` : ''}</div>`).join('')}</div></section>`
-      + win('c1', t('cT'), t('cTd'), `<div class="tbar" style="background:${TG}"><i style="left:${pos}%"></i></div>`, 'temp') + win('c2', t('cR'), tr > 0 ? tr.toFixed(1) + ' mm' : t('noRain'), '', 'rain') + win('c4', t('snow'), ts > 0 ? ts.toFixed(1) + ' cm' : t('noSnow'), '', 'snow') + win('c3', t('cW'), 'km/h', '', 'wind') + win('c5', t('press'), Math.round(S.pr[S.pr.length - 1]) + ' hPa', '', 'press');
+      + win('c1', t('cT'), t('cTd'), `<div class="tbar" style="background:${TG}"><i style="left:${pos}%"></i></div>`, 'temp') + win('c2', t('cR'), tr > 0 ? tr.toFixed(1) + ' mm' : t('noRain'), '', 'rain') + win('c4', t('snow'), ts > 0 ? ts.toFixed(1) + ' cm' : t('noSnow'), '', 'snow') + win('c3', t('cW'), uS(), '', 'wind') + win('c5', t('press'), Math.round(S.pr[S.pr.length - 1]) + ' hPa', '', 'press');
     VZD = { tc: tc(mean), mean, wind: Math.max(...S.wind) }; vzInit();
-    chart($('c1'), S.lb, S.lo ? [{ d: S.hi, cf: tc, n: t('hi') }, { d: S.lo, cf: tc, n: t('lo') }] : [{ d: S.hi, cf: tc, n: t('temp') }], 'band', '°', 3);
+    chart($('c1'), S.lb, S.lo ? [{ d: S.hi.map(cT), cf: tcU, n: t('hi') }, { d: S.lo.map(cT), cf: tcU, n: t('lo') }] : [{ d: S.hi.map(cT), cf: tcU, n: t('temp') }], 'band', '°', 3);
     chart($('c2'), S.lb, [{ d: S.rain, c: '#2f8bff' }], 'bar', ' mm', n === 1 ? 1 : 5); chart($('c4'), S.lb, [{ d: S.snow, c: '#8fc4ff' }], 'bar', ' cm', n === 1 ? 1 : 5);
-    chart($('c3'), S.lb, [{ d: S.wind, c: '#2fd6a8' }], 'band', ' km/h', 6); chart($('c5'), S.lb, [{ d: S.pr, c: '#a17cff' }], 'band', ' hPa', 4);
+    chart($('c3'), S.lb, [{ d: S.wind.map(cS), c: '#2fd6a8' }], 'band', ' ' + uS(), 6); chart($('c5'), S.lb, [{ d: S.pr, c: '#a17cff' }], 'band', ' hPa', 4);
   } catch (e) { o.innerHTML = `<div class="win err">${e.message}</div>`; }
 }
 /* ---------- live backgrounds inside the dashboard cards ---------- */
@@ -533,7 +630,7 @@ async function radar() {
 async function load(name) {
   $('msg').className = 'sub'; $('msg').textContent = t('load');
   try {
-    place = typeof name === 'object' && name ? name : name ? await findCity(name) : place; W = await getWeather(place); render();
+    place = typeof name === 'object' && name ? name : name ? await findCity(name) : place; W = await getWeather(place); W.at = Date.now(); render();
     $('msg').textContent = ''; $('app').hidden = false; drawSky(); if (MAP) MAP.invalidateSize();
     try { localStorage.setItem('place', JSON.stringify(place)); } catch (e) { }
   } catch (e) { $('msg').className = 'err'; $('msg').textContent = e.message; }
@@ -571,7 +668,222 @@ let tm; const sug = $('sug');
 function pick(r) { sug.innerHTML = ''; r.slice(0, 8).forEach(p => { const d = document.createElement('div'); d.innerHTML = `${p.name}<br><small>${p.sub || ''}</small>`; d.onclick = () => { sug.style.display = 'none'; $('q').value = p.name.split(',')[0]; load(p); }; sug.appendChild(d); }); sug.style.display = r.length ? 'block' : 'none'; }
 $('q').oninput = e => { clearTimeout(tm); const v = e.target.value.trim(); if (v.length < 3) { sug.style.display = 'none'; return; } tm = setTimeout(async () => { try { pick(await find(v)); } catch (x) { } }, 600); };
 $('geo').onclick = () => navigator.geolocation && navigator.geolocation.getCurrentPosition(async p => { let n = 'My location'; try { const j = await getJSON(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=${L}&lat=${p.coords.latitude}&lon=${p.coords.longitude}`), a = j.address || {}; n = (a.city || a.town || a.village || a.county || n) + (a.state ? ', ' + a.state : ''); } catch (x) { } load({ name: n, lat: p.coords.latitude, lon: p.coords.longitude }); });
-document.addEventListener('click', e => { if (e.target.closest('input,button,select,#map,#sug,.cb,a')) return; const el = e.target.closest('.grid>div,.kpis>div,.tp,.win'); document.querySelectorAll('.up').forEach(x => x !== el && x.classList.remove('up')); if (el) el.classList.toggle('up'); });
+document.addEventListener('click', e => { if (e.target.closest('input,button,select,#map,#sug,#sug2,.cb,.ck,a')) return; const el = e.target.closest('.grid>div,.kpis>div,.tp,.win'); document.querySelectorAll('.up').forEach(x => x !== el && x.classList.remove('up')); if (el) el.classList.toggle('up'); });
+/* ===================== v4 additions ===================== */
+const SHARE_IC = SV('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>');
+const REF_IC = SV('<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>');
+const BELL = SV('<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>');
+function toast(msg) { let e = $('toast'); if (!e) { e = document.createElement('div'); e.id = 'toast'; document.body.appendChild(e); } e.textContent = msg; e.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('show'), 2800); }
+const cdir = d => ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(d / 45) % 8];
+
+/* ---------- units ---------- */
+function unitUI() { $('uT').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.u === U.t)); $('uS').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.u === U.s)); }
+function saveU() { try { localStorage.setItem('units', JSON.stringify(U)); } catch (e) { } unitUI(); if (W) render(true); }
+$('uT').onclick = e => { const b = e.target.closest('button'); if (!b) return; U.t = b.dataset.u; saveU(); };
+$('uS').onclick = e => { const b = e.target.closest('button'); if (!b) return; U.s = b.dataset.u; saveU(); };
+
+/* ---------- favourite cities ---------- */
+let FAV = []; try { FAV = JSON.parse(localStorage.getItem('favs')) || []; } catch (e) { }
+const saveFav = () => { try { localStorage.setItem('favs', JSON.stringify(FAV)); } catch (e) { } };
+const near = (a, b) => Math.abs(a.lat - b.lat) < .05 && Math.abs(a.lon - b.lon) < .05, isFav = () => FAV.some(f => near(f, place));
+function drawFavs() {
+  const b = $('favs'); b.style.display = FAV.length ? 'flex' : 'none';
+  b.innerHTML = FAV.map((f, i) => `<span class="chip${near(f, place) ? ' on' : ''}"><button class="cn" data-i="${i}">${esc(f.name.split(',')[0])}</button><button class="cx" data-i="${i}" aria-label="Remove">×</button></span>`).join('');
+  const s = $('star'); if (s) { s.classList.toggle('on', isFav()); s.textContent = isFav() ? '★' : '☆'; }
+}
+function toggleFav() {
+  if (isFav()) { FAV = FAV.filter(f => !near(f, place)); toast(t('favOff')); }
+  else { FAV.push({ name: place.name, lat: place.lat, lon: place.lon }); FAV = FAV.slice(-12); toast(t('favOn')); }
+  saveFav(); drawFavs();
+}
+$('favs').onclick = e => { const b = e.target.closest('button'); if (!b) return; const i = +b.dataset.i; if (b.classList.contains('cx')) { FAV.splice(i, 1); saveFav(); drawFavs(); } else if (FAV[i]) load(FAV[i]); };
+$('hero').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.id === 'star') toggleFav(); else if (b.id === 'shareb') shareCard(); else if (b.id === 'refb') refresh(true); };
+
+/* ---------- 15-minute rain nowcast ---------- */
+const fmtMin = m => { m = Math.round(m / 5) * 5; const hh = Math.floor(m / 60), mm = m % 60; return hh ? hh + ' ' + t('hh') + (mm ? ' ' + mm + ' ' + t('mn') : '') : m + ' ' + t('mn'); };
+function calcNow(w) {
+  const m = w.minutely_15; if (!m || !m.time || !m.precipitation) return null;
+  const now = Pt(w.current.time), i0 = m.time.findIndex(x => Pt(x) >= now - 14 * 60000); if (i0 < 0) return null;
+  const vals = m.precipitation.slice(i0, i0 + 24).map(v => v || 0), tim = m.time.slice(i0, i0 + 24); if (vals.length < 4) return null;
+  const wet = v => v >= .1, lv = v => v >= 1.9 ? 'heavy' : v >= .5 ? 'moderate' : 'light', o = { vals, soon: null };
+  if (wet(vals[0])) { const j = vals.findIndex(v => !wet(v)); o.ic = '🌧️'; o.msg = j < 0 ? t('ncLong') : t('ncEnd').replace('{x}', fmtMin(Math.max(15, (Pt(tim[j]) - now) / 6e4))); o.sub = t('lv')[lv(Math.max(...vals.slice(0, 4)))] + ' · ' + t('ncSub'); }
+  else { const j = vals.findIndex(wet); if (j < 0) { o.ic = '🌤️'; o.msg = t('ncNone'); o.sub = t('ncSub'); } else { const mn = Math.max(0, (Pt(tim[j]) - now) / 6e4); o.soon = mn; o.ic = '🌧️'; o.msg = mn < 5 ? t('ncNow') : t('ncStart').replace('{x}', fmtMin(mn)); o.sub = t('lv')[lv(Math.max(...vals.slice(j, j + 4)))] + ' · ' + t('ncSub'); } }
+  return o;
+}
+
+/* ---------- weather warnings ---------- */
+const AL = {
+  en: { heat: ['Heat warning', 'Feels like up to {v} around {h}. Drink water and avoid the midday sun.'], heatX: ['Extreme heat warning', 'Feels like up to {v} around {h}. Stay indoors in the afternoon and drink water often.'], cold: ['Cold warning', 'Down to {v} around {h}. Dress in warm layers.'], coldX: ['Severe cold warning', 'Down to {v} around {h}. Limit time outdoors.'],
+    storm: ['Thunderstorm warning', 'Thunderstorm expected around {h}. Stay indoors, away from trees and open ground.'], rain: ['Heavy rain warning', 'Up to {v} mm/h around {h}. Expect waterlogging.'], rainX: ['Very heavy rain warning', 'Up to {v} mm/h around {h}. Avoid travel and low-lying areas.'],
+    wind: ['Strong wind warning', 'Gusts up to {v} around {h}. Secure loose items.'], windX: ['Damaging wind warning', 'Gusts up to {v} around {h}. Stay indoors.'], snow: ['Snow or ice warning', 'Snow or freezing rain expected around {h}. Drive slowly.'],
+    fog: ['Dense fog warning', 'Visibility under 1 km around {h}. Use fog lamps and slow down.'], air: ['Poor air quality', 'AQI {v}. Wear an N95 mask outside.'], airX: ['Hazardous air quality', 'AQI {v}. Stay indoors with windows shut.'], uv: ['Very high UV', 'UV index {v}. Use SPF 50 and avoid direct sun.'] },
+  hi: { heat: ['गर्मी की चेतावनी', '{h} के आसपास महसूस होने वाला तापमान {v} तक। पानी पिएँ और दोपहर की धूप से बचें।'], heatX: ['भीषण गर्मी की चेतावनी', '{h} के आसपास {v} तक महसूस होगा। दोपहर में घर के अंदर रहें, बार-बार पानी पिएँ।'], cold: ['ठंड की चेतावनी', '{h} के आसपास तापमान {v} तक गिरेगा। गर्म कपड़े पहनें।'], coldX: ['कड़ाके की ठंड की चेतावनी', '{h} के आसपास {v} तक। बाहर कम रहें।'],
+    storm: ['तूफ़ान की चेतावनी', '{h} के आसपास बिजली के साथ तूफ़ान। घर के अंदर रहें, पेड़ों और खुले मैदान से दूर।'], rain: ['भारी बारिश की चेतावनी', '{h} के आसपास {v} मिमी/घंटा तक। जलभराव हो सकता है।'], rainX: ['अत्यधिक भारी बारिश की चेतावनी', '{h} के आसपास {v} मिमी/घंटा तक। सफ़र और निचले इलाकों से बचें।'],
+    wind: ['तेज़ हवा की चेतावनी', '{h} के आसपास झोंके {v} तक। ढीला सामान बाँध लें।'], windX: ['नुकसानदेह हवा की चेतावनी', '{h} के आसपास झोंके {v} तक। घर के अंदर रहें।'], snow: ['बर्फ़ की चेतावनी', '{h} के आसपास बर्फ़बारी या जमने वाली बारिश। धीरे चलाएँ।'],
+    fog: ['घने कोहरे की चेतावनी', '{h} के आसपास दृश्यता 1 किमी से कम। फ़ॉग लैंप जलाएँ, धीरे चलाएँ।'], air: ['खराब हवा', 'AQI {v}। बाहर N95 मास्क पहनें।'], airX: ['खतरनाक हवा', 'AQI {v}। खिड़कियाँ बंद कर घर में रहें।'], uv: ['बहुत तेज़ UV', 'UV इंडेक्स {v}। SPF 50 लगाएँ, सीधी धूप से बचें।'] }
+};
+const ALI = { heat: '🥵', heatX: '🔥', cold: '🥶', coldX: '❄️', storm: '⛈️', rain: '🌧️', rainX: '🌊', wind: '💨', windX: '🌪️', snow: '🌨️', fog: '🌫️', air: '😷', airX: '🚨', uv: '😎' };
+function calcAlerts(w, q) {
+  const h = w.hourly, i = Math.max(hourNow(w), 0), N = Math.min(i + 12, h.time.length), out = [];
+  const add = (type, lvl, v, j) => out.push({ type, lvl, v, hl: hourLabel(h.time[j]), j });
+  const pk = (arr, sgn) => { if (!arr) return [null, i]; let bi = i, bv = -Infinity; for (let j = i; j < N; j++) { const v = arr[j] == null ? -Infinity : sgn * arr[j]; if (v > bv) { bv = v; bi = j; } } return [bv === -Infinity ? null : sgn * bv, bi]; };
+  let [v, j] = pk(h.apparent_temperature, 1); if (v != null) { if (v >= 41) add('heatX', 2, v, j); else if (v >= 35) add('heat', 1, v, j); }
+  [v, j] = pk(h.apparent_temperature, -1); if (v != null) { if (v <= -10) add('coldX', 2, v, j); else if (v <= 2) add('cold', 1, v, j); }
+  for (let k = i; k < N; k++) if (h.weather_code[k] >= 95) { add('storm', 2, 0, k); break; }
+  [v, j] = pk(h.precipitation, 1); if (v != null) { if (v >= 20) add('rainX', 2, v, j); else if (v >= 7.6) add('rain', 1, v, j); }
+  [v, j] = pk(h.wind_gusts_10m, 1); if (v != null) { if (v >= 75) add('windX', 2, v, j); else if (v >= 50) add('wind', 1, v, j); }
+  for (let k = i; k < N; k++) if ([66, 67, 71, 73, 75, 77, 85, 86].includes(h.weather_code[k]) || (h.snowfall && h.snowfall[k] > .5)) { add('snow', 1, 0, k); break; }
+  if (h.visibility) for (let k = i; k < N; k++) if (h.visibility[k] != null && h.visibility[k] < 1000) { add('fog', 1, 0, k); break; }
+  const aq = q && q.current && q.current.us_aqi; if (aq >= 301) add('airX', 2, aq, i); else if (aq >= 201) add('air', 1, aq, i);
+  [v, j] = pk(h.uv_index, 1); if (v != null && v >= 8) add('uv', v >= 11 ? 2 : 1, v, j);
+  return out.sort((a, b) => b.lvl - a.lvl || a.j - b.j).slice(0, 5);
+}
+function alText(a) {
+  const [ti, tx] = (AL[L] && AL[L][a.type]) || AL.en[a.type], ty = a.type;
+  const vs = /^(heat|cold)/.test(ty) ? dTu(a.v) : /^rain/.test(ty) ? a.v.toFixed(1) : /^wind/.test(ty) ? Math.round(cS(a.v)) + ' ' + uS() : ty === 'uv' ? a.v.toFixed(1) : /^air/.test(ty) ? Math.round(a.v) : '';
+  return [ti, tx.replace('{v}', vs).replace('{h}', a.hl)];
+}
+function drawAlerts() {
+  const w = W.w, nc = calcNow(w), al = calcAlerts(w, W.q); W.al = al; W.nc = nc; let s = '';
+  if (nc) {
+    const mx = Math.max(2, ...nc.vals);
+    s += `<div class="ncr"><span class="nci">${nc.ic}</span><div><b>${nc.msg}</b><div class="sub">${nc.sub}</div></div></div><div class="ncb">${nc.vals.map(v => `<i class="${v >= .1 ? 'w' : ''}" style="height:${Math.max(7, v / mx * 100)}%"></i>`).join('')}</div><div class="ncl"><span>${t('now')}</span><span>+3 ${t('hh')}</span><span>+6 ${t('hh')}</span></div>`;
+  }
+  s += al.length ? `<div class="als">${al.map(a => { const [ti, tx] = alText(a); return `<div class="al lv${a.lvl}"><span class="ai">${ALI[a.type]}</span><div><b>${ti}</b><div class="sub">${tx}</div></div></div>`; }).join('')}</div>` : `<div class="sub okw">✅ ${t('noWarn')}</div>`;
+  $('alrt').innerHTML = s;
+}
+
+/* ---------- notifications (work while the site is open) ---------- */
+const NOTI = () => { try { return localStorage.getItem('noti') === '1'; } catch (e) { return false; } };
+function bellUI() { const on = NOTI() && 'Notification' in window && Notification.permission === 'granted'; $('bell').classList.toggle('on', on); $('bell').innerHTML = BELL; $('bell').title = on ? t('nOffTip') : t('nOnTip'); }
+async function notify(title, body, tag) {
+  try { const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : null; if (reg && reg.showNotification) { await reg.showNotification(title, { body, tag, vibrate: [120, 60, 120] }); return; } } catch (e) { }
+  try { new Notification(title, { body, tag }); } catch (e) { toast(title); }
+}
+function checkNotify() {
+  if (!NOTI() || !('Notification' in window) || Notification.permission !== 'granted' || !W || !W.al) return;
+  let seen = {}; try { seen = JSON.parse(localStorage.getItem('nk')) || {}; } catch (e) { }
+  const now = Date.now(), loc = place.lat.toFixed(1) + ',' + place.lon.toFixed(1), city = place.name.split(',')[0], day = W.w.current.time.slice(0, 10), todo = [];
+  Object.keys(seen).forEach(k => { if (now - seen[k] > 864e5) delete seen[k]; });
+  W.al.forEach(a => { const [ti, tx] = alText(a); todo.push([`a:${loc}:${a.type}:${day}`, ALI[a.type] + ' ' + ti + ' · ' + city, tx]); });
+  const nc = W.nc; if (nc && nc.soon != null && nc.soon <= 60) todo.push([`r:${loc}:${Math.round((now + nc.soon * 6e4) / 1.8e6)}`, '🌧️ ' + nc.msg + ' · ' + city, nc.sub]);
+  todo.forEach(([k, ti, bo]) => { if (!seen[k]) { seen[k] = now; notify(ti, bo, k); } });
+  try { localStorage.setItem('nk', JSON.stringify(seen)); } catch (e) { }
+}
+$('bell').onclick = async () => {
+  if (!('Notification' in window)) { toast(t('nSup')); return; }
+  if (NOTI()) { try { localStorage.setItem('noti', '0'); } catch (e) { } bellUI(); toast(t('nOff')); return; }
+  let p = Notification.permission; if (p !== 'granted') { try { p = await Notification.requestPermission(); } catch (e) { } }
+  if (p !== 'granted') { toast(t('nBlock')); return; }
+  try { localStorage.setItem('noti', '1'); } catch (e) { } bellUI(); toast(t('nOn')); notify(t('nTitle'), t('nBody'), 'test'); checkNotify();
+};
+
+/* ---------- wind compass + UV gauge ---------- */
+const BF = [1, 5, 11, 19, 28, 38, 49, 61, 74, 88, 102, 117], UVB = [[0, 3, '#3ddc84'], [3, 6, '#f1d84a'], [6, 8, '#ff9f1a'], [8, 11, '#ff4d4d'], [11, 12, '#b455ff']];
+const pol = (u, r) => { const a = Math.PI * (1 - u / 12); return [80 + r * Math.cos(a), 86 - r * Math.sin(a)]; };
+function drawGauges() {
+  const w = W.w, c = w.current, i = Math.max(hourNow(w), 0), d = Math.max(todayIdx(w), 0), uv = w.hourly.uv_index[i] || 0, uvm = w.daily.uv_index_max[d] || 0, ws = c.wind_speed_10m || 0, gu = c.wind_gusts_10m || ws, dr = c.wind_direction_10m;
+  const bf = BF.findIndex(x => ws < x), bfi = bf < 0 ? 12 : bf, has = dr != null, to = has ? (dr + 180) % 360 : 0;
+  const ticks = Array.from({ length: 36 }, (_, k) => { const a = k * 10, l = a % 90 === 0 ? 10 : a % 30 === 0 ? 7 : 4; return `<line x1="80" y1="18" x2="80" y2="${18 + l}" transform="rotate(${a} 80 80)" stroke-opacity="${a % 90 === 0 ? .6 : .3}"/>`; }).join('');
+  $('cmpsC').innerHTML = `<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="62" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/><g stroke="currentColor" stroke-width="1.5">${ticks}</g>
+    <g fill="currentColor" font-size="11" font-weight="600" text-anchor="middle"><text x="80" y="44" fill="#ff6b6b">N</text><text x="121" y="84" opacity=".7">E</text><text x="80" y="127" opacity=".7">S</text><text x="39" y="84" opacity=".7">W</text></g>
+    ${has ? `<g class="arw" data-to="${to}" style="transform:rotate(0deg);transform-origin:80px 80px"><g class="wob" style="--wa:${clamp(gu / 12, 1, 6).toFixed(1)}deg"><path d="M80 50 L89 72 L80 67 L71 72Z" fill="#dcf56e"/><line x1="80" y1="67" x2="80" y2="108" stroke="#dcf56e" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="80" r="4" fill="#dcf56e"/></g></g>` : ''}</svg>
+    <div class="gv">${sp1(ws)} <span>${uS()}</span></div><div class="sub">${has ? t('from').replace('{d}', cdir(dr)) + ' · ' : ''}${t('bf')[bfi]}</div><div class="sub">${t('gust')} ${Math.round(cS(gu))} ${uS()}</div>`;
+  const ui = uv < 3 ? 0 : uv < 6 ? 1 : uv < 8 ? 2 : uv < 11 ? 3 : 4, ucol = UVB[Math.min(ui, 4)][2];
+  const segs = UVB.map(([a, b, col]) => { const [x1, y1] = pol(a + (a ? .12 : 0), 60), [x2, y2] = pol(b - .12, 60); return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A60 60 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="${col}" stroke-width="12"/>`; }).join('');
+  $('uvC').innerHTML = `<svg viewBox="0 0 160 100">${segs}<g class="ndl" data-to="${clamp(uv, 0, 12) / 12 * 180 - 90}" style="transform:rotate(-90deg);transform-origin:80px 86px"><line x1="80" y1="86" x2="80" y2="38" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="86" r="6" fill="currentColor"/></g></svg>
+    <div class="gv" style="color:${ucol}">${uv.toFixed(1)} <span>${t('uvl')[ui]}</span></div><div class="sub">${t('uvMax').replace('{v}', uvm)}</div><div class="sub">${t('uva')[ui]}</div>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#gaugeW [data-to]').forEach(e => { e.style.transform = `rotate(${e.dataset.to}deg)`; })));
+}
+
+/* ---------- pendulum clock (location time) ---------- */
+let H24 = false; try { H24 = localStorage.getItem('h24') === '1'; } catch (e) { }
+function clockTxt() {
+  if (!W) return; const off = W.w.utc_offset_seconds || 0, d = new Date(Date.now() + off * 1000), h = d.getUTCHours();
+  const set = (id, v) => { const e = $(id); if (e.textContent !== v) e.textContent = v; };
+  set('ckH', H24 ? pad(h) : pad(h % 12 || 12)); set('ckM', pad(d.getUTCMinutes())); set('ckS', pad(d.getUTCSeconds())); set('ckA', H24 ? '' : (h < 12 ? 'AM' : 'PM'));
+  set('ckD', d.toLocaleDateString(L === 'hi' ? 'hi-IN' : 'en-IN', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }));
+  const a = Math.abs(off), z = (W.w.timezone || '').replace(/_/g, ' '), I = sunI();
+  set('ckZ', (I.t >= 0 && I.t <= 1 ? '☀️ ' : '🌙 ') + (z ? z + ' · ' : '') + 'UTC' + (off < 0 ? '-' : '+') + pad(Math.floor(a / 3600)) + ':' + pad(Math.floor(a % 3600 / 60)));
+}
+$('ck').onclick = () => { H24 = !H24; try { localStorage.setItem('h24', H24 ? '1' : '0'); } catch (e) { } clockTxt(); if (CMP) renderCmp(); };
+setInterval(clockTxt, 250);
+const PEND = { vis: false };
+if (window.IntersectionObserver) new IntersectionObserver(es => { PEND.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '100px' }).observe($('pendC')); else PEND.vis = true;
+function infinity(x, cx, cy, a, phi, lt, al) { /* lemniscate spinning about the pendulum axis, with perspective */
+  const N = 64, f = a * 4.2, P = [], cs = Math.cos(phi), sn = Math.sin(phi);
+  for (let j = 0; j <= N; j++) { const u = j / N * 6.2832, dd = 1 + Math.sin(u) ** 2, X0 = a * Math.cos(u) / dd, Y0 = a * Math.sin(u) * Math.cos(u) / dd, Z = X0 * sn, sc = f / (f - Z); P.push([cx + X0 * cs * sc, cy + Y0 * sc, sc]); }
+  x.lineJoin = 'round';
+  for (let pass = 0; pass < 2; pass++) { x.lineCap = pass ? 'round' : 'butt'; for (let j = 1; j <= N; j++) {
+    const sc = (P[j][2] + P[j - 1][2]) / 2, dep = clamp((sc - .8) / .5, 0, 1);
+    x.strokeStyle = pass ? (lt ? `rgba(15,20,32,${al * (.45 + .55 * dep)})` : `rgba(240,255,190,${al * (.45 + .55 * dep)})`) : (lt ? `rgba(60,90,200,${al * .12})` : `rgba(220,245,110,${al * .22 * (.4 + dep)})`);
+    x.lineWidth = pass ? 2.2 + 2.6 * dep : 8 + 5 * dep; x.beginPath(); x.moveTo(P[j - 1][0], P[j - 1][1]); x.lineTo(P[j][0], P[j][1]); x.stroke(); } }
+}
+function drawPend() {
+  const c = $('pendC'), dpr = Math.min(devicePixelRatio || 1, 2), w = c.clientWidth, h = c.clientHeight; if (!w || !h) return;
+  if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+  const x = c.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
+  const lt = TH === 'white', ink = lt ? '15,20,32' : '255,255,255', cx = w / 2, py = 18, Lr = h - 100, th0 = .5, tt = Date.now() / 1000;
+  const ang = s => RM ? 0 : th0 * Math.cos(Math.PI * s), spin = s => RM ? .4 : s / 6 * 6.2832, th = ang(tt), bx = cx + Math.sin(th) * Lr, by = py + Math.cos(th) * Lr, fy = h - 14;
+  x.strokeStyle = `rgba(${ink},.12)`; x.lineWidth = 1; x.beginPath(); x.moveTo(cx - w * .4, fy); x.lineTo(cx + w * .4, fy); x.stroke();
+  const sg = x.createRadialGradient(bx, fy, 2, bx, fy, 46); sg.addColorStop(0, `rgba(${lt ? '15,20,32' : '220,245,110'},.28)`); sg.addColorStop(1, 'rgba(0,0,0,0)');
+  x.save(); x.translate(0, fy); x.scale(1, .18); x.translate(0, -fy); x.fillStyle = sg; x.beginPath(); x.arc(bx, fy, 46, 0, 7); x.fill(); x.restore();
+  x.setLineDash([3, 7]); x.strokeStyle = `rgba(${ink},.16)`; x.beginPath(); x.arc(cx, py, Lr, Math.PI / 2 - th0, Math.PI / 2 + th0); x.stroke(); x.setLineDash([]);
+  x.fillStyle = `rgba(${ink},.3)`; [-th0, th0].forEach(s => { x.beginPath(); x.arc(cx + Math.sin(s) * Lr, py + Math.cos(s) * Lr, 2.5, 0, 7); x.fill(); });
+  if (!RM) for (let k = 4; k >= 1; k--) { const s = tt - k * .04, t2 = ang(s); x.save(); x.translate(cx + Math.sin(t2) * Lr, py + Math.cos(t2) * Lr); x.rotate(-t2); infinity(x, 0, 0, 36, spin(s), lt, .16 / k + .02); x.restore(); }
+  const rgd = x.createLinearGradient(cx, py, bx, by); rgd.addColorStop(0, `rgba(${ink},.85)`); rgd.addColorStop(1, `rgba(${ink},.45)`); x.strokeStyle = rgd; x.lineWidth = 2.4; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx, py); x.lineTo(bx, by); x.stroke();
+  x.fillStyle = `rgba(${ink},.8)`; x.fillRect(cx - 30, 4, 60, 5); x.beginPath(); x.arc(cx, py, 5, 0, 7); x.fill();
+  x.save(); x.translate(bx, by); x.rotate(-th); infinity(x, 0, 0, 36, spin(tt), lt, 1); x.restore();
+}
+(function pendLoop() { requestAnimationFrame(pendLoop); if (PEND.vis && !document.hidden && W) drawPend(); })();
+
+/* ---------- share as image ---------- */
+const EMO = (c, day) => { const k = kind(c); return k === 'clear' ? (day ? '☀️' : '🌙') : { partly: day ? '⛅' : '☁️', cloud: '☁️', fog: '🌫️', rain: '🌧️', snow: '❄️', storm: '⛈️' }[k]; };
+function rr(x, a, b, w, h, r) { x.beginPath(); x.moveTo(a + r, b); x.arcTo(a + w, b, a + w, b + h, r); x.arcTo(a + w, b + h, a, b + h, r); x.arcTo(a, b + h, a, b, r); x.arcTo(a, b, a + w, b, r); x.closePath(); }
+async function shareCard() {
+  if (!W) return; toast('…'); const w = W.w, c = w.current, i = Math.max(hourNow(w), 0), d = Math.max(todayIdx(w), 0), k = kind(c.weather_code), cvs = document.createElement('canvas'); cvs.width = 1080; cvs.height = 1350;
+  const x = cvs.getContext('2d'), [tp, bt] = sky(sunE()), F = '"Helvetica Neue", system-ui, "Noto Sans Devanagari", Arial, sans-serif'; let gg = x.createLinearGradient(0, 0, 0, 1350); gg.addColorStop(0, rg(tp)); gg.addColorStop(1, rg(bt)); x.fillStyle = gg; x.fillRect(0, 0, 1080, 1350);
+  gg = x.createRadialGradient(540, 600, 250, 540, 700, 1000); gg.addColorStop(0, 'rgba(0,0,0,0)'); gg.addColorStop(1, 'rgba(0,0,0,.45)'); x.fillStyle = gg; x.fillRect(0, 0, 1080, 1350);
+  x.fillStyle = '#fff'; x.textAlign = 'left'; x.globalAlpha = .75; x.font = `600 34px ${F}`; x.fillText('W E A T H E R ∞', 70, 110); x.globalAlpha = 1;
+  let cn = place.name; x.font = `500 64px ${F}`; while (x.measureText(cn).width > 940 && cn.length > 3) cn = cn.slice(0, -2) + '…'; x.fillText(cn, 70, 215);
+  x.globalAlpha = .75; x.font = `400 36px ${F}`; x.fillText(fmtDate(c.time) + ' · ' + c.time.slice(11), 70, 275); x.globalAlpha = 1;
+  x.font = `200 330px ${F}`; x.fillText(dT(c.temperature_2m), 56, 640);
+  x.textAlign = 'right'; x.font = `190px ${F}`; x.fillText(EMO(c.weather_code, c.is_day), 1010, 540); x.font = `500 46px ${F}`; x.fillText(t('c')[k], 1010, 640); x.textAlign = 'left';
+  const aq = W.q && W.q.current ? W.q.current.us_aqi : null, st = [[t('feels'), dTu(c.apparent_temperature)], [t('hum'), c.relative_humidity_2m + '%'], [t('wind'), sp1(c.wind_speed_10m) + ' ' + uS()], [t('pop'), w.daily.precipitation_probability_max[d] + '%'], [t('uv'), (w.hourly.uv_index[i] || 0).toFixed(1)], ['AQI', aq == null ? '-' : aq]];
+  st.forEach((e, n) => { const bx = 70 + (n % 2) * 490, by = 700 + Math.floor(n / 2) * 140; x.fillStyle = 'rgba(255,255,255,.14)'; rr(x, bx, by, 450, 120, 28); x.fill(); x.fillStyle = '#fff'; x.globalAlpha = .7; x.font = `400 28px ${F}`; x.fillText(e[0], bx + 28, by + 44); x.globalAlpha = 1; x.font = `500 50px ${F}`; x.fillText(String(e[1]), bx + 28, by + 98); });
+  x.textAlign = 'center'; for (let j = 0; j < 6; j++) { const n = i + j, cx = 70 + 156.7 * j + 78; x.globalAlpha = .75; x.font = `400 28px ${F}`; x.fillText(j ? hourLabel(w.hourly.time[n]) : t('now'), cx, 1170); x.globalAlpha = 1; x.font = `52px ${F}`; x.fillText(EMO(w.hourly.weather_code[n], w.hourly.is_day[n]), cx, 1236); x.font = `500 40px ${F}`; x.fillText(dT(w.hourly.temperature_2m[n]), cx, 1296); }
+  x.globalAlpha = .55; x.font = `400 26px ${F}`; x.fillText('Weather∞ · ' + (location.host || ''), 540, 1334); x.globalAlpha = 1;
+  const blob = await new Promise(r => cvs.toBlob(r, 'image/png')), nm = 'weather-' + (place.name.split(',')[0].replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'city') + '.png', file = new File([blob], nm, { type: 'image/png' }), text = `${place.name}: ${dT(c.temperature_2m)} ${t('c')[k]} · Weather∞`;
+  try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text, title: 'Weather∞' }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nm; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); toast(t('shSaved'));
+}
+
+/* ---------- auto refresh ---------- */
+function updLabel() { const e = $('updT'); if (!e || !W) return; const m = Math.floor((Date.now() - W.at) / 6e4); e.textContent = m < 1 ? t('updNow') : t('updAgo').replace('{n}', m); }
+let REFING = false;
+async function refresh(manual) {
+  if (REFING || !W) return; REFING = true; const rb = $('refb'); if (manual && rb) rb.classList.add('spin');
+  try {
+    const n = await getWeather(place); n.at = Date.now(); n.moon = W.moon;
+    if (W.big && W.big.hourly.time.some(x => x.startsWith(n.w.current.time.slice(0, 13)))) n.big = W.big;
+    W = n; render(true);
+  } catch (e) { if (manual) toast(t('refFail')); }
+  finally { REFING = false; const b2 = $('refb'); if (b2) b2.classList.remove('spin'); }
+}
+setInterval(() => { if (!W) return; updLabel(); if (Date.now() - W.at > 6e5) refresh(); }, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && W && Date.now() - W.at > 6e5) refresh(); });
+
+/* ---------- suggestions in the compare box ---------- */
+let tm2, CMPSEL = null; const sug2 = $('sug2');
+function pick2(r) { sug2.innerHTML = ''; r.slice(0, 8).forEach(p => { const d = document.createElement('div'); d.innerHTML = `${esc(p.name)}<br><small>${esc(p.sub || '')}</small>`; d.onclick = () => { sug2.style.display = 'none'; $('q2').value = p.name.split(',')[0]; CMPSEL = p; compare(); }; sug2.appendChild(d); }); sug2.style.display = r.length ? 'block' : 'none'; }
+$('q2').oninput = e => { CMPSEL = null; clearTimeout(tm2); const v = e.target.value.trim(); if (v.length < 3) { sug2.style.display = 'none'; return; } tm2 = setTimeout(async () => { try { pick2(await find(v)); } catch (x) { } }, 600); };
+document.addEventListener('click', e => { if (!e.target.closest('#q2,#sug2')) sug2.style.display = 'none'; });
+
+/* ---------- called at the end of every render ---------- */
+function extras() { drawAlerts(); drawGauges(); clockTxt(); drawFavs(); updLabel(); if (NOTI()) checkNotify(); }
+unitUI(); bellUI(); drawFavs();
+if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) navigator.serviceWorker.register('sw.js').catch(() => { });
+
 let saved = null;
 try { saved = JSON.parse(localStorage.getItem('place')); L = localStorage.getItem('lang') || 'en'; } catch (e) { }
 $('lang').value = L; applyLang(); load(saved || 'Delhi');
