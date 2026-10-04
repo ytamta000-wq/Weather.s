@@ -108,6 +108,17 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 #ptr.go svg{animation:spin 1s linear infinite}
 [data-th=white] #ptr{background:#fff;color:#0f1420;border-color:rgba(0,0,0,.2)}
 
+/* ===== v13: search bar lives at the bottom of the screen ===== */
+#sbar{position:fixed;left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:572px;bottom:calc(12px + env(safe-area-inset-bottom));margin:0!important;z-index:50}
+#sug{position:fixed;left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:572px;top:auto;bottom:calc(84px + env(safe-area-inset-bottom));max-height:46vh;overflow-y:auto;z-index:55}
+.wrap{padding-bottom:110px}
+#toast{bottom:92px}
+[data-th=space] #sbar{background:transparent;border-color:transparent}
+[data-th=space] .wrap>.win#sbar{animation:none}
+[data-th=space] #q{background:rgba(0,0,0,.9);border-color:rgba(255,255,255,.22)}
+[data-th=space] .ic2,[data-th=space] .ic3,[data-th=space] .seg2,[data-th=space] .chip,[data-th=space] .pill{background:transparent}
+[data-th=space] .ic2.on,[data-th=space] .chip.on,[data-th=space] .pill.on{background:#fff}
+
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .up{transform:translateY(-12px) scale(1.03)!important;box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.28);z-index:30;position:relative}
@@ -291,7 +302,7 @@ input{-webkit-user-select:text;user-select:text}
 <canvas id="fx"></canvas>
 <div class="wrap">
   <div id="skyH"><div id="skyT"></div></div>
-  <div class="win row" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
+  <div class="win row" id="sbar" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
   <div id="sug"></div>
   <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="ur">اردو</option><option value="tr">Türkçe</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="id">Bahasa Indonesia</option></select></div></div>
   <div class="tools row" id="tools"><div class="seg2" id="uT"><button data-u="C">°C</button><button data-u="F">°F</button></div><div class="seg2" id="uS"><button data-u="kmh">km/h</button><button data-u="mph">mph</button></div><button id="bell" class="ic2" aria-label="Alerts"></button></div>
