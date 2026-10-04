@@ -159,6 +159,59 @@ input{-webkit-user-select:text;user-select:text}
 [data-th=white] .chip.on{background:#0f1420;color:#fff}
 [data-th=white] .chip button{background:transparent;color:inherit}
 [data-th=white] .ncb i{background:rgba(0,0,0,.1)}[data-th=white] .ncb i.w{background:#2f6fe0}
+
+/* ===== v5 ===== */
+#dw{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,0);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);transition:background .3s,backdrop-filter .3s,-webkit-backdrop-filter .3s;-webkit-tap-highlight-color:transparent}
+#dw.on{background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+.dwc{width:100%;max-width:440px;max-height:86vh;overflow:hidden;background:rgba(18,18,20,.97);border:1px solid rgba(255,255,255,.2);border-radius:28px;box-shadow:0 30px 80px rgba(0,0,0,.7);color:#fff;position:relative;transform-origin:center;will-change:transform,opacity}
+.dws{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain}
+.dws::-webkit-scrollbar{display:none}
+.dsl{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;padding:20px 20px 16px;max-height:calc(86vh - 44px);overflow-y:auto;box-sizing:border-box}
+.dnav{display:flex;align-items:center;justify-content:center;gap:14px;padding:0 0 14px}
+.dnav button{width:30px;height:30px;padding:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:1rem;line-height:1}
+.dots{display:flex;gap:6px}.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25);transition:.2s}.dots i.on{background:#fff;width:18px;border-radius:5px}
+.dh{display:flex;align-items:center;gap:12px}.dh .e{font-size:2rem;line-height:1}.dh h4{margin:0;font-weight:500;font-size:1.1rem}
+.dbig{font-size:3.2rem;font-weight:200;line-height:1.05;margin:10px 0 2px}.dbig small{display:inline!important;font-size:1rem;opacity:.6;margin-left:6px;white-space:nowrap}
+.dlv{display:inline-block;padding:3px 12px;border-radius:999px;font-size:.82rem;font-weight:600;color:#000;margin:4px 0 8px}
+.dm{height:10px;border-radius:6px;position:relative;margin:10px 0 4px}.dm i{position:absolute;top:-4px;width:4px;height:18px;background:#fff;border-radius:2px;box-shadow:0 0 6px #000;transform:translateX(-50%)}
+.dmt{display:flex;justify-content:space-between;font-size:.7rem;opacity:.5}
+.dp{font-size:.9rem;opacity:.82;line-height:1.5;margin:10px 0}
+.dst{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.dst div{background:rgba(255,255,255,.07);border-radius:14px;padding:8px 6px;text-align:center}.dst small{display:block;opacity:.55;font-size:.7rem}.dst b{font-weight:500;font-size:.95rem}
+.dsp{width:100%;height:auto;display:block;margin:6px 0}
+.dcb{position:relative;margin-top:6px}
+.dhr{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.dhr div{background:rgba(255,255,255,.06);border-radius:12px;padding:6px 2px;text-align:center;font-size:.78rem}.dhr svg{width:26px;height:26px}
+.dl{margin:8px 0 0;padding:0;list-style:none;font-size:.92rem}.dl li{padding:6px 0 6px 26px;position:relative;line-height:1.4}
+.dl.g li:before{content:"✔";position:absolute;left:2px;color:#3ddc84}.dl.r li:before{content:"✖";position:absolute;left:2px;color:#ff6b6b}
+.dtt{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;opacity:.6;margin-top:12px}
+.ctg{position:absolute;top:0;right:0;z-index:3;display:inline-flex;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.45);padding:2px}
+.ctg button{padding:4px 10px;background:transparent;color:inherit;border-radius:999px;font-size:.72rem;font-weight:600}
+.ctg button.on{background:#fff;color:#000}
+.tpg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.tp2{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:6px;min-height:168px;cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;-webkit-user-select:none;user-select:none}
+.tp2 .th{display:flex;align-items:center;gap:8px;font-weight:500;font-size:.95rem}.tp2 .th span{font-size:1.4rem}
+.tp2 .vz2{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.tp2 .ring{position:relative;width:74px;height:74px}.ring svg{width:74px;height:74px;transform:rotate(-90deg)}.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.25rem;font-weight:500}
+.tp2 .cap{font-size:.74rem;opacity:.65}
+.tp2 .ln{font-size:.76rem;opacity:.85;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center}
+.segs{display:flex;gap:4px;width:100%;margin:6px 0}.segs i{flex:1;height:14px;border-radius:5px;background:rgba(255,255,255,.12)}
+.mbar{width:100%;height:10px;border-radius:6px;position:relative;margin:10px 0 4px}.mbar i{position:absolute;top:-4px;width:4px;height:18px;background:#fff;border-radius:2px;box-shadow:0 0 5px #000;transform:translateX(-50%)}
+.drops{font-size:1.1rem;letter-spacing:2px}
+.nrh{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:12px}
+.nrh div{text-align:center;font-size:.72rem}.nrh .bb{height:38px;border-radius:6px;background:rgba(255,255,255,.1);position:relative;overflow:hidden;margin:3px 0}.nrh .bb i{position:absolute;left:0;right:0;bottom:0;background:#4da3ff}
+.nrt{font-size:.74rem;opacity:.6;margin-top:10px}
+#clkW{background:#000!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#fff;border-color:rgba(255,255,255,.14)!important}
+#clkW .sub{color:#fff}
+#clkW .ck #ckS{color:#19f060}
+[data-th=white] #dw.on{background:rgba(20,30,50,.45)}
+[data-th=white] .dwc{background:rgba(255,255,255,.98);color:#0f1420;border-color:rgba(0,0,0,.12)}
+[data-th=white] .dst div,[data-th=white] .dhr div{background:rgba(0,0,0,.05)}
+[data-th=white] .dnav button{background:rgba(0,0,0,.08);color:#0f1420}[data-th=white] .dots i{background:rgba(0,0,0,.2)}[data-th=white] .dots i.on{background:#0f1420}
+[data-th=white] .tp2{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1)}[data-th=white] .segs i{background:rgba(0,0,0,.12)}
+[data-th=white] .ctg{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.2)}[data-th=white] .ctg button.on{background:#0f1420;color:#fff}
+[data-th=white] .nrh .bb{background:rgba(0,0,0,.08)}
+[data-th=white] #clkW .ck,[data-th=white] #clkW h3{color:#fff}
 </style>
 </head>
 <body>
@@ -431,7 +484,7 @@ async function find(q) {
 }
 async function findCity(q) { const r = await find(q); if (!r.length) throw new Error(t('nf')); return r[0]; }
 async function getWeather(p) {
-  const f = getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability,is_day,dew_point_2m,visibility,uv_index,precipitation,wind_gusts_10m,apparent_temperature,snowfall&minutely_15=precipitation&forecast_minutely_15=24&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset&timezone=auto&past_days=1&forecast_days=8`);
+  const f = getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover,wind_direction_10m&hourly=temperature_2m,weather_code,precipitation_probability,is_day,dew_point_2m,visibility,uv_index,precipitation,wind_gusts_10m,apparent_temperature,snowfall,relative_humidity_2m,pressure_msl,wind_speed_10m,cloud_cover&minutely_15=precipitation&forecast_minutely_15=24&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,precipitation_sum,snowfall_sum,wind_speed_10m_max,wind_gusts_10m_max,apparent_temperature_max,apparent_temperature_min&timezone=auto&past_days=1&forecast_days=8`);
   const a = getJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${p.lat}&longitude=${p.lon}&current=us_aqi,pm2_5,pm10`).catch(() => null);
   const [w, q] = await Promise.all([f, a]); return { w, q };
 }
@@ -488,7 +541,8 @@ function tips(w, q, d, i) {
   const ic = ['👕', '🏃', '🚗', '🩺', '🧴', '💧', '😮‍💨', '🏠', '🌙'], pm = q && q.current ? q.current.pm2_5 : '-';
   const det = [`${t('feels')} ${dT(fl)} · ${t('wind')} ${sp1(wi)} ${uS()}`, `${t('temp')} ${dT(tp)} · AQI ${aqi || '-'} · ${t('pop')} ${pp}%`, `${t('vis')} ${vis.toFixed(1)} km · ${t('wind')} ${sp1(wi)} ${uS()}`, `${t('hum')} ${hu}% · ${t('feels')} ${dT(fl)} · Δ ${dD(sp)}`, `${t('uv')} ${uv.toFixed(1)} (max ${uvm})`, `${t('temp')} ${dT(tp)} · ${t('hum')} ${hu}%`, `AQI ${aqi || '-'} · PM2.5 ${pm}`, `${t('wind')} ${sp1(wi)} · ${t('gust')} ${Math.round(cS(gu))} ${uS()} · ${t('rn')} ${c.rain} mm`, `${t('set')} ${ss} · ${t('moon')} ${ill}% ${t('lit')}`];
   const hr = probs.findIndex(p => p >= 50), nx = hr === 0 ? t('n0') : hr > 0 ? t('nN').replace('{n}', hr) : t('nX'), li = a => a.length ? a.map(x => `<li>${x}</li>`).join('') : `<li>${L === 'hi' ? 'कोई खास परहेज़ नहीं' : 'Nothing special'}</li>`;
-  $('tips').innerHTML = `<h3>${t('tips')}</h3><div class="sub">${nx} · ${t('tipsD')}</div><div class="tpg">${S.map((x, j) => `<div class="tp"><h4>${ic[j]} ${t('tt')[j]}</h4><small>${det[j]}</small><b class="g">${t('yes')}</b><ul>${li(x.y)}</ul><b class="r">${t('no')}</b><ul>${li(x.n)}</ul></div>`).join('')}</div>`;
+  $('tips').innerHTML = `<h3>${t('tips')}</h3><div class="sub">${nx} · ${t('tipsD')}</div>`;
+  tipsUI(S, det, ic, li, { tp, fl, hu, wi, gu, uv, vis, aqi, day, k, sn, wet, w, d });
 }
 const summ = o => { const w = o.w, c = w.current, d = todayIdx(w); return { tp: c.temperature_2m, fl: c.apparent_temperature, hu: c.relative_humidity_2m, wi: c.wind_speed_10m, ra: w.daily.precipitation_probability_max[d], uv: w.daily.uv_index_max[d], aq: o.q && o.q.current ? o.q.current.us_aqi : null }; };
 let CMP = null;
@@ -523,12 +577,13 @@ async function series(n) {
 }
 function chart(box, lb, ser, type, u, m0) {
   const Wd = 640, H = 230, Lm = 46, R = 10, Tm = 12, B = 26, N = lb.length, IW = Wd - Lm - R, all = ser.flatMap(s => s.d); let mn = Math.min(...all), mx = Math.max(...all);
-  if (type === 'bar') { mn = 0; mx = Math.max(mx, m0 || 1) * 1.1; } else { if (mx - mn < (m0 || 2)) { const m = ((m0 || 2) - (mx - mn)) / 2; mn -= m; mx += m; } const pd = (mx - mn) * .08; mn -= pd; mx += pd; }
+  const rng = type === 'bar' && ser.length > 1, trunc = type === 'bar' && (rng || (mn > 0 && mx - mn < mx * .15)), zero = type === 'bar' && !trunc;
+  if (zero) { const a0 = Math.min(0, mn), b0 = Math.max(0, mx), top = Math.max(b0, a0 < 0 ? 0 : (m0 || 1)), pd0 = (top - a0) * .1; mn = a0 < 0 ? a0 - pd0 : 0; mx = top + pd0; } else { if (mn === 0 && mx === 0) { mx = m0 || 1; } else { if (mx - mn < (m0 || 2)) { const m = ((m0 || 2) - (mx - mn)) / 2; mn -= m; mx += m; } const pd = (mx - mn) * .08; mn -= pd; mx += pd; } }
   const sp = mx - mn, dec = sp < 1 ? 2 : sp < 10 ? 1 : 0, X = i => Lm + (type === 'bar' ? (i + .5) * IW / N : i * IW / Math.max(1, N - 1)), Y = v => Tm + (1 - (v - mn) / sp) * (H - Tm - B);
   let s = `<svg viewBox="0 0 ${Wd} ${H}" width="100%">`;
   for (let j = 0; j <= 4; j++) { const v = mn + sp * j / 4, y = Y(v); s += `<line x1="${Lm}" x2="${Wd - R}" y1="${y}" y2="${y}" stroke="currentColor" stroke-opacity=".12"/><text x="${Lm - 6}" y="${y + 4}" fill="currentColor" fill-opacity=".6" font-size="11" text-anchor="end">${v.toFixed(dec)}</text>`; }
   for (let j = 0; j < 5; j++) { const i = Math.round(j * (N - 1) / 4); s += `<text x="${X(i)}" y="${H - 6}" fill="currentColor" fill-opacity=".6" font-size="11" text-anchor="middle">${lb[i]}</text>`; }
-  if (type === 'bar') { const bw = Math.max(2, IW / N * .62); ser[0].d.forEach((v, i) => { if (v > 0) s += `<rect x="${X(i) - bw / 2}" y="${Y(v)}" width="${bw}" height="${Math.max(1, Y(0) - Y(v))}" rx="${Math.min(3, bw / 2)}" fill="${ser[0].c}"/>`; }); }
+  if (type === 'bar') { const bw = Math.max(2, IW / N * .62), z0 = ser[0]; z0.d.forEach((v, i) => { if (!rng && !trunc && v === 0) return; const a = Y(v), b = rng ? Y(ser[1].d[i]) : Y(trunc ? mn : 0), y0 = Math.min(a, b); s += `<rect x="${X(i) - bw / 2}" y="${y0}" width="${bw}" height="${Math.max(2, Math.abs(a - b))}" rx="${Math.min(3, bw / 2)}" fill="${z0.cf ? z0.cf(rng ? (v + ser[1].d[i]) / 2 : v) : z0.c}"/>`; }); }
   else { const pts = d => d.map((v, i) => X(i).toFixed(1) + ',' + Y(v).toFixed(1)); s += `<polygon points="${pts(ser[0].d).concat(ser[1] ? pts(ser[1].d).reverse() : [X(N - 1) + ',' + Y(mn), X(0) + ',' + Y(mn)]).join(' ')}" fill="currentColor" fill-opacity=".08"/>`;
     ser.forEach(z => { for (let i = 1; i < N; i++) s += `<line x1="${X(i - 1)}" y1="${Y(z.d[i - 1])}" x2="${X(i)}" y2="${Y(z.d[i])}" stroke="${z.cf ? z.cf((z.d[i - 1] + z.d[i]) / 2) : z.c}" stroke-width="2.4" stroke-linecap="round"/>`; }); }
   s += `<line class="cur" y1="${Tm}" y2="${H - B}" stroke="currentColor" stroke-opacity=".5" style="display:none"/></svg><div class="tip"></div>`; box.innerHTML = s;
@@ -540,7 +595,7 @@ function chart(box, lb, ser, type, u, m0) {
 async function drawDash(n) {
   RANGE = n; const o = $('dash'); o.innerHTML = `<div class="win sub">${t('load')}</div>`;
   try {
-    const S = await series(n), lo = S.lo || S.hi, sm = a => a.reduce((x, y) => x + y, 0), mean = (sm(S.hi) + sm(lo)) / (S.hi.length * 2), mxT = Math.max(...S.hi), mnT = Math.min(...lo), tr = sm(S.rain), ts = sm(S.snow), rd = S.rain.filter(x => x > (n === 1 ? .1 : 1)).length;
+    const S = DS = await series(n), lo = S.lo || S.hi, sm = a => a.reduce((x, y) => x + y, 0), mean = (sm(S.hi) + sm(lo)) / (S.hi.length * 2), mxT = Math.max(...S.hi), mnT = Math.min(...lo), tr = sm(S.rain), ts = sm(S.snow), rd = S.rain.filter(x => x > (n === 1 ? .1 : 1)).length;
     const kp = [[t('kavg'), dT(mean), tc(mean)], [t('kmax'), dT(mxT), tc(mxT)], [t('kmin'), dT(mnT), tc(mnT)], [t('ktr'), tr.toFixed(1) + ' mm', '', rd + ' ' + (n === 1 ? t('rdh') : t('rdd'))], [t('kts'), ts.toFixed(1) + ' cm'], [t('kw'), Math.round(cS(Math.max(...S.wind))) + ' ' + uS()]];
     const win = (id, ti, de, ex = '', vk = '') => `<section class="win vz"><canvas class="vzc" data-k="${vk}"></canvas><div class="vzi"><h3>${ti}</h3><div class="sub">${de || ''}</div>${ex}<div class="cb" id="${id}"></div></div></section>`, pos = clamp((mean + 40) / 82, 0, 1) * 98;
     o.innerHTML = `<section class="win"><div class="kpis">${kp.map(x => `<div><small>${x[0]}</small><b style="color:${x[2] || 'inherit'}">${x[1]}</b>${x[3] ? `<small>${x[3]}</small>` : ''}</div>`).join('')}</div></section>`
@@ -548,7 +603,7 @@ async function drawDash(n) {
     VZD = { tc: tc(mean), mean, wind: Math.max(...S.wind) }; vzInit();
     chart($('c1'), S.lb, S.lo ? [{ d: S.hi.map(cT), cf: tcU, n: t('hi') }, { d: S.lo.map(cT), cf: tcU, n: t('lo') }] : [{ d: S.hi.map(cT), cf: tcU, n: t('temp') }], 'band', '°', 3);
     chart($('c2'), S.lb, [{ d: S.rain, c: '#2f8bff' }], 'bar', ' mm', n === 1 ? 1 : 5); chart($('c4'), S.lb, [{ d: S.snow, c: '#8fc4ff' }], 'bar', ' cm', n === 1 ? 1 : 5);
-    chart($('c3'), S.lb, [{ d: S.wind.map(cS), c: '#2fd6a8' }], 'band', ' ' + uS(), 6); chart($('c5'), S.lb, [{ d: S.pr, c: '#a17cff' }], 'band', ' hPa', 4);
+    chart($('c3'), S.lb, [{ d: S.wind.map(cS), c: '#2fd6a8' }], 'band', ' ' + uS(), 6); chart($('c5'), S.lb, [{ d: S.pr, c: '#a17cff' }], 'band', ' hPa', 4); dashTog();
   } catch (e) { o.innerHTML = `<div class="win err">${e.message}</div>`; }
 }
 /* ---------- live backgrounds inside the dashboard cards ---------- */
@@ -668,7 +723,7 @@ let tm; const sug = $('sug');
 function pick(r) { sug.innerHTML = ''; r.slice(0, 8).forEach(p => { const d = document.createElement('div'); d.innerHTML = `${p.name}<br><small>${p.sub || ''}</small>`; d.onclick = () => { sug.style.display = 'none'; $('q').value = p.name.split(',')[0]; load(p); }; sug.appendChild(d); }); sug.style.display = r.length ? 'block' : 'none'; }
 $('q').oninput = e => { clearTimeout(tm); const v = e.target.value.trim(); if (v.length < 3) { sug.style.display = 'none'; return; } tm = setTimeout(async () => { try { pick(await find(v)); } catch (x) { } }, 600); };
 $('geo').onclick = () => navigator.geolocation && navigator.geolocation.getCurrentPosition(async p => { let n = 'My location'; try { const j = await getJSON(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=${L}&lat=${p.coords.latitude}&lon=${p.coords.longitude}`), a = j.address || {}; n = (a.city || a.town || a.village || a.county || n) + (a.state ? ', ' + a.state : ''); } catch (x) { } load({ name: n, lat: p.coords.latitude, lon: p.coords.longitude }); });
-document.addEventListener('click', e => { if (e.target.closest('input,button,select,#map,#sug,#sug2,.cb,.ck,a')) return; const el = e.target.closest('.grid>div,.kpis>div,.tp,.win'); document.querySelectorAll('.up').forEach(x => x !== el && x.classList.remove('up')); if (el) el.classList.toggle('up'); });
+document.addEventListener('click', e => { if (e.target.closest('#dw')) return; if (e.target.closest('input,button,select,#map,#sug,#sug2,.cb,.ck,a')) return; const el = e.target.closest('.grid>div,.kpis>div,.tp,.win'); document.querySelectorAll('.up').forEach(x => x !== el && x.classList.remove('up')); if (el) el.classList.toggle('up'); });
 /* ===================== v4 additions ===================== */
 const SHARE_IC = SV('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/>');
 const REF_IC = SV('<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>');
@@ -747,7 +802,7 @@ function drawAlerts() {
   const w = W.w, nc = calcNow(w), al = calcAlerts(w, W.q); W.al = al; W.nc = nc; let s = '';
   if (nc) {
     const mx = Math.max(2, ...nc.vals);
-    s += `<div class="ncr"><span class="nci">${nc.ic}</span><div><b>${nc.msg}</b><div class="sub">${nc.sub}</div></div></div><div class="ncb">${nc.vals.map(v => `<i class="${v >= .1 ? 'w' : ''}" style="height:${Math.max(7, v / mx * 100)}%"></i>`).join('')}</div><div class="ncl"><span>${t('now')}</span><span>+3 ${t('hh')}</span><span>+6 ${t('hh')}</span></div>`;
+    s += `<div class="ncr"><span class="nci">${nc.ic}</span><div><b>${nc.msg}</b><div class="sub">${nc.sub}</div></div></div>${nowViz(nc, mx)}`;
   }
   s += al.length ? `<div class="als">${al.map(a => { const [ti, tx] = alText(a); return `<div class="al lv${a.lvl}"><span class="ai">${ALI[a.type]}</span><div><b>${ti}</b><div class="sub">${tx}</div></div></div>`; }).join('')}</div>` : `<div class="sub okw">✅ ${t('noWarn')}</div>`;
   $('alrt').innerHTML = s;
@@ -810,29 +865,26 @@ $('ck').onclick = () => { H24 = !H24; try { localStorage.setItem('h24', H24 ? '1
 setInterval(clockTxt, 250);
 const PEND = { vis: false };
 if (window.IntersectionObserver) new IntersectionObserver(es => { PEND.vis = es[es.length - 1].isIntersecting; }, { rootMargin: '100px' }).observe($('pendC')); else PEND.vis = true;
-function infinity(x, cx, cy, a, phi, lt, al) { /* lemniscate spinning about the pendulum axis, with perspective */
-  const N = 64, f = a * 4.2, P = [], cs = Math.cos(phi), sn = Math.sin(phi);
-  for (let j = 0; j <= N; j++) { const u = j / N * 6.2832, dd = 1 + Math.sin(u) ** 2, X0 = a * Math.cos(u) / dd, Y0 = a * Math.sin(u) * Math.cos(u) / dd, Z = X0 * sn, sc = f / (f - Z); P.push([cx + X0 * cs * sc, cy + Y0 * sc, sc]); }
-  x.lineJoin = 'round';
-  for (let pass = 0; pass < 2; pass++) { x.lineCap = pass ? 'round' : 'butt'; for (let j = 1; j <= N; j++) {
-    const sc = (P[j][2] + P[j - 1][2]) / 2, dep = clamp((sc - .8) / .5, 0, 1);
-    x.strokeStyle = pass ? (lt ? `rgba(15,20,32,${al * (.45 + .55 * dep)})` : `rgba(240,255,190,${al * (.45 + .55 * dep)})`) : (lt ? `rgba(60,90,200,${al * .12})` : `rgba(220,245,110,${al * .22 * (.4 + dep)})`);
-    x.lineWidth = pass ? 2.2 + 2.6 * dep : 8 + 5 * dep; x.beginPath(); x.moveTo(P[j - 1][0], P[j - 1][1]); x.lineTo(P[j][0], P[j][1]); x.stroke(); } }
+function infinity(x, cx, cy, a, phi, lt, al) { /* lemniscate rotating in its own plane: ∞ → 8 → ∞ → 8 */
+  const N = 72, P = [], cs = Math.cos(phi), sn = Math.sin(phi);
+  for (let j = 0; j <= N; j++) { const u = j / N * 6.2832, dd = 1 + Math.sin(u) ** 2, X0 = a * 1.1 * Math.cos(u) / dd, Y0 = a * 1.1 * Math.sin(u) * Math.cos(u) / dd; P.push([cx + X0 * cs - Y0 * sn, cy + X0 * sn + Y0 * cs]); }
+  x.lineJoin = 'round'; x.lineCap = 'round';
+  [[11, .16], [6, .3], [3.2, 1]].forEach(([lw, k], n) => { x.strokeStyle = n === 2 ? `rgba(25,240,96,${al})` : `rgba(0,255,100,${al * k})`; x.lineWidth = lw; x.beginPath(); P.forEach((p, j) => j ? x.lineTo(p[0], p[1]) : x.moveTo(p[0], p[1])); x.stroke(); });
 }
 function drawPend() {
   const c = $('pendC'), dpr = Math.min(devicePixelRatio || 1, 2), w = c.clientWidth, h = c.clientHeight; if (!w || !h) return;
   if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
   const x = c.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
-  const lt = TH === 'white', ink = lt ? '15,20,32' : '255,255,255', cx = w / 2, py = 18, Lr = h - 100, th0 = .5, tt = Date.now() / 1000;
-  const ang = s => RM ? 0 : th0 * Math.cos(Math.PI * s), spin = s => RM ? .4 : s / 6 * 6.2832, th = ang(tt), bx = cx + Math.sin(th) * Lr, by = py + Math.cos(th) * Lr, fy = h - 14;
+  const lt = false, ink = '255,255,255', cx = w / 2, py = 18, Lr = h - 100, th0 = .5, tt = Date.now() / 1000;
+  const ang = s => RM ? 0 : th0 * Math.cos(Math.PI * s), spin = s => RM ? .4 : s / 5 * 6.2832, th = ang(tt), bx = cx + Math.sin(th) * Lr, by = py + Math.cos(th) * Lr, fy = h - 14;
   x.strokeStyle = `rgba(${ink},.12)`; x.lineWidth = 1; x.beginPath(); x.moveTo(cx - w * .4, fy); x.lineTo(cx + w * .4, fy); x.stroke();
-  const sg = x.createRadialGradient(bx, fy, 2, bx, fy, 46); sg.addColorStop(0, `rgba(${lt ? '15,20,32' : '220,245,110'},.28)`); sg.addColorStop(1, 'rgba(0,0,0,0)');
+  const sg = x.createRadialGradient(bx, fy, 2, bx, fy, 46); sg.addColorStop(0, 'rgba(25,240,96,.3)'); sg.addColorStop(1, 'rgba(0,0,0,0)');
   x.save(); x.translate(0, fy); x.scale(1, .18); x.translate(0, -fy); x.fillStyle = sg; x.beginPath(); x.arc(bx, fy, 46, 0, 7); x.fill(); x.restore();
   x.setLineDash([3, 7]); x.strokeStyle = `rgba(${ink},.16)`; x.beginPath(); x.arc(cx, py, Lr, Math.PI / 2 - th0, Math.PI / 2 + th0); x.stroke(); x.setLineDash([]);
   x.fillStyle = `rgba(${ink},.3)`; [-th0, th0].forEach(s => { x.beginPath(); x.arc(cx + Math.sin(s) * Lr, py + Math.cos(s) * Lr, 2.5, 0, 7); x.fill(); });
   if (!RM) for (let k = 4; k >= 1; k--) { const s = tt - k * .04, t2 = ang(s); x.save(); x.translate(cx + Math.sin(t2) * Lr, py + Math.cos(t2) * Lr); x.rotate(-t2); infinity(x, 0, 0, 36, spin(s), lt, .16 / k + .02); x.restore(); }
-  const rgd = x.createLinearGradient(cx, py, bx, by); rgd.addColorStop(0, `rgba(${ink},.85)`); rgd.addColorStop(1, `rgba(${ink},.45)`); x.strokeStyle = rgd; x.lineWidth = 2.4; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx, py); x.lineTo(bx, by); x.stroke();
-  x.fillStyle = `rgba(${ink},.8)`; x.fillRect(cx - 30, 4, 60, 5); x.beginPath(); x.arc(cx, py, 5, 0, 7); x.fill();
+  const rgd = x.createLinearGradient(cx, py, bx, by); rgd.addColorStop(0, `rgba(${ink},.85)`); rgd.addColorStop(1, `rgba(${ink},.45)`); x.strokeStyle = '#fff'; x.lineWidth = 3; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx, py); x.lineTo(bx, by); x.stroke();
+  x.fillStyle = '#fff'; x.fillRect(cx - 30, 4, 60, 5); x.beginPath(); x.arc(cx, py, 5, 0, 7); x.fill();
   x.save(); x.translate(bx, by); x.rotate(-th); infinity(x, 0, 0, 36, spin(tt), lt, 1); x.restore();
 }
 (function pendLoop() { requestAnimationFrame(pendLoop); if (PEND.vis && !document.hidden && W) drawPend(); })();
@@ -884,6 +936,208 @@ function extras() { drawAlerts(); drawGauges(); clockTxt(); drawFavs(); updLabel
 unitUI(); bellUI(); drawFavs();
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) navigator.serviceWorker.register('sw.js').catch(() => { });
 
+/* ===================== v5 additions ===================== */
+Object.assign(T.en, { rch: 'Rain chance, next 6 hours', dry: 'Dry spell', sunD: 'Day length', sunN: 'Solar noon', sunG: 'Golden hour', sunL: 'Daylight left', sunC: 'Tomorrow', sunUp: 'Sun is up', sunDn: 'Sun is down', mx: 'Max', mi: 'Min', av: 'Avg', pk: 'Peak', nextH: 'Next 24 hours', line: 'Line', bar: 'Bar', fine: 'Fine', fair: 'Fair', poor: 'Poor', sOut: 'Outdoor score', sRoad: 'Road safety', sCom: 'Comfort', sHome: 'Home safety', sSlp: 'Sleep comfort', sWarm: 'Warmth needed', sUV: 'UV level', sH2O: 'Water today', sAir: 'Air quality', wl: ['Very light', 'Light', 'Medium', 'Warm', 'Heavy'], close: 'Tap outside to close', today: 'Today', hiLo: 'High / Low', feelR: 'Feels range', rainT: 'Rain total', windM: 'Max wind', daylight: 'Daylight', wet: 'Wettest', when: 'When', perDay: 'Per day', rdays: 'Rainy', total: 'Total', cond: 'Condition' });
+Object.assign(T.hi, { rch: 'बारिश की संभावना, अगले 6 घंटे', dry: 'सूखा मौसम', sunD: 'दिन की लंबाई', sunN: 'सूर्य सबसे ऊपर', sunG: 'सुनहरा समय', sunL: 'बची धूप', sunC: 'कल', sunUp: 'सूरज निकला है', sunDn: 'सूरज डूबा है', mx: 'अधिकतम', mi: 'न्यूनतम', av: 'औसत', pk: 'शिखर', nextH: 'अगले 24 घंटे', line: 'लाइन', bar: 'बार', fine: 'बढ़िया', fair: 'ठीक', poor: 'ख़राब', sOut: 'बाहर का स्कोर', sRoad: 'सड़क सुरक्षा', sCom: 'आराम', sHome: 'घर की सुरक्षा', sSlp: 'नींद का आराम', sWarm: 'ज़रूरी गर्माहट', sUV: 'UV स्तर', sH2O: 'आज का पानी', sAir: 'हवा की गुणवत्ता', wl: ['बहुत हल्के', 'हल्के', 'मध्यम', 'गर्म', 'भारी'], close: 'बंद करने के लिए बाहर टैप करें', today: 'आज', hiLo: 'अधिकतम / न्यूनतम', feelR: 'महसूस होने की रेंज', rainT: 'कुल बारिश', windM: 'अधिकतम हवा', daylight: 'दिन की रोशनी', wet: 'सबसे गीला', when: 'कब', perDay: 'प्रति दिन', rdays: 'बारिश वाले', total: 'कुल', cond: 'मौसम' });
+const B2 = (e, h) => L === 'hi' ? h : e, P7 = ['#4da3ff', '#3fd0e0', '#3ddc84', '#f1d84a', '#ff9f1a', '#ff4d4d', '#b455ff'];
+
+/* ---------- floating detail window (grows out of the tile you tapped) ---------- */
+let DWS = null;
+(function () { const d = document.createElement('div'); d.id = 'dw'; d.innerHTML = '<div class="dwc" id="dwc"></div>'; document.body.appendChild(d); })();
+function openDW(src, slides, start) {
+  closeDW(true); const dw = $('dw'), c = $('dwc'); start = start || 0;
+  const many = slides.length > 1;
+  c.innerHTML = `<div class="dws" id="dws">${slides.map(h => `<div class="dsl">${h}</div>`).join('')}</div>` + (many ? `<div class="dnav"><button id="dpv" aria-label="Previous">‹</button><div class="dots">${slides.map((_, j) => `<i class="${j === start ? 'on' : ''}"></i>`).join('')}</div><button id="dnx" aria-label="Next">›</button></div>` : '');
+  dw.style.display = 'flex'; document.body.style.overflow = 'hidden';
+  const r = src && src.getBoundingClientRect ? src.getBoundingClientRect() : null; if (src && src.classList) src.classList.add('up');
+  DWS = { src, many };
+  const sc = $('dws'); sc.scrollLeft = start * c.clientWidth;
+  if (many) {
+    const dots = c.querySelectorAll('.dots i'), go = j => sc.scrollTo({ left: clamp(j, 0, slides.length - 1) * c.clientWidth, behavior: 'smooth' });
+    const upd = () => { const j = Math.round(sc.scrollLeft / c.clientWidth); dots.forEach((q, n) => q.classList.toggle('on', n === j)); DWS.j = j; }; sc.addEventListener('scroll', upd, { passive: true }); DWS.j = start;
+    $('dpv').onclick = () => go((DWS.j || 0) - 1); $('dnx').onclick = () => go((DWS.j || 0) + 1);
+  }
+  const f = c.getBoundingClientRect(); if (r && !RM) { const dx = r.left + r.width / 2 - (f.left + f.width / 2), dy = r.top + r.height / 2 - (f.top + f.height / 2), k = Math.max(.25, Math.min(r.width / f.width, 1));
+    c.style.transition = 'none'; c.style.opacity = '0'; c.style.transform = `translate(${dx}px,${dy}px) scale(${k})`; void c.offsetWidth;
+    c.style.transition = 'transform .42s cubic-bezier(.2,.9,.2,1),opacity .25s'; c.style.opacity = '1'; c.style.transform = 'none'; } else { c.style.transform = 'none'; c.style.opacity = '1'; }
+  requestAnimationFrame(() => dw.classList.add('on'));
+}
+function closeDW(now) {
+  const dw = $('dw'); if (!dw || dw.style.display !== 'flex') return; const c = $('dwc'), S = DWS; DWS = null;
+  const fin = () => { dw.style.display = 'none'; dw.classList.remove('on'); document.body.style.overflow = ''; c.innerHTML = ''; if (S && S.src && S.src.classList) S.src.classList.remove('up'); };
+  if (now || RM) { fin(); return; }
+  dw.classList.remove('on'); const r = S && S.src && S.src.isConnected ? S.src.getBoundingClientRect() : null, f = c.getBoundingClientRect();
+  c.style.transition = 'transform .32s cubic-bezier(.4,0,.2,1),opacity .28s'; c.style.opacity = '0';
+  c.style.transform = r ? `translate(${r.left + r.width / 2 - (f.left + f.width / 2)}px,${r.top + r.height / 2 - (f.top + f.height / 2)}px) scale(${Math.max(.25, Math.min(r.width / f.width, 1))})` : 'scale(.9)';
+  if (S && S.src && S.src.classList) S.src.classList.remove('up'); setTimeout(() => { if (!DWS) fin(); }, 340);
+}
+$('dw').addEventListener('click', e => { if (e.target === $('dw')) closeDW(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDW(); });
+/* any tap outside a tile that opens a window is handled here, before the old lift handler */
+document.addEventListener('click', e => {
+  if (e.target.closest('#dw')) return;
+  if (DWS) { closeDW(); }
+  if (e.target.closest('input,button,select,#map,#sug,#sug2,.cb,.ck,a')) return;
+  const el = e.target.closest('#hero .grid>div,.kpis>div,#daily .dy,.tp2'); if (!el) return;
+  e.stopPropagation(); document.querySelectorAll('.up').forEach(x => x.classList.remove('up'));
+  if (el.matches('#hero .grid>div')) heroDW(el); else if (el.matches('.kpis>div')) kpiDW(el); else if (el.matches('#daily .dy')) dailyDW(el); else tipDW(el);
+}, true);
+
+/* ---------- small helpers for the windows ---------- */
+function spark(vals, i0, fmt, col, h) { /* tiny area chart, vertical marker at "now" */
+  const n = vals.length, Wd = 400, H = h || 90, p = 8, mn = Math.min(...vals), mx = Math.max(...vals), sp = (mx - mn) || 1, X = j => p + j * (Wd - 2 * p) / Math.max(1, n - 1), Y = v => p + (1 - (v - mn) / sp) * (H - 2 * p - 12);
+  const pts = vals.map((v, j) => X(j).toFixed(1) + ',' + Y(v).toFixed(1)).join(' '), im = vals.indexOf(mx), in_ = vals.indexOf(mn);
+  return `<svg class="dsp" viewBox="0 0 ${Wd} ${H}"><polygon points="${p},${H - 12} ${pts} ${Wd - p},${H - 12}" fill="${col}" fill-opacity=".16"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="${X(i0)}" x2="${X(i0)}" y1="4" y2="${H - 12}" stroke="currentColor" stroke-opacity=".5" stroke-dasharray="3 4"/><circle cx="${X(i0)}" cy="${Y(vals[i0])}" r="4.5" fill="${col}" stroke="#fff" stroke-width="1.5"/>
+    <text x="${clamp(X(im), 24, Wd - 24)}" y="${Math.max(11, Y(mx) - 6)}" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity=".8">${fmt(mx)}</text>
+    <text x="${clamp(X(in_), 24, Wd - 24)}" y="${Math.min(H - 14, Y(mn) + 14)}" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity=".6">${fmt(mn)}</text></svg>`;
+}
+const scaleBar = (v, sc, cols, rev) => { const c = rev ? cols.slice().reverse() : cols, g = 'linear-gradient(90deg,' + c.map((x, j) => x + ' ' + (j / (c.length - 1) * 100) + '%').join(',') + ')'; return `<div class="dm" style="background:${g}"><i style="left:${clamp((v - sc[0]) / (sc[1] - sc[0]), 0, 1) * 100}%"></i></div>`; };
+const lvOf = (m, v) => { let j = m.lv.findIndex(x => v < x[0]); if (j < 0) j = m.lv.length - 1; const n = m.lv.length, pal = m.pal || (n <= 5 ? [P7[0], P7[2], P7[3], P7[4], P7[5]].slice(0, n) : P7), c = m.rev ? pal[n - 1 - j] || pal[0] : pal[j] || pal[pal.length - 1]; return { j, name: B2(m.lv[j][1], m.lv[j][2]), col: c }; };
+const hrIdx = (w, d, h) => w.hourly.time.indexOf(w.daily.time[d] + 'T' + pad(h) + ':00');
+const fnum = (v, dec) => (+v).toFixed(dec == null ? 0 : dec);
+
+/* ---------- hero tiles: metric table ---------- */
+const MET = [
+  { id: 'feels', ic: '🌡️', ti: 'feel', ser: 'apparent_temperature', cv: cT, un: () => '°' + U.t, dec: 0, sc: [-20, 50], pal: ['#4da3ff', '#3fd0e0', '#3ddc84', '#f1d84a', '#ff9f1a', '#ff4d4d', '#b455ff'], lv: [[0, 'Freezing', 'जमाने वाली ठंड'], [10, 'Cold', 'ठंडा'], [20, 'Cool', 'सुहावना ठंडा'], [28, 'Comfortable', 'आरामदायक'], [35, 'Warm', 'गर्म'], [41, 'Hot', 'बहुत गर्म'], [99, 'Extreme heat', 'भीषण गर्मी']], ab: ['How the air really feels on your skin, counting wind and humidity. This is the number to dress for.', 'त्वचा को हवा असल में कैसी लगती है, हवा और नमी मिलाकर। कपड़े इसी के हिसाब से चुनें।'] },
+  { id: 'hum', ic: '💧', ti: 'hum', ser: 'relative_humidity_2m', cv: v => v, un: () => '%', dec: 0, sc: [0, 100], lv: [[30, 'Dry', 'सूखा'], [60, 'Comfortable', 'आरामदायक'], [80, 'Humid', 'उमस'], [101, 'Very humid', 'बहुत उमस']], pal: ['#f1d84a', '#3ddc84', '#3fd0e0', '#4da3ff'], ab: ['How much moisture the air holds. High values feel sticky and slow sweat from cooling you; low values dry your skin and throat.', 'हवा में कितनी नमी है। ज़्यादा हो तो चिपचिपा लगता है और पसीना सूखता नहीं; कम हो तो त्वचा और गला सूखता है।'] },
+  { id: 'wind', ic: '💨', ti: 'wind', ser: 'wind_speed_10m', cv: cS, un: uS, dec: 0, sc: [0, 60], lv: [[12, 'Calm to light', 'शांत से हल्की'], [29, 'Breezy', 'झोंकेदार'], [50, 'Strong', 'तेज़'], [75, 'Gale', 'आँधी'], [999, 'Storm', 'तूफ़ान']], pal: ['#3ddc84', '#3fd0e0', '#f1d84a', '#ff9f1a', '#ff4d4d'], ab: ['Average wind speed 10 m above the ground. Gusts can be much stronger than this.', 'ज़मीन से 10 मीटर ऊपर औसत हवा की रफ़्तार। झोंके इससे कहीं तेज़ हो सकते हैं।'] },
+  { id: 'press', ic: '🧭', ti: 'press', ser: 'pressure_msl', cv: v => v, un: () => ' hPa', dec: 0, sc: [980, 1040], lv: [[1000, 'Low, unsettled', 'कम, अस्थिर मौसम'], [1020, 'Normal', 'सामान्य'], [1100, 'High, settled', 'ऊँचा, स्थिर मौसम']], pal: ['#a17cff', '#3fd0e0', '#f1d84a'], ab: ['Air pressure at sea level. Falling pressure often brings clouds and rain; rising pressure brings clearer skies.', 'समुद्र तल पर वायुदाब। दबाव गिरे तो बादल और बारिश आती है; बढ़े तो आसमान साफ़ होता है।'] },
+  { id: 'pop', ic: '☔', ti: 'pop', ser: 'precipitation_probability', cv: v => v, un: () => '%', dec: 0, sc: [0, 100], lv: [[20, 'Unlikely', 'कम संभावना'], [50, 'Possible', 'हो सकती है'], [75, 'Likely', 'संभावना ज़्यादा'], [101, 'Very likely', 'लगभग तय']], pal: ['#3ddc84', '#f1d84a', '#4da3ff', '#2f6fe0'], ab: ['Chance of measurable rain in the hour. The tile shows today\'s highest chance.', 'उस घंटे में नापने लायक बारिश की संभावना। टाइल आज की सबसे ज़्यादा संभावना दिखाती है।'], top: 'pop' },
+  { id: 'uv', ic: '😎', ti: 'uv', ser: 'uv_index', cv: v => v, un: () => '', dec: 1, sc: [0, 12], lv: [[3, 'Low', 'कम'], [6, 'Moderate', 'मध्यम'], [8, 'High', 'ज़्यादा'], [11, 'Very high', 'बहुत ज़्यादा'], [99, 'Extreme', 'अत्यधिक']], pal: ['#3ddc84', '#f1d84a', '#ff9f1a', '#ff4d4d', '#b455ff'], ab: ['Strength of sunburn-causing UV rays. Above 3 you should use sunscreen; above 8 avoid direct sun at midday.', 'त्वचा जलाने वाली UV किरणों की तीव्रता। 3 से ऊपर सनस्क्रीन लगाएँ; 8 से ऊपर दोपहर की सीधी धूप से बचें।'], top: 'uv' },
+  { sun: 'rise' }, { sun: 'set' },
+  { id: 'gust', ic: '🌬️', ti: 'gust', ser: 'wind_gusts_10m', cv: cS, un: uS, dec: 0, sc: [0, 90], lv: [[29, 'Light', 'हल्के'], [50, 'Noticeable', 'महसूस होने वाले'], [75, 'Strong', 'तेज़'], [99, 'Damaging', 'नुकसानदेह'], [999, 'Violent', 'भीषण']], pal: ['#3ddc84', '#3fd0e0', '#f1d84a', '#ff9f1a', '#ff4d4d'], ab: ['Short bursts of wind above the average speed. Above 50 km/h loose objects can fly.', 'औसत से तेज़ हवा के छोटे झोंके। 50 किमी/घंटे से ऊपर ढीला सामान उड़ सकता है।'] },
+  { id: 'rn', ic: '🌧️', ti: 'rn', ser: 'precipitation', cv: v => v, un: () => ' mm', dec: 1, sc: [0, 10], lv: [[.1, 'Dry', 'सूखा'], [2.5, 'Light rain', 'हल्की बारिश'], [7.6, 'Moderate rain', 'मध्यम बारिश'], [50, 'Heavy rain', 'भारी बारिश'], [999, 'Violent rain', 'अत्यधिक बारिश']], pal: ['#3ddc84', '#4da3ff', '#2f6fe0', '#a17cff', '#ff4d4d'], ab: ['Rain falling in this hour, in millimetres. Over 7.6 mm an hour counts as heavy.', 'इस घंटे में गिरी बारिश, मिलीमीटर में। एक घंटे में 7.6 मिमी से ऊपर भारी मानी जाती है।'] },
+  { id: 'sn', ic: '❄️', ti: 'sn', ser: 'snowfall', cv: v => v, un: () => ' cm', dec: 1, sc: [0, 3], lv: [[.05, 'None', 'नहीं'], [.5, 'Light snow', 'हल्की बर्फ़'], [1.5, 'Moderate snow', 'मध्यम बर्फ़'], [99, 'Heavy snow', 'भारी बर्फ़']], pal: ['#3ddc84', '#8fc4ff', '#4da3ff', '#a17cff'], ab: ['Fresh snow settling in this hour, in centimetres.', 'इस घंटे में गिरी ताज़ा बर्फ़, सेंटीमीटर में।'] },
+  { id: 'cl', ic: '☁️', ti: 'cl', ser: 'cloud_cover', cv: v => v, un: () => '%', dec: 0, sc: [0, 100], lv: [[20, 'Clear', 'साफ़'], [60, 'Partly cloudy', 'आंशिक बादल'], [85, 'Mostly cloudy', 'ज़्यादातर बादल'], [101, 'Overcast', 'घना बादल']], pal: ['#f1d84a', '#3fd0e0', '#8a9bb5', '#5b6678'], ab: ['How much of the sky is covered by cloud. More cloud means cooler days and warmer nights.', 'आसमान का कितना हिस्सा बादलों से ढका है। ज़्यादा बादल यानी दिन ठंडे और रातें गर्म।'] },
+  { id: 'dew', ic: '🌫️', ti: 'dew', ser: 'dew_point_2m', cv: cT, un: () => '°' + U.t, dec: 0, sc: [-10, 28], lv: [[10, 'Dry and fresh', 'सूखा और ताज़ा'], [16, 'Pleasant', 'सुहावना'], [21, 'Slightly humid', 'थोड़ी उमस'], [24, 'Muggy', 'उमस भरा'], [99, 'Oppressive', 'असहनीय उमस']], pal: ['#3fd0e0', '#3ddc84', '#f1d84a', '#ff9f1a', '#ff4d4d'], ab: ['The temperature at which dew forms. The higher it is, the muggier the air feels, whatever the humidity says.', 'वह तापमान जिस पर ओस बनती है। यह जितना ज़्यादा, हवा उतनी उमस भरी लगती है।'] },
+  { id: 'vis', ic: '👁️', ti: 'vis', ser: 'visibility', cv: v => v, un: () => ' km', dec: 1, sc: [0, 20], raw: 1000, lv: [[1, 'Dense fog', 'घना कोहरा'], [4, 'Poor', 'ख़राब'], [10, 'Moderate', 'मध्यम'], [999, 'Excellent', 'बेहतरीन']], pal: ['#ff4d4d', '#ff9f1a', '#f1d84a', '#3ddc84'], ab: ['How far you can see. Under 1 km counts as fog; take care while driving.', 'आप कितनी दूर तक देख सकते हैं। 1 किमी से कम हो तो कोहरा माना जाता है; गाड़ी सावधानी से चलाएँ।'] }
+];
+function heroDW(el) {
+  const idx = [...el.parentNode.children].indexOf(el), m = MET[idx]; if (!m || !W) return; const w = W.w, c = w.current, i = Math.max(hourNow(w), 0), d = Math.max(todayIdx(w), 0), h = w.hourly;
+  if (m.sun) return openDW(el, [sunHTML(w, d)]);
+  const title = t(m.ti), arr = h[m.ser], raw = m.raw || 1, series = arr ? arr.slice(i, i + 24).map(v => v == null ? 0 : v / raw) : null;
+  let v = series ? series[0] : 0; const cur = { feels: c.apparent_temperature, hum: c.relative_humidity_2m, wind: c.wind_speed_10m, press: c.pressure_msl, gust: c.wind_gusts_10m, rn: c.rain, sn: c.snowfall, cl: c.cloud_cover }[m.id]; if (cur != null) v = cur;
+  let shown = v; if (m.top === 'pop') shown = w.daily.precipitation_probability_max[d]; if (m.top === 'uv') shown = w.daily.uv_index_max[d];
+  const lv = lvOf(m, shown), fmt = x => fnum(m.cv(x), m.dec), un = m.un();
+  let st = '';
+  if (series && series.length) {
+    const mx = Math.max(...series), mn = Math.min(...series), av = series.reduce((a, b) => a + b, 0) / series.length, pi = series.indexOf(mx), pl = hourLabel(h.time[i + pi]);
+    st = `<div class="dtt">${t('nextH')}</div>${spark(series.map(x => m.cv(x)), 0, x => fnum(x, m.dec), lv.col)}<div class="dst"><div><small>${t('mx')}</small><b>${fmt(mx)}${un}</b></div><div><small>${t('mi')}</small><b>${fmt(mn)}${un}</b></div><div><small>${t('av')}</small><b>${fmt(av)}${un}</b></div></div><div class="sub">${t('pk')}: ${pl}</div>`;
+  }
+  const sc = m.id === 'feels' ? [cT(m.sc[0]), cT(m.sc[1])] : m.sc, pal = m.pal.slice(), val = m.id === 'feels' || m.id === 'dew' || m.id === 'wind' || m.id === 'gust' ? m.cv(shown) : m.cv(shown), scl = (m.id === 'wind' || m.id === 'gust') ? [cS(m.sc[0]), cS(m.sc[1])] : (m.id === 'dew' ? [cT(m.sc[0]), cT(m.sc[1])] : sc);
+  openDW(el, [`<div class="dh"><span class="e">${m.ic}</span><h4>${title}</h4></div><div class="dbig">${fmt(shown)}<small>${un.trim()}</small></div><span class="dlv" style="background:${lv.col}">${lv.name}</span>${scaleBar(val, scl, pal, m.rev)}<div class="dmt"><span>${fnum(scl[0])}</span><span>${fnum(scl[1])}</span></div><div class="dp">${B2(m.ab[0], m.ab[1])}</div>${st}<div class="sub" style="text-align:center;margin-top:8px">${t('close')}</div>`]);
+}
+function sunHTML(w, d) {
+  const sr = w.daily.sunrise[d], ss = w.daily.sunset[d], a = mins(sr), b = mins(ss), len = b - a, now = mins(w.current.time), up = now >= a && now <= b;
+  const d2 = d + 1 < w.daily.time.length ? mins(w.daily.sunset[d + 1]) - mins(w.daily.sunrise[d + 1]) : len, df = d2 - len, hm = m => Math.floor(m / 60) + ' ' + t('hh') + ' ' + pad(Math.round(m % 60)) + ' ' + t('mn'), tt = m => pad(Math.floor(m / 60) % 24) + ':' + pad(Math.round(m % 60) % 60);
+  const prog = clamp((now - a) / len, 0, 1), px = 20 + prog * 360, py = 100 - Math.sin(prog * Math.PI) * 78;
+  return `<div class="dh"><span class="e">${up ? '☀️' : '🌙'}</span><h4>${t('rise')} · ${t('set')}</h4></div><div class="dbig">${sr.slice(11)}<small>→ ${ss.slice(11)}</small></div><span class="dlv" style="background:${up ? '#f1d84a' : '#8a9bb5'}">${up ? t('sunUp') : t('sunDn')}</span>
+    <svg class="dsp" viewBox="0 0 400 120"><line x1="10" x2="390" y1="100" y2="100" stroke="currentColor" stroke-opacity=".3"/><path d="M20 100 Q200 -56 380 100" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-dasharray="4 5"/>${up ? `<circle cx="${px}" cy="${py}" r="9" fill="#ffd34d"/><circle cx="${px}" cy="${py}" r="16" fill="#ffd34d" fill-opacity=".25"/>` : ''}<text x="20" y="116" font-size="11" fill="currentColor" fill-opacity=".7">${sr.slice(11)}</text><text x="380" y="116" font-size="11" text-anchor="end" fill="currentColor" fill-opacity=".7">${ss.slice(11)}</text></svg>
+    <div class="dst"><div><small>${t('sunD')}</small><b>${hm(len)}</b></div><div><small>${t('sunN')}</small><b>${tt(a + len / 2)}</b></div><div><small>${t('sunL')}</small><b>${up ? hm(b - now) : '-'}</b></div></div>
+    <div class="dst"><div><small>${t('sunG')} ☀</small><b>${tt(a)}–${tt(a + 60)}</b></div><div><small>${t('sunG')} 🌇</small><b>${tt(b - 60)}–${tt(b)}</b></div><div><small>${t('sunC')}</small><b>${df >= 0 ? '+' : '−'}${Math.abs(Math.round(df * 60))} s</b></div></div><div class="sub" style="text-align:center;margin-top:8px">${t('close')}</div>`;
+}
+
+/* ---------- daily rows: one big window per day, swipe left and right ---------- */
+function dayHTML(w, n) {
+  const dd = w.daily, h = w.hourly, k = kind(dd.weather_code[n]), date = dd.time[n], a0 = h.time.findIndex(x => x.startsWith(date)), has = a0 >= 0;
+  const hv = key => has && h[key] ? h[key].slice(a0, a0 + 24) : null, tm = hv('temperature_2m'), sr = dd.sunrise[n], ss = dd.sunset[n], len = mins(ss) - mins(sr), tcol = tc(dd.temperature_2m_max[n]);
+  const dl = new Date(date + 'T12:00:00').toLocaleDateString(L === 'hi' ? 'hi-IN' : 'en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+  const g = (lab, val) => `<div><small>${lab}</small><b>${val}</b></div>`, ap = x => x == null ? '-' : x;
+  const sl = [0, 3, 6, 9, 12, 15, 18, 21].map(hh => { const q = a0 + hh; return has && h.time[q] ? `<div><div class="sub">${hourLabel(h.time[q])}</div>${icon(h.weather_code[q], h.is_day[q])}<div style="color:${tc(h.temperature_2m[q])}">${dT(h.temperature_2m[q])}</div><div class="sub">${h.precipitation_probability[q]}%</div></div>` : ''; }).join('');
+  return `<div class="dh"><span class="e">${EMO(dd.weather_code[n], 1)}</span><div><h4>${dl}</h4><div class="sub">${t('c')[k]}</div></div></div>
+    <div class="dbig" style="color:${tcol}">${dT(dd.temperature_2m_max[n])}<small style="color:${tc(dd.temperature_2m_min[n])}">/ ${dT(dd.temperature_2m_min[n])}</small></div>
+    ${tm ? spark(tm.map(cT), clamp(has && date === w.current.time.slice(0, 10) ? hourNow(w) - a0 : 12, 0, 23), x => Math.round(x) + '°', tcol) : ''}
+    <div class="dst">${g(t('feelR'), dT(dd.apparent_temperature_min ? dd.apparent_temperature_min[n] : dd.temperature_2m_min[n]) + ' – ' + dT(dd.apparent_temperature_max ? dd.apparent_temperature_max[n] : dd.temperature_2m_max[n]))}${g(t('pop'), dd.precipitation_probability_max[n] + '%')}${g(t('rainT'), ap(dd.precipitation_sum && dd.precipitation_sum[n] != null ? dd.precipitation_sum[n].toFixed(1) + ' mm' : null))}</div>
+    <div class="dst">${g(t('windM'), dd.wind_speed_10m_max ? Math.round(cS(dd.wind_speed_10m_max[n])) + ' ' + uS() : '-')}${g(t('gust'), dd.wind_gusts_10m_max ? Math.round(cS(dd.wind_gusts_10m_max[n])) + ' ' + uS() : '-')}${g(t('uv'), dd.uv_index_max[n])}</div>
+    <div class="dst">${g(t('rise'), sr.slice(11))}${g(t('set'), ss.slice(11))}${g(t('daylight'), Math.floor(len / 60) + ' ' + t('hh') + ' ' + pad(len % 60) + ' ' + t('mn'))}</div>
+    <div class="dhr">${sl}</div>`;
+}
+function dailyDW(el) {
+  if (!W) return; const w = W.w, d = Math.max(todayIdx(w), 0), rows = [...$('daily').children], j = rows.indexOf(el); if (j < 0) return;
+  openDW(el, Array.from({ length: 7 }, (_, q) => dayHTML(w, d + q)), j);
+}
+
+/* ---------- dashboard summary tiles ---------- */
+function kpiDW(el) {
+  if (!DS) return; const S = DS, idx = [...el.parentNode.children].indexOf(el), n = RANGE, lo = S.lo || S.hi, lb = S.lb, sm = a => a.reduce((x, y) => x + y, 0), per = n === 1 ? t('nextH').replace(t('nextH'), L === 'hi' ? 'पिछले 24 घंटे' : 'Last 24 hours') : n + ' ' + (L === 'hi' ? 'दिन' : 'days');
+  const argmax = a => a.indexOf(Math.max(...a)), argmin = a => a.indexOf(Math.min(...a)); let title, ic, big, un, body = '', col = '#4da3ff', ser, typ, u2, m0;
+  const g = (lab, val) => `<div><small>${lab}</small><b>${val}</b></div>`;
+  if (idx <= 2) {
+    const mean = (sm(S.hi) + sm(lo)) / (S.hi.length * 2), mxT = Math.max(...S.hi), mnT = Math.min(...lo), im = argmax(S.hi), in_ = argmin(lo), v = [mean, mxT, mnT][idx];
+    title = [t('kavg'), t('kmax'), t('kmin')][idx]; ic = ['📊', '🔥', '🧊'][idx]; big = fnum(cT(v)); un = '°' + U.t; col = tc(v);
+    body = `<div class="dst">${g(t('kavg'), dT(mean))}${g(t('kmax'), dT(mxT))}${g(t('kmin'), dT(mnT))}</div><div class="sub">${t('kmax')}: ${lb[im]} · ${t('kmin')}: ${lb[in_]}</div>`;
+    ser = S.lo ? [{ d: S.hi.map(cT), cf: tcU, n: t('hi') }, { d: S.lo.map(cT), cf: tcU, n: t('lo') }] : [{ d: S.hi.map(cT), cf: tcU, n: t('temp') }]; typ = 'band'; u2 = '°'; m0 = 3;
+  } else if (idx === 3 || idx === 4) {
+    const a = idx === 3 ? S.rain : S.snow, tot = sm(a), thr = idx === 3 ? (n === 1 ? .1 : 1) : (n === 1 ? .05 : .5), wd = a.filter(x => x > thr).length, im = argmax(a), u = idx === 3 ? ' mm' : ' cm';
+    title = idx === 3 ? t('ktr') : t('kts'); ic = idx === 3 ? '🌧️' : '❄️'; big = tot.toFixed(1); un = u.trim(); col = idx === 3 ? '#2f8bff' : '#8fc4ff';
+    body = `<div class="dst">${g(t('total'), tot.toFixed(1) + u)}${g(t('wet'), a[im] > 0 ? a[im].toFixed(1) + u : '-')}${g(t('perDay'), (tot / (n === 1 ? 1 : a.length)).toFixed(1) + u)}</div><div class="sub">${a[im] > 0 ? t('when') + ': ' + lb[im] + ' · ' : ''}${wd} ${n === 1 ? t('rdh') : t('rdd')}</div>`;
+    ser = [{ d: a, c: col }]; typ = 'bar'; u2 = u; m0 = n === 1 ? 1 : 5;
+  } else {
+    const mxw = Math.max(...S.wind), im = argmax(S.wind), av = sm(S.wind) / S.wind.length;
+    title = t('kw'); ic = '💨'; big = fnum(cS(mxw)); un = uS(); col = '#2fd6a8';
+    body = `<div class="dst">${g(t('mx'), Math.round(cS(mxw)) + ' ' + uS())}${g(t('av'), Math.round(cS(av)) + ' ' + uS())}${g(t('when'), lb[im])}</div>`;
+    ser = [{ d: S.wind.map(cS), c: col }]; typ = 'band'; u2 = ' ' + uS(); m0 = 6;
+  }
+  openDW(el, [`<div class="dh"><span class="e">${ic}</span><div><h4>${title}</h4><div class="sub">${per}</div></div></div><div class="dbig" style="color:${col}">${big}<small>${un}</small></div>${body}<div class="dcb" id="dwch"></div><div class="sub" style="text-align:center;margin-top:8px">${t('close')}</div>`]);
+  chart0($('dwch'), lb, ser, typ, u2, m0);
+}
+
+/* ---------- dashboard: Line / Bar switch on every chart card ---------- */
+let DS = null; const DEFT = { c1: 'band', c2: 'bar', c3: 'band', c4: 'bar', c5: 'band' }, CHA = {}; let DTOG = {}; try { DTOG = JSON.parse(localStorage.getItem('ct')) || {}; } catch (e) { }
+const chart0 = chart;
+chart = function (box, lb, ser, type, u, m0) { const id = box && box.id; if (DEFT[id]) { CHA[id] = [lb, ser, type, u, m0]; if (DTOG[id]) type = DTOG[id]; } return chart0(box, lb, ser, type, u, m0); };
+function dashTog() {
+  Object.keys(DEFT).forEach(id => {
+    const box = $(id); if (!box) return; const card = box.closest('.vzi'); if (!card || card.querySelector('.ctg')) return; const cur = DTOG[id] || DEFT[id];
+    const g = document.createElement('div'); g.className = 'ctg'; g.innerHTML = `<button data-t="band" class="${cur === 'band' ? 'on' : ''}">${t('line')}</button><button data-t="bar" class="${cur === 'bar' ? 'on' : ''}">${t('bar')}</button>`;
+    g.onclick = e => { const b = e.target.closest('button'); if (!b) return; DTOG[id] = b.dataset.t; try { localStorage.setItem('ct', JSON.stringify(DTOG)); } catch (x) { } g.querySelectorAll('button').forEach(q => q.classList.toggle('on', q === b)); chart($(id), ...CHA[id]); };
+    card.appendChild(g);
+  });
+}
+
+/* ---------- rain card: show something useful when no rain is coming ---------- */
+function nowViz(nc, mx) {
+  if (nc.vals.some(v => v >= .1)) return `<div class="ncb">${nc.vals.map(v => `<i class="${v >= .1 ? 'w' : ''}" style="height:${Math.max(7, v / mx * 100)}%"></i>`).join('')}</div><div class="ncl"><span>${t('now')}</span><span>+3 ${t('hh')}</span><span>+6 ${t('hh')}</span></div>`;
+  const w = W.w, i = Math.max(hourNow(w), 0), h = w.hourly;
+  return `<div class="nrt">${t('rch')}</div><div class="nrh">${Array.from({ length: 6 }, (_, j) => { const q = i + j, p = h.precipitation_probability[q] || 0; return `<div><span>${j ? hourLabel(h.time[q]) : t('now')}</span><div class="bb"><i style="height:${Math.max(4, p)}%"></i></div><b>${p}%</b></div>`; }).join('')}</div>`;
+}
+
+/* ---------- life tips as visual tiles ---------- */
+let TIPD = [];
+function ringHTML(score, col) { const C = 2 * Math.PI * 30; return `<div class="ring"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="30" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="7"/><circle cx="36" cy="36" r="30" fill="none" stroke="${col}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(C * score / 100).toFixed(1)} ${C.toFixed(1)}"/></svg><b>${Math.round(score)}</b></div>`; }
+function tipsUI(S, det, ic, li, o) {
+  const { tp, fl, hu, wi, gu, uv, vis, aqi, day, k, sn, wet, w, d } = o, cl = x => clamp(Math.round(x), 0, 100), scol = x => x >= 70 ? '#3ddc84' : x >= 45 ? '#ff9f1a' : '#ff4d4d', slab = x => x >= 70 ? t('fine') : x >= 45 ? t('fair') : t('poor');
+  const out = cl(100 - Math.min(60, Math.abs(fl - 22) * 2.2) - (wet ? 25 : 0) - (aqi > 100 ? Math.min(40, (aqi - 100) / 4) : 0) - (wi > 30 ? Math.min(20, wi - 30) : 0) - (k === 'storm' ? 40 : 0));
+  const road = cl(100 - (vis < 1 ? 55 : vis < 4 ? 30 : vis < 10 ? 10 : 0) - (wet ? 20 : 0) - (k === 'storm' ? 25 : 0) - (sn || tp <= 0 ? 35 : 0) - (gu >= 45 ? 15 : 0));
+  const com = cl(100 - Math.abs(fl - 22) * 2 - (hu > 85 ? 15 : 0) - (hu < 25 ? 10 : 0) - (aqi > 150 ? 15 : 0));
+  const home = cl(100 - (k === 'storm' ? 50 : 0) - (wi >= 30 || gu >= 45 ? 25 : 0) - (wet ? 15 : 0) - (tp >= 38 || tp <= 5 ? 15 : 0));
+  const nj = hrIdx(w, d, 22), nt = nj >= 0 && !day ? tp : (nj >= 0 ? w.hourly.temperature_2m[nj] : tp), slp = cl(100 - Math.abs(nt - 22) * 3.2 - (hu > 85 ? 10 : 0));
+  const wl = fl >= 35 ? 0 : fl >= 25 ? 1 : fl >= 15 ? 2 : fl >= 5 ? 3 : 4, litres = tp >= 38 ? 4.5 : tp >= 32 ? 4 : tp >= 26 ? 3.2 : tp <= 10 ? 2.2 : 2.7, ui = uv < 3 ? 0 : uv < 6 ? 1 : uv < 8 ? 2 : uv < 11 ? 3 : 4, ai = aqiInfo(aqi);
+  const wcol = ['#3fd0e0', '#3ddc84', '#f1d84a', '#ff9f1a', '#ff4d4d'][wl], ucol = UVB[ui][2];
+  const ringV = (sc, cap) => ({ big: ringHTML(sc, scol(sc)), cap: `${cap} · ${slab(sc)}`, col: scol(sc), val: sc, sh: slab(sc), capn: cap });
+  const vz = [
+    { big: `<div class="segs">${[0, 1, 2, 3, 4].map(j => `<i style="${j <= wl ? 'background:' + wcol : ''}"></i>`).join('')}</div>`, cap: t('sWarm') + ' · ' + t('wl')[wl], col: wcol, val: t('wl')[wl], capn: t('sWarm') },
+    ringV(out, t('sOut')), ringV(road, t('sRoad')), ringV(com, t('sCom')),
+    { big: `<div class="mbar" style="background:linear-gradient(90deg,${UVB.map(([a, b, c], j) => c + ' ' + (a / 12 * 100) + '%').join(',')})"><i style="left:${clamp(uv, 0, 12) / 12 * 100}%"></i></div><b style="font-size:1.25rem;font-weight:500;color:${ucol}">${uv.toFixed(1)}</b>`, cap: t('sUV') + ' · ' + t('uvl')[ui], col: ucol, val: uv.toFixed(1), capn: t('sUV') },
+    { big: `<div class="drops">${'💧'.repeat(Math.round(litres))}</div><b style="font-size:1.25rem;font-weight:500">≈ ${litres} L</b>`, cap: t('sH2O'), col: '#4da3ff', val: litres + ' L', capn: t('sH2O') },
+    { big: aqi ? `<div class="mbar" style="background:linear-gradient(90deg,#2ecc71 0%,#f1c40f 20%,#ff9f1a 35%,#ff4d4d 50%,#b455ff 70%,#c2223d 100%)"><i style="left:${clamp(aqi, 0, 500) / 5}%"></i></div><b style="font-size:1.25rem;font-weight:500;color:${ai[0]}">${aqi}</b>` : '<b>-</b>', cap: t('sAir') + (aqi ? ' · ' + ai[1] : ''), col: ai[0], val: aqi || '-', capn: t('sAir') },
+    ringV(home, t('sHome')), ringV(slp, t('sSlp'))
+  ];
+  TIPD = S.map((x, j) => ({ ic: ic[j], ti: t('tt')[j], det: det[j], y: x.y, n: x.n, li, v: vz[j], first: x.y[0] || x.n[0] || '' }));
+  const grid = TIPD.map((q, j) => `<div class="tp2" data-j="${j}"><div class="th"><span>${q.ic}</span>${q.ti}</div><div class="vz2">${q.v.big}<div class="cap">${q.v.cap}</div></div><div class="ln">${q.y.length ? q.y[0] : q.first}</div></div>`).join('');
+  $('tips').insertAdjacentHTML('beforeend', `<div class="tpg2">${grid}</div>`);
+}
+function tipDW(el) {
+  const j = +el.dataset.j; if (!TIPD.length || isNaN(j)) return;
+  const sl = TIPD.map(q => `<div class="dh"><span class="e">${q.ic}</span><div><h4>${q.ti}</h4><div class="sub">${q.v.capn}</div></div></div><div class="dbig" style="color:${q.v.col}">${q.v.val}</div><div class="sub">${q.det}</div>
+    <div class="dtt" style="color:#3ddc84;opacity:1">${t('yes')}</div><ul class="dl g">${q.li(q.y)}</ul><div class="dtt" style="color:#ff6b6b;opacity:1">${t('no')}</div><ul class="dl r">${q.li(q.n)}</ul>`);
+  openDW(el, sl, j);
+}
+
+/* ---------- label every hero tile so the window knows which one it is ---------- */
+const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
+document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
 let saved = null;
 try { saved = JSON.parse(localStorage.getItem('place')); L = localStorage.getItem('lang') || 'en'; } catch (e) { }
 $('lang').value = L; applyLang(); load(saved || 'Delhi');
