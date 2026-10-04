@@ -10,7 +10,8 @@
 html,body{margin:0;background:#0a0a0a}
 body{font-family:"Helvetica Neue",system-ui,'Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Tamil','Noto Sans Telugu','Noto Sans Gujarati','Noto Sans Arabic','Noto Sans JP','Noto Sans KR','Noto Sans SC',Arial,sans-serif;color:#fff}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:0}
-.wrap{position:relative;z-index:1;max-width:600px;margin:auto;padding:14px 14px 60px}
+.wrap{position:relative;z-index:1;max-width:600px;margin:auto;padding:calc(14px + var(--gap)) 14px 60px}
+:root{--gap:clamp(150px,27vh,270px)}
 .win{background:rgba(10,10,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:16px;margin:14px 0}
 .row{display:flex;gap:8px;align-items:center}
 input,select{flex:1;min-width:0;padding:11px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font-size:1rem;outline:0}
@@ -76,9 +77,9 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 [data-th=space] .dsl{background:rgba(5,5,8,.97);-webkit-backdrop-filter:none;backdrop-filter:none}
 [data-th=space] #thp,[data-th=space] #sug,[data-th=space] #sug2{background:#030305}
 [data-th=space] .vzc{opacity:.6}
-html[data-th=space] .wrap{perspective:700px;perspective-origin:50% 40%}
-[data-th=space] .wrap>.win,[data-th=space] .wrap>.stk,[data-th=space] #app>.win{animation:fwd 6.5s ease-in-out infinite alternate;animation-delay:calc(var(--fi,0) * -1.3s);will-change:transform}
-@keyframes fwd{0%{transform:translateZ(-46px) scale(.992)}100%{transform:translateZ(26px) scale(1)}}
+[data-th=space] .wrap>.win:not(:first-child),[data-th=space] #app>.win{animation:sway 7s ease-in-out infinite;animation-delay:calc(var(--fi,0) * -1.4s)}
+[data-th=space] .wrap>.win:first-child,[data-th=space] .stk{animation:none}
+@keyframes sway{0%,100%{transform:translate3d(0,0,0) rotate(0)}22%{transform:translate3d(1.6px,-2px,0) rotate(.12deg)}50%{transform:translate3d(-1.2px,1.6px,0) rotate(-.1deg)}76%{transform:translate3d(1px,1.2px,0) rotate(.08deg)}}
 
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
@@ -498,7 +499,7 @@ function setFx() {
   STAR = Array.from({ length: 130 }, () => ({ x: Math.random(), y: Math.random() * .75, r: Math.random() * 1.1 + .3, p: Math.random() * 7 })); GR = null;
 }
 function fit() { cv.width = innerWidth; cv.height = innerHeight; setFx(); }
-const SP = (w, h, t) => { const c = clamp(t, 0, 1); return [w * (.12 + .76 * c), h * (.4 - .3 * Math.sin(Math.PI * c))]; };
+const GAPH = h => clamp(h * .27, 150, 270), SP = (w, h, t) => { const c = clamp(t, 0, 1), G = GAPH(h); return [w * (.14 + .72 * c), G * (.9 - .66 * Math.sin(Math.PI * c))]; };
 /* ---------- sky follows the real weather: no sun in rain, clouds instead ---------- */
 function skyVis() { if (!W) return 1; const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || k === 'fog' || EV.rain > 0 || EV.snow > 0) return 0; return clamp(1 - (EV.cl - 35) / 50, 0, 1); }
 function greyAmt() { const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || EV.rain > 0) return .95; if (k === 'fog') return .7; return clamp((EV.cl - 30) / 60, 0, 1); }
@@ -534,7 +535,7 @@ function bgSky(ms, w, h, e) { /* real time of day: bright / orange dawn+dusk / b
   if (e > 0) { g.fillStyle = `rgba(20,25,35,${Math.min(.5, EV.cl / 100 * .45 + (EV.rain > 0 ? .15 : 0))})`; g.fillRect(0, 0, w, h); }
   { const ov = greyAmt(); if (ov > 0) { g.fillStyle = `rgba(110,122,140,${ov * .6 * clamp(e * 2.2 + .35, 0, 1)})`; g.fillRect(0, 0, w, h); } }
   if (e < .1) stars(w, h, ms, e);
-  const sv = skyVis(); if (sv > .2 && e > -.05) { const [X, Y] = SP(w, h, sunI().t); drawSun(g, X, Y, e, e > 0, .8); veil(X, Y, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [X, Y] = SP(w, h, MI.t), q = g.createRadialGradient(X, Y, 8, X, Y, 90); q.addColorStop(0, 'rgba(220,230,255,.3)'); q.addColorStop(1, 'rgba(220,230,255,0)'); g.fillStyle = q; g.fillRect(X - 90, Y - 90, 180, 180); putMoon(g, MSP, X, Y, 64, MI.south); }
+  const sv = skyVis(); if (sv > .2 && e > -.05) { const [X, Y] = SP(w, h, sunI().t); drawSun(g, X, Y, e, e > 0, .8); veil(X, Y, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [X, Y] = SP(w, h, MI.t), q = g.createRadialGradient(X, Y, 8, X, Y, 90); q.addColorStop(0, 'rgba(220,230,255,.3)'); q.addColorStop(1, 'rgba(220,230,255,0)'); g.fillStyle = q; g.fillRect(X - 90, Y - 90, 180, 180); putMoon(g, MSP, X, Y, 78, MI.south); }
   clouds(ms, w, h, e);
 }
 function buildGreen(w, h) { /* skyline is seeded by lat/lon; height from real elevation; palette from latitude */
@@ -547,7 +548,7 @@ function bgGreen(ms, w, h, e) {
   if (!GR || GR.w !== w) buildGreen(w, h); const G = GR, I = sunI(), [tp, b0] = sky(e), k = clamp(e * 3, 0, 1), bt = b0.map((v, j) => v * (1 - .22 * k) + [30, 110, 95][j] * .22 * k), gr = g.createLinearGradient(0, 0, 0, h * .75), bc = bt.map(Math.round);
   gr.addColorStop(0, rg(tp)); gr.addColorStop(1, rg(bt)); g.fillStyle = gr; g.fillRect(0, 0, w, h); { const ov = greyAmt(); if (ov > 0) { g.fillStyle = `rgba(110,122,140,${ov * .55 * clamp(e * 2.2 + .35, 0, 1)})`; g.fillRect(0, 0, w, h); } } if (e < .1) stars(w, h, ms, e);
   const [X, Y] = SP(w, h, I.t);
-  const sv = skyVis(); if (sv > .2 && e > -.05) { drawSun(g, X, Y + h * .04, e, e > 0, .7); veil(X, Y + h * .04, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [mx, my] = SP(w, h, MI.t); putMoon(g, MSP, mx, my, 54, MI.south); }
+  const sv = skyVis(); if (sv > .2 && e > -.05) { drawSun(g, X, Y + h * .04, e, e > 0, .7); veil(X, Y + h * .04, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [mx, my] = SP(w, h, MI.t); putMoon(g, MSP, mx, my, 78, MI.south); }
   clouds(ms, w, h, e);
   if (e > 0 && e < .7 && EV.cl < 65 && sv > .5) for (let i = 0; i < 6; i++) { const an = .9 + i * .28 + Math.sin(ms / 6000 + i) * .05; g.save(); g.translate(X, Y); g.rotate(an); g.fillStyle = 'rgba(255,220,160,.06)'; g.beginPath(); g.moveTo(0, 0); g.lineTo(1000, -60); g.lineTo(1000, 60); g.fill(); g.restore(); }
   const snow = EV.tp <= 1 || EV.snow > 0;
@@ -1356,6 +1357,45 @@ function bgSpace(ms, w, h) {
 }
 document.querySelectorAll('#app>.win').forEach((e, i) => e.style.setProperty('--fi', i % 5));
 new MutationObserver(() => document.querySelectorAll('#app>.win').forEach((e, i) => e.style.setProperty('--fi', i % 5))).observe($('app'), { childList: true });
+
+/* ---------- v9: realistic sun, moon and clouds ---------- */
+function drawSun(x, X, Y, e, up, k = 1) {
+  const low = Math.max(0, 1 - e * 2.2), bl = up ? 1 : Math.max(0, 1 + e * 6); if (bl <= 0) return;
+  const c1 = [255, 244 - 100 * low | 0, 214 - 175 * low | 0], c2 = [255, 190 - 80 * low | 0, 110 - 80 * low | 0];
+  x.save(); x.globalCompositeOperation = 'lighter';
+  let q = x.createRadialGradient(X, Y, 0, X, Y, 300 * k); q.addColorStop(0, `rgba(${c2},${.34 * bl})`); q.addColorStop(.18, `rgba(${c2},${.16 * bl})`); q.addColorStop(.5, `rgba(${c2},${.05 * bl})`); q.addColorStop(1, `rgba(${c2},0)`); x.fillStyle = q; x.fillRect(X - 300 * k, Y - 300 * k, 600 * k, 600 * k);
+  q = x.createRadialGradient(X, Y, 0, X, Y, 70 * k); q.addColorStop(0, `rgba(${c1},${.75 * bl})`); q.addColorStop(.35, `rgba(${c1},${.28 * bl})`); q.addColorStop(1, `rgba(${c1},0)`); x.fillStyle = q; x.fillRect(X - 70 * k, Y - 70 * k, 140 * k, 140 * k);
+  q = x.createRadialGradient(X, Y, 0, X, Y, 17 * k); q.addColorStop(0, `rgba(255,255,255,${bl})`); q.addColorStop(.55, `rgba(255,252,240,${.95 * bl})`); q.addColorStop(1, `rgba(${c1},0)`); x.fillStyle = q; x.beginPath(); x.arc(X, Y, 17 * k, 0, 7); x.fill();
+  x.restore();
+}
+function putMoon(x, sp, cx, cy, size, south) {
+  x.save(); x.globalCompositeOperation = 'lighter'; let q = x.createRadialGradient(cx, cy, size * .3, cx, cy, size * 2.2); q.addColorStop(0, 'rgba(200,215,255,.22)'); q.addColorStop(.4, 'rgba(170,190,255,.07)'); q.addColorStop(1, 'rgba(170,190,255,0)'); x.fillStyle = q; x.fillRect(cx - size * 2.2, cy - size * 2.2, size * 4.4, size * 4.4); x.restore();
+  x.save(); x.globalCompositeOperation = 'lighter'; x.fillStyle = 'rgba(34,44,70,.5)'; x.beginPath(); x.arc(cx, cy, size / 2 - .5, 0, 7); x.fill(); x.globalAlpha = .88; x.translate(cx, cy); if (south) x.rotate(Math.PI); x.drawImage(sp, -size / 2, -size / 2, size, size); x.restore();
+}
+const CDEN = {}, CTN = {};
+function cloudDen(k) {
+  if (CDEN[k]) return CDEN[k]; const W2 = 320, H2 = 120, a = new Float32Array(W2 * H2), sh = new Float32Array(W2 * H2), cir = k >= 2, o = k * 17.3;
+  for (let y = 0; y < H2; y++) for (let x = 0; x < W2; x++) {
+    const u = (x / W2 - .5) * 2, v = (y / H2 - .5) * 2, sx = cir ? 62 : 34, sy = cir ? 6.5 : 24, n = fbm(x / sx + o, y / sy + o * .7), m = fbm(x / (sx * .45) + 9 + o, y / (sy * .45) + 4);
+    const shape = cir ? Math.max(0, 1 - Math.pow(Math.abs(u), 2.2) * .9 - Math.pow(Math.abs(v), 1.6) * 1.7) : Math.max(0, 1 - u * u * .85 - Math.pow(Math.max(0, v + .1), 2) * 1.5 - Math.pow(Math.max(0, -v - .1), 2) * 2.4);
+    const d = clamp((n * .75 + m * .25 - (cir ? .46 : .4)) * (cir ? 2.6 : 3.2) * shape * (cir ? 1.5 : 1.3), 0, 1); a[y * W2 + x] = d * d * (3 - 2 * d); sh[y * W2 + x] = 1 - .38 * clamp(v + .15 + (m - .5) * .5, 0, 1);
+  }
+  return (CDEN[k] = { W2, H2, a, sh });
+}
+function cloudSprite(v, R, G, B) {
+  const key = v + '-' + (R >> 4) + '-' + (G >> 4) + '-' + (B >> 4); if (CTN[key]) return CTN[key]; if (Object.keys(CTN).length > 40) Object.keys(CTN).forEach(q => delete CTN[q]);
+  const D = cloudDen(v), c = document.createElement('canvas'); c.width = D.W2; c.height = D.H2; const x = c.getContext('2d'), im = x.createImageData(D.W2, D.H2), cir = v >= 2;
+  for (let i = 0; i < D.a.length; i++) { const s2 = D.sh[i], k = i * 4; im.data[k] = R * s2 + 6; im.data[k + 1] = G * s2 + 6; im.data[k + 2] = B * (.9 + .1 * s2) + 10; im.data[k + 3] = 255 * D.a[i] * (cir ? .55 : .8); }
+  x.putImageData(im, 0, 0); return (CTN[key] = c);
+}
+const CLD2 = Array.from({ length: 12 }, (_, i) => ({ x: (i * .211 + .08) % 1, y: ((i * .43) % 1), s: .75 + ((i * .53) % 1) * .8, v: .5 + ((i * .29) % 1) * .9, a: .6 + ((i * .41) % 1) * .4, k: i % 4 }));
+function clouds(ms, w, h, e) {
+  const amt = cloudAmt(); if (amt < .06) return; const G = GAPH(h), n = Math.min(CLD2.length, Math.ceil(amt * CLD2.length) + 2), wet = EV.k === 'rain' || EV.k === 'storm', dusk = e > -.05 && e < .25, lum = clamp(.32 + e * 1.3, .17, 1), dk = wet ? .6 : EV.k === 'snow' ? .85 : 1, base = 255 * lum * dk;
+  const R = Math.round(Math.min(255, base + (dusk ? 34 : 0))), G2 = Math.round(base * (dusk ? .86 : 1)), B = Math.round(Math.min(255, base * (dusk ? .78 : 1) + (e < -.05 ? 24 : 10))), t0 = RM ? 0 : ms;
+  if (amt > .5) { const hz = g.createLinearGradient(0, 0, 0, G * 1.5); hz.addColorStop(0, `rgba(${R},${G2},${B},${.4 * amt})`); hz.addColorStop(1, `rgba(${R},${G2},${B},0)`); g.fillStyle = hz; g.fillRect(0, 0, w, G * 1.5); }
+  for (let i = 0; i < n; i++) { const c = CLD2[i], cir = c.k >= 2, sw = c.s * (w * (cir ? 1.15 : .75)), sh2 = sw * (cir ? .26 : .36), span = w + sw, X = ((c.x * span + t0 * .0045 * c.v * (1 + EV.wind / 30)) % span) - sw, Y = (wet ? .05 : -.12) * G + c.y * G * (wet ? 1.1 : 1.0); g.globalAlpha = clamp(c.a * Math.min(1, amt + .35), 0, 1) * (cir ? .9 : 1); g.drawImage(cloudSprite(c.k, R, G2, B), X, Y, sw, sh2); }
+  g.globalAlpha = 1;
+}
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
