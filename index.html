@@ -229,6 +229,11 @@ input{-webkit-user-select:text;user-select:text}
 .pstr{display:flex;justify-content:space-between;font-size:1.35rem;margin:10px 0}.pstr i{font-style:normal;opacity:.35;padding:2px 3px;border-radius:8px}.pstr i.on{opacity:1;background:rgba(255,255,255,.14)}
 .cyc{height:8px;border-radius:5px;background:rgba(255,255,255,.12);position:relative;margin:12px 0 4px}.cyc i{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#e8ecff;transform:translateX(-50%);box-shadow:0 0 8px rgba(200,215,255,.7)}
 [data-th=white] .rw{border-color:rgba(0,0,0,.1)}[data-th=white] .pstr i.on{background:rgba(0,0,0,.1)}[data-th=white] .cyc{background:rgba(0,0,0,.12)}
+
+.pill{padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.1);color:inherit;font-size:.74rem;font-weight:600;border:1px solid rgba(255,255,255,.2);margin-top:8px}
+.pill.on{background:#dcf56e;color:#000;border-color:#dcf56e}
+[data-th=white] .pill{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.2)}[data-th=white] .pill.on{background:#0f1420;color:#fff}
+#cdial{will-change:transform}
 </style>
 </head>
 <body>
@@ -242,8 +247,8 @@ input{-webkit-user-select:text;user-select:text}
   <div id="msg" class="sub"></div>
   <main id="app" hidden>
     <section class="win" id="aqi"></section>
-    <section class="win" id="alrt"></section>
     <section class="win" id="hero"></section>
+    <section class="win" id="alrt"></section>
     <section class="win">
       <div class="tabs" id="ftabs"><button class="on" data-v="hourly" data-i="hourly"></button><button data-v="daily" data-i="week"></button></div>
       <div class="strip" id="hourly"></div><div id="daily" hidden style="margin-top:10px"></div>
@@ -914,15 +919,17 @@ function drawGauges() {
   const w = W.w, c = w.current, i = Math.max(hourNow(w), 0), d = Math.max(todayIdx(w), 0), uv = w.hourly.uv_index[i] || 0, uvm = w.daily.uv_index_max[d] || 0, ws = c.wind_speed_10m || 0, gu = c.wind_gusts_10m || ws, dr = c.wind_direction_10m;
   const bf = BF.findIndex(x => ws < x), bfi = bf < 0 ? 12 : bf, has = dr != null, to = has ? (dr + 180) % 360 : 0;
   const ticks = Array.from({ length: 36 }, (_, k) => { const a = k * 10, l = a % 90 === 0 ? 10 : a % 30 === 0 ? 7 : 4; return `<line x1="80" y1="18" x2="80" y2="${18 + l}" transform="rotate(${a} 80 80)" stroke-opacity="${a % 90 === 0 ? .6 : .3}"/>`; }).join('');
-  $('cmpsC').innerHTML = `<svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="62" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/><g stroke="currentColor" stroke-width="1.5">${ticks}</g>
+  $('cmpsC').innerHTML = `<svg viewBox="0 0 160 160"><path d="M80 2L87 14H73Z" fill="#fff"/><g id="cdial" style="transform-origin:80px 80px;transform:rotate(${HEAD == null ? 0 : -HEAD}deg)"><circle cx="80" cy="80" r="62" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/><g stroke="currentColor" stroke-width="1.5">${ticks}</g>
     <g fill="currentColor" font-size="11" font-weight="600" text-anchor="middle"><text x="80" y="44" fill="#ff6b6b">N</text><text x="121" y="84" opacity=".7">E</text><text x="80" y="127" opacity=".7">S</text><text x="39" y="84" opacity=".7">W</text></g>
-    ${has ? `<g class="arw" data-to="${to}" style="transform:rotate(0deg);transform-origin:80px 80px"><g class="wob" style="--wa:${clamp(gu / 12, 1, 6).toFixed(1)}deg"><path d="M80 50 L89 72 L80 67 L71 72Z" fill="#dcf56e"/><line x1="80" y1="67" x2="80" y2="108" stroke="#dcf56e" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="80" r="4" fill="#dcf56e"/></g></g>` : ''}</svg>
-    <div class="gv">${sp1(ws)} <span>${uS()}</span></div><div class="sub">${has ? t('from').replace('{d}', cdir(dr)) + ' · ' : ''}${t('bf')[bfi]}</div><div class="sub">${t('gust')} ${Math.round(cS(gu))} ${uS()}</div>`;
+    ${has ? `<g class="arw" data-to="${to}" style="transform:rotate(0deg);transform-origin:80px 80px"><g class="wob" style="--wa:${clamp(gu / 12, 1, 6).toFixed(1)}deg"><path d="M80 50 L89 72 L80 67 L71 72Z" fill="#dcf56e"/><line x1="80" y1="67" x2="80" y2="108" stroke="#dcf56e" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="80" r="4" fill="#dcf56e"/></g></g>` : ''}</g></svg>
+    <div class="gv">${sp1(ws)} <span>${uS()}</span></div><div class="sub">${has ? t('from').replace('{d}', cdir(dr)) + ' · ' : ''}${t('bf')[bfi]}</div><div class="sub">${t('gust')} ${Math.round(cS(gu))} ${uS()}</div><button id="cmpsB" class="pill"></button>`;
+  paintHead();
   const ui = uv < 3 ? 0 : uv < 6 ? 1 : uv < 8 ? 2 : uv < 11 ? 3 : 4, ucol = UVB[Math.min(ui, 4)][2];
   const segs = UVB.map(([a, b, col]) => { const [x1, y1] = pol(a + (a ? .12 : 0), 60), [x2, y2] = pol(b - .12, 60); return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A60 60 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="${col}" stroke-width="12"/>`; }).join('');
   $('uvC').innerHTML = `<svg viewBox="0 0 160 100">${segs}<g class="ndl" data-to="${clamp(uv, 0, 12) / 12 * 180 - 90}" style="transform:rotate(-90deg);transform-origin:80px 86px"><line x1="80" y1="86" x2="80" y2="38" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="86" r="6" fill="currentColor"/></g></svg>
     <div class="gv" style="color:${ucol}">${uv.toFixed(1)} <span>${t('uvl')[ui]}</span></div><div class="sub">${t('uvMax').replace('{v}', uvm)}</div><div class="sub">${t('uva')[ui]}</div>`;
-  requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#gaugeW [data-to]').forEach(e => { e.style.transform = `rotate(${e.dataset.to}deg)`; })));
+  UVSW.uvm = uvm; requestAnimationFrame(() => requestAnimationFrame(() => { document.querySelectorAll('#gaugeW .arw').forEach(e => { e.style.transform = `rotate(${e.dataset.to}deg)`; }); uvPlay(); }));
+  if (!AUTOC) { AUTOC = true; try { if (localStorage.getItem('cmps') === '1' && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission !== 'function') startCompass(); } catch (e) { } }
 }
 
 /* ---------- pendulum clock (location time) ---------- */
@@ -1251,6 +1258,32 @@ function moonDW(el) {
     <div class="cyc"><i style="left:${clamp(ph, 0, 1) * 100}%"></i></div><div class="dmt"><span>${phn[0]}</span><span>${phn[4]}</span><span>${phn[0]}</span></div>
     <div class="dst"><div><small>${t('mr').replace(' ≈', '')}</small><b>${mr}</b></div><div><small>${t('ill')}</small><b>${ill}%</b></div><div><small>${t('ms').replace(' ≈', '')}</small><b>${ms}</b></div></div>${extra}<div class="sub" style="text-align:center;margin-top:8px">${t('close')}</div>`]);
 }
+
+/* ---------- phone compass + UV needle sweep ---------- */
+let HEAD = null, HSM = null, LASTH = null, CMPS_ON = false, CMPS_EV = '', AUTOC = false, UVSW = { key: '', vis: false, uvm: 0 };
+const compassHeading = (al, be, ga) => { const r = Math.PI / 180, a = al * r, b = be * r, g2 = ga * r, cA = Math.cos(a), sA = Math.sin(a), sB = Math.sin(b), cB = Math.cos(b), sG = Math.sin(g2), cG = Math.cos(g2); let h; if (Math.abs(cB * cG) > .7) h = Math.atan2(-sA, cA); /* phone lying flat: use its top edge */ else h = Math.atan2(-cA * sG - sA * sB * cG, -sA * sG + cA * sB * cG); /* phone upright: use the back */ if (h < 0) h += 2 * Math.PI; return h / r; };
+function onOri(e) { let h = null; if (e.webkitCompassHeading != null) h = e.webkitCompassHeading; else if (e.alpha != null && (e.absolute || e.type === 'deviceorientationabsolute')) h = compassHeading(e.alpha, e.beta || 0, e.gamma || 0); if (h != null && !isNaN(h)) LASTH = h; }
+function paintHead() {
+  const d = $('cdial'), b = $('cmpsB'); if (d) d.style.transform = `rotate(${HEAD == null ? 0 : -HEAD}deg)`;
+  if (b) { b.classList.toggle('on', CMPS_ON); const tx = CMPS_ON ? (HEAD == null ? '🧭 …' : `🧭 ${Math.round(HEAD)}° ${cdir(HEAD)}`) : B2('🧭 Use phone compass', '🧭 फ़ोन कंपास चालू करें'); if (b.textContent !== tx) b.textContent = tx; }
+}
+function headLoop() { if (!CMPS_ON) return; if (LASTH != null) { HSM = HSM == null ? LASTH : (HSM + ((LASTH - HSM + 540) % 360 - 180) * .25 + 360) % 360; HEAD = HSM; paintHead(); } requestAnimationFrame(headLoop); }
+async function startCompass() {
+  if (typeof DeviceOrientationEvent === 'undefined') { toast(B2('Compass is not supported on this phone', 'इस फ़ोन में कंपास सपोर्ट नहीं है')); return; }
+  try { if (typeof DeviceOrientationEvent.requestPermission === 'function') { const r = await DeviceOrientationEvent.requestPermission(); if (r !== 'granted') { toast(B2('Compass permission was denied', 'कंपास की अनुमति नहीं मिली')); return; } } } catch (e) { toast(B2('Compass permission was denied', 'कंपास की अनुमति नहीं मिली')); return; }
+  CMPS_EV = 'ondeviceorientationabsolute' in window ? 'deviceorientationabsolute' : 'deviceorientation'; window.addEventListener(CMPS_EV, onOri, true);
+  CMPS_ON = true; LASTH = null; try { localStorage.setItem('cmps', '1'); } catch (e) { } paintHead(); headLoop();
+  setTimeout(() => { if (CMPS_ON && LASTH == null) { toast(B2('No compass sensor found on this phone', 'इस फ़ोन में कंपास सेंसर नहीं मिला')); stopCompass(); } }, 2500);
+}
+function stopCompass() { window.removeEventListener(CMPS_EV, onOri, true); CMPS_ON = false; LASTH = null; HEAD = null; HSM = null; try { localStorage.setItem('cmps', '0'); } catch (e) { } paintHead(); }
+$('gaugeW').addEventListener('click', e => { if (e.target.closest('#cmpsB')) { CMPS_ON ? stopCompass() : startCompass(); } });
+function uvPlay() {
+  const n = document.querySelector('#uvC .ndl'); if (!n) return; const act = n.dataset.to, key = place.lat + ',' + place.lon;
+  if (RM || UVSW.key === key) { n.style.transform = `rotate(${act}deg)`; return; }
+  if (!UVSW.vis) return;
+  UVSW.key = key; n.style.transform = `rotate(${clamp(UVSW.uvm, 0, 12) / 12 * 180 - 90}deg)`; setTimeout(() => { n.style.transform = `rotate(${act}deg)`; }, 1700);
+}
+if (window.IntersectionObserver) new IntersectionObserver(es => { UVSW.vis = es[es.length - 1].isIntersecting; if (UVSW.vis && W) uvPlay(); }, { threshold: .5 }).observe($('gaugeW')); else UVSW.vis = true;
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
