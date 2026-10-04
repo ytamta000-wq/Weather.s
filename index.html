@@ -11,7 +11,7 @@ html,body{margin:0;background:#0a0a0a}
 body{font-family:"Helvetica Neue",system-ui,'Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Tamil','Noto Sans Telugu','Noto Sans Gujarati','Noto Sans Arabic','Noto Sans JP','Noto Sans KR','Noto Sans SC',Arial,sans-serif;color:#fff}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:0}
 .wrap{position:relative;z-index:1;max-width:600px;margin:auto;padding:calc(14px + var(--gap)) 14px 60px}
-:root{--gap:clamp(300px,50vh,520px)}
+:root{--gap:clamp(340px,50vh,520px)}
 html,body{overscroll-behavior-y:none}
 .win{background:rgba(10,10,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:16px;margin:14px 0}
 .row{display:flex;gap:8px;align-items:center}
@@ -75,17 +75,25 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 [data-th=black] .vzc{opacity:.55;filter:grayscale(.85)}
 [data-th=space] .win,[data-th=space] .stk{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:transparent;box-shadow:none}
 [data-th=space] .up{box-shadow:none}
+[data-th=space] .vz{background:transparent!important}
+[data-th=space] .vzc{opacity:.14}
+[data-th=space] input,[data-th=space] select{background:transparent;border-color:rgba(255,255,255,.2)}
+[data-th=space] .ctg{background:transparent}
+[data-th=space] .tp2{border-color:transparent}
+[data-th=space] #clkW{background:transparent!important;border-color:transparent!important}
+[data-th=space] .tabs button{background:transparent;border-color:rgba(255,255,255,.18)}[data-th=space] .tabs button.on{background:#fff}
 [data-th=space] .grid div,[data-th=space] .kpis div,[data-th=space] .tp,[data-th=space] .tp2,[data-th=space] .dst div,[data-th=space] .dhr div{background:transparent;border-color:transparent}
 [data-th=space] .dsl{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.12)}
 [data-th=space] #dw.on{background:rgba(0,0,0,.9);-webkit-backdrop-filter:none;backdrop-filter:none}
 [data-th=space] #thp,[data-th=space] #sug,[data-th=space] #sug2{background:#030305}
-[data-th=space] .vzc{opacity:.6}
 [data-th=space] .wrap>.win:not(:first-child),[data-th=space] #app>.win{animation:sway 7s ease-in-out infinite;animation-delay:calc(var(--fi,0) * -1.4s)}
 [data-th=space] .wrap>.win:first-child,[data-th=space] .stk{animation:none}
 @keyframes sway{0%,100%{transform:translate3d(0,0,0) rotate(0)}22%{transform:translate3d(1.6px,-2px,0) rotate(.12deg)}50%{transform:translate3d(-1.2px,1.6px,0) rotate(-.1deg)}76%{transform:translate3d(1px,1.2px,0) rotate(.08deg)}}
 
 /* ===== v10 sky header + pull to refresh ===== */
-#skyH{position:absolute;left:14px;right:14px;top:0;height:var(--gap);display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding-bottom:20px;pointer-events:none;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+#skyH{position:absolute;left:14px;right:14px;top:0;height:var(--gap);display:flex;flex-direction:column;justify-content:flex-start;padding-top:54px;pointer-events:none;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+#skyT{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+#skyH #aqi{pointer-events:auto;margin:16px 0 0;padding:0;background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;text-shadow:none}
 #skyH .pl{font-size:1.08rem;font-weight:400;opacity:.92;margin-bottom:2px;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #skyH .tm{font-size:6.2rem;font-weight:200;line-height:1;letter-spacing:-.03em;margin-left:-.04em}
 #skyH .rt{text-align:right;padding-bottom:10px;font-size:1.02rem}
@@ -282,7 +290,7 @@ input{-webkit-user-select:text;user-select:text}
 <body>
 <canvas id="fx"></canvas>
 <div class="wrap">
-  <div id="skyH"></div>
+  <div id="skyH"><div id="skyT"></div></div>
   <div class="win row" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
   <div id="sug"></div>
   <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="ur">اردو</option><option value="tr">Türkçe</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="id">Bahasa Indonesia</option></select></div></div>
@@ -1420,8 +1428,9 @@ function clouds(ms, w, h, e) {
 /* ---------- v10: sky header on the background ---------- */
 function skyHead() {
   if (!W) return; const c = W.w.current, k = kind(c.weather_code), tp = Math.round(c.temperature_2m);
-  $('skyH').innerHTML = `<div><div class="pl">${esc(place.name)}</div><div class="tm" style="color:${tc(tp)}">${dT(c.temperature_2m)}</div></div><div class="rt">${icon(c.weather_code, c.is_day)}${t('c')[k]}<div class="sub">${fmtDate(c.time)} · ${c.time.slice(11)}</div></div>`;
+  $('skyT').innerHTML = `<div><div class="pl">${esc(place.name)}</div><div class="tm" style="color:${tc(tp)}">${dT(c.temperature_2m)}</div></div><div class="rt">${icon(c.weather_code, c.is_day)}${t('c')[k]}<div class="sub">${fmtDate(c.time)} · ${c.time.slice(11)}</div></div>`;
 }
+$('skyH').appendChild($('aqi'));
 { const _r = render; render = function () { _r.apply(this, arguments); skyHead(); }; }
 /* ---------- v10: pull down to refresh ---------- */
 (function () {
