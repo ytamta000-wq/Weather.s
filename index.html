@@ -73,9 +73,11 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 [data-th=black] .nrh .bb,[data-th=black] .segs i{background:#1a1a1a}
 [data-th=black] #map{background:#050505}
 [data-th=black] .vzc{opacity:.55;filter:grayscale(.85)}
-[data-th=space] .win,[data-th=space] .stk{background:rgba(3,3,5,.97);-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.12)}
-[data-th=space] .grid div,[data-th=space] .kpis div,[data-th=space] .tp,[data-th=space] .tp2,[data-th=space] .dst div,[data-th=space] .dhr div{background:#0b0b0e}
-[data-th=space] .dsl{background:rgba(5,5,8,.97);-webkit-backdrop-filter:none;backdrop-filter:none}
+[data-th=space] .win,[data-th=space] .stk{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:transparent;box-shadow:none}
+[data-th=space] .up{box-shadow:none}
+[data-th=space] .grid div,[data-th=space] .kpis div,[data-th=space] .tp,[data-th=space] .tp2,[data-th=space] .dst div,[data-th=space] .dhr div{background:transparent;border-color:transparent}
+[data-th=space] .dsl{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-color:rgba(255,255,255,.12)}
+[data-th=space] #dw.on{background:rgba(0,0,0,.9);-webkit-backdrop-filter:none;backdrop-filter:none}
 [data-th=space] #thp,[data-th=space] #sug,[data-th=space] #sug2{background:#030305}
 [data-th=space] .vzc{opacity:.6}
 [data-th=space] .wrap>.win:not(:first-child),[data-th=space] #app>.win{animation:sway 7s ease-in-out infinite;animation-delay:calc(var(--fi,0) * -1.4s)}
@@ -83,10 +85,15 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 @keyframes sway{0%,100%{transform:translate3d(0,0,0) rotate(0)}22%{transform:translate3d(1.6px,-2px,0) rotate(.12deg)}50%{transform:translate3d(-1.2px,1.6px,0) rotate(-.1deg)}76%{transform:translate3d(1px,1.2px,0) rotate(.08deg)}}
 
 /* ===== v10 sky header + pull to refresh ===== */
-#skyH{position:absolute;left:0;right:0;top:0;height:var(--gap);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:26px;text-align:center;pointer-events:none;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35)}
-#skyH .pl{font-size:1.25rem;font-weight:400;letter-spacing:.01em;max-width:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#skyH .tm{font-size:6.4rem;font-weight:200;line-height:1;letter-spacing:-.03em;margin:2px 0 6px;padding-left:.12em}
-#skyH svg{width:44px;height:44px;display:block;margin:0 auto}
+#skyH{position:absolute;left:14px;right:14px;top:0;height:var(--gap);display:flex;align-items:flex-end;justify-content:space-between;gap:10px;padding-bottom:20px;pointer-events:none;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+#skyH .pl{font-size:1.08rem;font-weight:400;opacity:.92;margin-bottom:2px;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#skyH .tm{font-size:6.2rem;font-weight:200;line-height:1;letter-spacing:-.03em;margin-left:-.04em}
+#skyH .rt{text-align:right;padding-bottom:10px;font-size:1.02rem}
+#skyH .rt svg{width:34px;height:34px;vertical-align:middle;margin-right:6px;display:inline-block}
+#skyH .rt .sub{font-size:.8rem;margin-top:3px;opacity:.75}
+.brand{position:absolute;top:16px;left:16px;z-index:3;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.bar2{justify-content:flex-end}
+#hero .hero{display:none}
 [data-th=white] #skyH{color:#0f1420;text-shadow:none}
 #ptr{position:fixed;left:50%;top:0;z-index:95;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:rgba(20,20,24,.92);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;color:#fff;transform:translateY(-60px);opacity:0;pointer-events:none}
 #ptr svg{width:20px;height:20px}
@@ -1412,8 +1419,8 @@ function clouds(ms, w, h, e) {
 
 /* ---------- v10: sky header on the background ---------- */
 function skyHead() {
-  if (!W) return; const c = W.w.current;
-  $('skyH').innerHTML = `<div class="pl">${esc(place.name)}</div><div class="tm">${dT(c.temperature_2m)}</div>${icon(c.weather_code, c.is_day)}`;
+  if (!W) return; const c = W.w.current, k = kind(c.weather_code), tp = Math.round(c.temperature_2m);
+  $('skyH').innerHTML = `<div><div class="pl">${esc(place.name)}</div><div class="tm" style="color:${tc(tp)}">${dT(c.temperature_2m)}</div></div><div class="rt">${icon(c.weather_code, c.is_day)}${t('c')[k]}<div class="sub">${fmtDate(c.time)} · ${c.time.slice(11)}</div></div>`;
 }
 { const _r = render; render = function () { _r.apply(this, arguments); skyHead(); }; }
 /* ---------- v10: pull down to refresh ---------- */
