@@ -212,6 +212,23 @@ input{-webkit-user-select:text;user-select:text}
 [data-th=white] .ctg{background:rgba(255,255,255,.7);border-color:rgba(0,0,0,.2)}[data-th=white] .ctg button.on{background:#0f1420;color:#fff}
 [data-th=white] .nrh .bb{background:rgba(0,0,0,.08)}
 [data-th=white] #clkW .ck,[data-th=white] #clkW h3{color:#fff}
+
+/* ===== v6 ===== */
+:root{--sw:min(440px,calc(100vw - 28px))}
+#dw{padding:0;flex-direction:column;align-items:stretch;justify-content:center}
+.dwc{width:100%;max-width:none;max-height:none;overflow:visible;background:none!important;border:0!important;border-radius:0;box-shadow:none!important}
+.dws{position:relative;display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:6px calc((100vw - var(--sw)) / 2) 18px;scroll-padding:0 calc((100vw - var(--sw)) / 2);align-items:center}
+.dsl{flex:0 0 var(--sw);scroll-snap-align:center;scroll-snap-stop:always;box-sizing:border-box;max-height:80vh;overflow-y:auto;padding:20px;background:rgba(22,22,28,.58);-webkit-backdrop-filter:blur(24px) saturate(1.35);backdrop-filter:blur(24px) saturate(1.35);border:1px solid rgba(255,255,255,.14);border-radius:28px;box-shadow:0 22px 50px rgba(0,0,0,.4);color:#fff}
+.dnav{padding:0;margin-top:2px}
+.dots i{background:rgba(255,255,255,.3)}
+[data-th=white] .dwc{background:none!important;border:0!important}
+[data-th=white] .dsl{background:rgba(255,255,255,.7);color:#0f1420;border-color:rgba(0,0,0,.1)}
+
+.rw{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.88rem}.rw span:first-child{opacity:.6}
+.mimg{width:58px;height:58px;border-radius:50%;flex:none}
+.pstr{display:flex;justify-content:space-between;font-size:1.35rem;margin:10px 0}.pstr i{font-style:normal;opacity:.35;padding:2px 3px;border-radius:8px}.pstr i.on{opacity:1;background:rgba(255,255,255,.14)}
+.cyc{height:8px;border-radius:5px;background:rgba(255,255,255,.12);position:relative;margin:12px 0 4px}.cyc i{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#e8ecff;transform:translateX(-50%);box-shadow:0 0 8px rgba(200,215,255,.7)}
+[data-th=white] .rw{border-color:rgba(0,0,0,.1)}[data-th=white] .pstr i.on{background:rgba(0,0,0,.1)}[data-th=white] .cyc{background:rgba(0,0,0,.12)}
 </style>
 </head>
 <body>
@@ -224,8 +241,8 @@ input{-webkit-user-select:text;user-select:text}
   <div class="favs" id="favs"></div>
   <div id="msg" class="sub"></div>
   <main id="app" hidden>
-    <section class="win" id="alrt"></section>
     <section class="win" id="aqi"></section>
+    <section class="win" id="alrt"></section>
     <section class="win" id="hero"></section>
     <section class="win">
       <div class="tabs" id="ftabs"><button class="on" data-v="hourly" data-i="hourly"></button><button data-v="daily" data-i="week"></button></div>
@@ -399,12 +416,47 @@ function drawSky() {
   const q = bc.createRadialGradient(95, 95, 40, 95, 95, 95); q.addColorStop(0, 'rgba(220,230,255,.25)'); q.addColorStop(1, 'rgba(220,230,255,0)'); bc.fillStyle = q; bc.fillRect(0, 0, 190, 190); putMoon(bc, MSP, 95, 95, 150, MI.south);
   $('moonS').textContent = `${nm} · ${Math.round(MI.ill * 100)}% ${t('lit')} · ${MI.up ? t('ab') : t('bl')}`;
   $('moonN').innerHTML = `<div style="font-size:1.25rem">${nm}</div><div class="sub">${t('age')} ${(MI.ph * SYN).toFixed(1)} d · ${MI.south ? 'S' : 'N'}</div>`;
-  $('moonK').innerHTML = K(MI.real ? t('mr').replace(' ≈', '') : t('mr'), hmm(MI.mr)) + K(t('ill'), Math.round(MI.ill * 100) + '%') + K(MI.real ? t('ms').replace(' ≈', '') : t('ms'), hmm(MI.ms)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
+  $('moonK').innerHTML = K(MI.real ? t('mr').replace(' ≈', '') : t('mr'), hmm(MI.mr) + dsfx(W.moon && W.moon.rd)) + K(t('ill'), Math.round(MI.ill * 100) + '%') + K(MI.real ? t('ms').replace(' ≈', '') : t('ms'), hmm(MI.ms) + dsfx(W.moon && W.moon.sd)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
 }
 setInterval(() => { if (W) drawSky(); }, 30000);
+const MLT = [[0, 0, 1, 0, 6288774], [2, 0, -1, 0, 1274027], [2, 0, 0, 0, 658314], [0, 0, 2, 0, 213618], [0, 1, 0, 0, -185116], [0, 0, 0, 2, -114332], [2, 0, -2, 0, 58793], [2, -1, -1, 0, 57066], [2, 0, 1, 0, 53322], [2, -1, 0, 0, 45758], [0, 1, -1, 0, -40923], [1, 0, 0, 0, -34720], [0, 1, 1, 0, -30383], [2, 0, 0, -2, 15327], [0, 0, 1, 2, -12528], [0, 0, 1, -2, 10980], [4, 0, -1, 0, 10675], [0, 0, 3, 0, 10034], [4, 0, -2, 0, 8548], [2, 1, -1, 0, -7888], [2, 1, 0, 0, -6766], [1, 0, -1, 0, -5163], [1, 1, 0, 0, 4987], [2, -1, 1, 0, 4036], [2, 0, 2, 0, 3994], [4, 0, 0, 0, 3861], [2, 0, -3, 0, 3665]],
+  MBT = [[0, 0, 0, 1, 5128122], [0, 0, 1, 1, 280602], [0, 0, 1, -1, 277693], [2, 0, 0, -1, 173237], [2, 0, -1, 1, 55413], [2, 0, -1, -1, 46271], [2, 0, 0, 1, 32573], [0, 0, 2, 1, 17198]],
+  MDT = [[0, 0, 1, 0, -20905355], [2, 0, -1, 0, -3699111], [2, 0, 0, 0, -2955968], [0, 0, 2, 0, -569925]];
+function moonAlt(ms, lat, lon) { /* moon altitude in degrees (0 = on the horizon, refraction included) */
+  const r2 = Math.PI / 180, jd = ms / 864e5 + 2440587.5, T = (jd - 2451545) / 36525, Lp = 218.3164477 + 481267.88123421 * T, Dd = 297.8501921 + 445267.1114034 * T, M = 357.5291092 + 35999.0502909 * T, Mp = 134.9633964 + 477198.8675055 * T, F = 93.272095 + 483202.0175233 * T, E = 1 - .002516 * T;
+  let sl = 0, bt = 0, rr = 385000.56;
+  for (const [a, m, b, , c] of MLT) sl += c * (Math.abs(m) === 1 ? E : 1) * Math.sin((a * Dd + m * M + b * Mp) * r2);
+  for (const [a, m, b, f, c] of MBT) bt += c * Math.sin((a * Dd + m * M + b * Mp + f * F) * r2);
+  for (const [a, m, b, , c] of MDT) rr += c * Math.cos((a * Dd + m * M + b * Mp) * r2) / 1000;
+  const lg = (Lp + sl / 1e6) * r2, bb = bt / 1e6 * r2, ep = (23.4393 - .0130042 * T) * r2;
+  const ra = Math.atan2(Math.sin(lg) * Math.cos(ep) - Math.tan(bb) * Math.sin(ep), Math.cos(lg)), dc = Math.asin(Math.sin(bb) * Math.cos(ep) + Math.cos(bb) * Math.sin(ep) * Math.sin(lg));
+  const gst = 280.46061837 + 360.98564736629 * (jd - 2451545) + .000387933 * T * T, H = (gst + lon) * r2 - ra, la = lat * r2, al = Math.asin(Math.sin(la) * Math.sin(dc) + Math.cos(la) * Math.cos(dc) * Math.cos(H)), par = Math.asin(6378.14 / rr);
+  return (al - par * Math.cos(al)) / r2 + .5667;
+}
+function moonCalc(lat, lon, off, dateStr) { /* rise and set for yesterday, today and tomorrow, as local-clock epochs */
+  const t0 = Date.parse(dateStr + 'T00:00:00Z'), out = { '-1': {}, 0: {}, 1: {} }; let pv = null;
+  for (let m = -1440; m <= 2880; m += 2) {
+    const a = moonAlt(t0 - off * 1000 + m * 6e4, lat, lon);
+    if (pv != null && (pv < 0) !== (a < 0)) { const f = pv / (pv - a), loc = t0 + (m - 2 + 2 * f) * 6e4, k = Math.floor((loc - t0) / 864e5), ty = a > 0 ? 'rise' : 'set'; if (out[k] && out[k][ty] == null) out[k][ty] = loc; }
+    pv = a;
+  }
+  return out;
+}
 async function moonReal() {
-  try { const w = W.w, off = w.utc_offset_seconds, a = Math.abs(off), j = await getJSON(`https://api.met.no/weatherapi/sunrise/3.0/moon?lat=${place.lat.toFixed(3)}&lon=${place.lon.toFixed(3)}&date=${w.current.time.slice(0, 10)}&offset=${off < 0 ? '-' : '+'}${pad(Math.floor(a / 3600))}:${pad(Math.floor(a % 3600 / 60))}`), p = j.properties, ms = x => x && x.time ? Date.parse(x.time) + off * 1000 : null;
-    W.moon = { rise: ms(p.moonrise), set: ms(p.moonset), ph: p.moonphase != null ? p.moonphase / 360 : null }; drawSky(); } catch (e) { }
+  const w = W.w, off = w.utc_offset_seconds, a = Math.abs(off), os = (off < 0 ? '-' : '+') + pad(Math.floor(a / 3600)) + ':' + pad(Math.floor(a % 3600 / 60)), date = w.current.time.slice(0, 10), ms = x => x && x.time ? Date.parse(x.time) + off * 1000 : null;
+  const day = async k => (await getJSON(`https://api.met.no/weatherapi/sunrise/3.0/moon?lat=${place.lat.toFixed(3)}&lon=${place.lon.toFixed(3)}&date=${new Date(Date.parse(date + 'T12:00:00Z') + k * 864e5).toISOString().slice(0, 10)}&offset=${os}`)).properties;
+  let rise = null, set = null, rd = 0, sd = 0, ph = null;
+  try {
+    const p = await day(0); rise = ms(p.moonrise); set = ms(p.moonset); ph = p.moonphase != null ? p.moonphase / 360 : null;
+    if (rise == null) { try { rise = ms((await day(-1)).moonrise); rd = -1; } catch (e) { } }
+    if (set == null) { try { set = ms((await day(1)).moonset); sd = 1; } catch (e) { } }
+  } catch (e) { }
+  if (rise == null || set == null) {
+    try { const c = moonCalc(place.lat, place.lon, off, date);
+      if (rise == null) { if (c[0].rise != null) { rise = c[0].rise; rd = 0; } else if (c[-1].rise != null) { rise = c[-1].rise; rd = -1; } }
+      if (set == null) { if (c[0].set != null) { set = c[0].set; sd = 0; } else if (c[1].set != null) { set = c[1].set; sd = 1; } } } catch (e) { }
+  }
+  if (rise != null || set != null || ph != null) { W.moon = { rise, set, rd, sd, ph }; drawSky(); }
 }
 
 /* weather state -> particles */
@@ -418,9 +470,28 @@ function setFx() {
 }
 function fit() { cv.width = innerWidth; cv.height = innerHeight; setFx(); }
 const SP = (w, h, t) => { const c = clamp(t, 0, 1); return [w * (.12 + .76 * c), h * (.4 - .3 * Math.sin(Math.PI * c))]; };
-function stars(w, h, ms, e) { g.fillStyle = '#fff'; STAR.forEach(s => { g.globalAlpha = clamp((.1 - e) * 4, 0, 1) * (.35 + .65 * Math.abs(Math.sin(ms / 700 + s.p))); g.fillRect(s.x * w, s.y * h, s.r, s.r); }); g.globalAlpha = 1; }
+/* ---------- sky follows the real weather: no sun in rain, clouds instead ---------- */
+function skyVis() { if (!W) return 1; const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || k === 'fog' || EV.rain > 0 || EV.snow > 0) return 0; return clamp(1 - (EV.cl - 35) / 50, 0, 1); }
+function greyAmt() { const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || EV.rain > 0) return .95; if (k === 'fog') return .7; return clamp((EV.cl - 30) / 60, 0, 1); }
+function cloudAmt() { const k = EV.k; if (k === 'rain' || k === 'storm') return 1; if (k === 'snow') return .9; if (k === 'fog') return .5; if (k === 'cloud') return Math.max(.7, EV.cl / 100); if (k === 'partly') return .25 + EV.cl / 100 * .5; return EV.cl / 100 * .3; }
+function veil(X, Y, sv, tp) { if (sv >= .98) return; const q = g.createRadialGradient(X, Y, 0, X, Y, 320), c = tp.map(Math.round).join(','); q.addColorStop(0, `rgba(${c},${(1 - sv) * .85})`); q.addColorStop(1, `rgba(${c},0)`); g.fillStyle = q; g.fillRect(X - 320, Y - 320, 640, 640); }
+const CSP = {}, CLDS = Array.from({ length: 14 }, (_, i) => ({ x: (i * .173 + .05) % 1, y: .03 + ((i * .37) % 1) * .4, s: .8 + ((i * .53) % 1) * .9, v: .5 + ((i * .29) % 1) * .9, a: .55 + ((i * .41) % 1) * .45, k: i % 4 }));
+function cloudSprite(v, R, G, B) {
+  const key = v + '-' + (R >> 5) + '-' + (G >> 5) + '-' + (B >> 5); if (CSP[key]) return CSP[key]; if (Object.keys(CSP).length > 40) Object.keys(CSP).forEach(k => delete CSP[k]);
+  const c = document.createElement('canvas'); c.width = 360; c.height = 170; const x = c.getContext('2d'), rn = rnd(v * 977 + 5);
+  for (let i = 0; i < 9; i++) { const px = 60 + rn() * 240, py = 95 + (rn() - .5) * 40 - Math.sin(i / 9 * Math.PI) * 25, r = 36 + rn() * 34, q = x.createRadialGradient(px, py, 0, px, py, r); q.addColorStop(0, `rgba(${R},${G},${B},.8)`); q.addColorStop(.6, `rgba(${R},${G},${B},.4)`); q.addColorStop(1, `rgba(${R},${G},${B},0)`); x.fillStyle = q; x.fillRect(px - r, py - r, 2 * r, 2 * r); }
+  return (CSP[key] = c);
+}
+function clouds(ms, w, h, e) {
+  const amt = cloudAmt(); if (amt < .08) return; const n = Math.ceil(amt * CLDS.length), wet = EV.k === 'rain' || EV.k === 'storm', dusk = e > -.05 && e < .25, lum = clamp(.3 + e * 1.3, .16, 1), dk = wet ? .62 : EV.k === 'snow' ? .85 : 1, base = 255 * lum * dk;
+  const R = Math.round(Math.min(255, base + (dusk ? 30 : 0))), G = Math.round(base * (dusk ? .88 : 1)), B = Math.round(Math.min(255, base * (dusk ? .8 : 1) + (e < -.05 ? 22 : 8))), t0 = RM ? 0 : ms;
+  const hz = g.createLinearGradient(0, 0, 0, h * .55); hz.addColorStop(0, `rgba(${R},${G},${B},${.42 * amt})`); hz.addColorStop(1, `rgba(${R},${G},${B},0)`); g.fillStyle = hz; g.fillRect(0, 0, w, h * .55);
+  for (let i = 0; i < n; i++) { const c = CLDS[i], sz = c.s * (w / 400 + .6) * 150, X = ((c.x * (w + 500) + t0 * .006 * c.v * (1 + EV.wind / 30)) % (w + 500)) - 250, Y = c.y * h * (wet ? .8 : 1); g.globalAlpha = clamp(c.a * Math.min(1, amt + .25), 0, 1); g.drawImage(cloudSprite(c.k, R, G, B), X, Y, sz * 2, sz); }
+  g.globalAlpha = 1;
+}
+function stars(w, h, ms, e) { g.fillStyle = '#fff'; STAR.forEach(s => { g.globalAlpha = clamp((.1 - e) * 4, 0, 1) * (.35 + .65 * Math.abs(Math.sin(ms / 700 + s.p))) * skyVis(); g.fillRect(s.x * w, s.y * h, s.r, s.r); }); g.globalAlpha = 1; }
 function glow(w, h, e) {
-  if (EV.k !== 'clear' && EV.k !== 'partly') return; let X, Y, col; if (e > -.05) { [X, Y] = SP(w, h, sunI().t); col = e < .2 ? '255,170,90' : '255,240,200'; } else if (MI && MI.up) { [X, Y] = SP(w, h, MI.t); col = '210,220,255'; } else return;
+  if ((EV.k !== 'clear' && EV.k !== 'partly') || skyVis() < .3) return; let X, Y, col; if (e > -.05) { [X, Y] = SP(w, h, sunI().t); col = e < .2 ? '255,170,90' : '255,240,200'; } else if (MI && MI.up) { [X, Y] = SP(w, h, MI.t); col = '210,220,255'; } else return;
   const q = g.createRadialGradient(X, Y, 0, X, Y, 150); q.addColorStop(0, `rgba(${col},.3)`); q.addColorStop(1, `rgba(${col},0)`); g.fillStyle = q; g.fillRect(0, 0, w, h);
 }
 function bgDots(ms, w, h, e) { /* tiny moving dots on pure black */
@@ -432,8 +503,10 @@ function bgDots(ms, w, h, e) { /* tiny moving dots on pure black */
 function bgSky(ms, w, h, e) { /* real time of day: bright / orange dawn+dusk / black starry night */
   const [tp, bt] = sky(e), gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, rg(tp)); gr.addColorStop(.75, rg(bt)); gr.addColorStop(1, rg(bt.map(v => v * .6))); g.fillStyle = gr; g.fillRect(0, 0, w, h);
   if (e > 0) { g.fillStyle = `rgba(20,25,35,${Math.min(.5, EV.cl / 100 * .45 + (EV.rain > 0 ? .15 : 0))})`; g.fillRect(0, 0, w, h); }
+  { const ov = greyAmt(); if (ov > 0) { g.fillStyle = `rgba(110,122,140,${ov * .6 * clamp(e * 2.2 + .35, 0, 1)})`; g.fillRect(0, 0, w, h); } }
   if (e < .1) stars(w, h, ms, e);
-  if (e > -.05) { const [X, Y] = SP(w, h, sunI().t); drawSun(g, X, Y, e, e > 0, .8); } else if (MI && MI.up && MSP) { const [X, Y] = SP(w, h, MI.t), q = g.createRadialGradient(X, Y, 8, X, Y, 90); q.addColorStop(0, 'rgba(220,230,255,.3)'); q.addColorStop(1, 'rgba(220,230,255,0)'); g.fillStyle = q; g.fillRect(X - 90, Y - 90, 180, 180); putMoon(g, MSP, X, Y, 64, MI.south); }
+  const sv = skyVis(); if (sv > .2 && e > -.05) { const [X, Y] = SP(w, h, sunI().t); drawSun(g, X, Y, e, e > 0, .8); veil(X, Y, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [X, Y] = SP(w, h, MI.t), q = g.createRadialGradient(X, Y, 8, X, Y, 90); q.addColorStop(0, 'rgba(220,230,255,.3)'); q.addColorStop(1, 'rgba(220,230,255,0)'); g.fillStyle = q; g.fillRect(X - 90, Y - 90, 180, 180); putMoon(g, MSP, X, Y, 64, MI.south); }
+  clouds(ms, w, h, e);
 }
 function buildGreen(w, h) { /* skyline is seeded by lat/lon; height from real elevation; palette from latitude */
   const la = place.lat, lo = place.lon, R = rnd(Math.round(la * 100) * 7919 + Math.round(lo * 100) * 104729 + 13), el = Math.max(0, W.w.elevation || 0), amp = Math.min(1.8, .55 + el / 1700), zn = Math.abs(la) < 23.5 ? 0 : Math.abs(la) < 45 ? 1 : Math.abs(la) < 60 ? 2 : 3;
@@ -443,10 +516,11 @@ function buildGreen(w, h) { /* skyline is seeded by lat/lon; height from real el
 const ry = (l, x) => l.y - l.a * (.55 + .45 * Math.sin(x * l.f[0] + l.ph[0]) + .28 * Math.sin(x * l.f[1] + l.ph[1]) + .12 * Math.sin(x * l.f[2] + l.ph[2])) * .9;
 function bgGreen(ms, w, h, e) {
   if (!GR || GR.w !== w) buildGreen(w, h); const G = GR, I = sunI(), [tp, b0] = sky(e), k = clamp(e * 3, 0, 1), bt = b0.map((v, j) => v * (1 - .22 * k) + [30, 110, 95][j] * .22 * k), gr = g.createLinearGradient(0, 0, 0, h * .75), bc = bt.map(Math.round);
-  gr.addColorStop(0, rg(tp)); gr.addColorStop(1, rg(bt)); g.fillStyle = gr; g.fillRect(0, 0, w, h); if (e < .1) stars(w, h, ms, e);
+  gr.addColorStop(0, rg(tp)); gr.addColorStop(1, rg(bt)); g.fillStyle = gr; g.fillRect(0, 0, w, h); { const ov = greyAmt(); if (ov > 0) { g.fillStyle = `rgba(110,122,140,${ov * .55 * clamp(e * 2.2 + .35, 0, 1)})`; g.fillRect(0, 0, w, h); } } if (e < .1) stars(w, h, ms, e);
   const [X, Y] = SP(w, h, I.t);
-  if (e > -.05) drawSun(g, X, Y + h * .04, e, e > 0, .7); else if (MI && MI.up && MSP) { const [mx, my] = SP(w, h, MI.t); putMoon(g, MSP, mx, my, 54, MI.south); }
-  if (e > 0 && e < .7 && EV.cl < 65) for (let i = 0; i < 6; i++) { const an = .9 + i * .28 + Math.sin(ms / 6000 + i) * .05; g.save(); g.translate(X, Y); g.rotate(an); g.fillStyle = 'rgba(255,220,160,.06)'; g.beginPath(); g.moveTo(0, 0); g.lineTo(1000, -60); g.lineTo(1000, 60); g.fill(); g.restore(); }
+  const sv = skyVis(); if (sv > .2 && e > -.05) { drawSun(g, X, Y + h * .04, e, e > 0, .7); veil(X, Y + h * .04, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [mx, my] = SP(w, h, MI.t); putMoon(g, MSP, mx, my, 54, MI.south); }
+  clouds(ms, w, h, e);
+  if (e > 0 && e < .7 && EV.cl < 65 && sv > .5) for (let i = 0; i < 6; i++) { const an = .9 + i * .28 + Math.sin(ms / 6000 + i) * .05; g.save(); g.translate(X, Y); g.rotate(an); g.fillStyle = 'rgba(255,220,160,.06)'; g.beginPath(); g.moveTo(0, 0); g.lineTo(1000, -60); g.lineTo(1000, 60); g.fill(); g.restore(); }
   const snow = EV.tp <= 1 || EV.snow > 0;
   G.L.forEach((l, i) => {
     const off = ms * l.sp * .05; g.beginPath(); g.moveTo(0, h); for (let x = 0; x <= w + 8; x += 8) g.lineTo(x, ry(l, x + off)); g.lineTo(w + 8, h); g.closePath();
@@ -876,13 +950,13 @@ function drawPend() {
   if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
   const x = c.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h);
   const lt = false, ink = '255,255,255', cx = w / 2, py = 18, Lr = h - 100, th0 = .5, tt = Date.now() / 1000;
-  const ang = s => RM ? 0 : th0 * Math.cos(Math.PI * s), spin = s => RM ? .4 : s / 5 * 6.2832, th = ang(tt), bx = cx + Math.sin(th) * Lr, by = py + Math.cos(th) * Lr, fy = h - 14;
+  const ang = s => RM ? 0 : th0 * Math.cos(Math.PI * s), spin = s => RM ? .4 : s * Math.PI / 2, th = ang(tt), bx = cx + Math.sin(th) * Lr, by = py + Math.cos(th) * Lr, fy = h - 14;
   x.strokeStyle = `rgba(${ink},.12)`; x.lineWidth = 1; x.beginPath(); x.moveTo(cx - w * .4, fy); x.lineTo(cx + w * .4, fy); x.stroke();
   const sg = x.createRadialGradient(bx, fy, 2, bx, fy, 46); sg.addColorStop(0, 'rgba(25,240,96,.3)'); sg.addColorStop(1, 'rgba(0,0,0,0)');
   x.save(); x.translate(0, fy); x.scale(1, .18); x.translate(0, -fy); x.fillStyle = sg; x.beginPath(); x.arc(bx, fy, 46, 0, 7); x.fill(); x.restore();
-  x.setLineDash([3, 7]); x.strokeStyle = `rgba(${ink},.16)`; x.beginPath(); x.arc(cx, py, Lr, Math.PI / 2 - th0, Math.PI / 2 + th0); x.stroke(); x.setLineDash([]);
-  x.fillStyle = `rgba(${ink},.3)`; [-th0, th0].forEach(s => { x.beginPath(); x.arc(cx + Math.sin(s) * Lr, py + Math.cos(s) * Lr, 2.5, 0, 7); x.fill(); });
-  if (!RM) for (let k = 4; k >= 1; k--) { const s = tt - k * .04, t2 = ang(s); x.save(); x.translate(cx + Math.sin(t2) * Lr, py + Math.cos(t2) * Lr); x.rotate(-t2); infinity(x, 0, 0, 36, spin(s), lt, .16 / k + .02); x.restore(); }
+  
+  
+  
   const rgd = x.createLinearGradient(cx, py, bx, by); rgd.addColorStop(0, `rgba(${ink},.85)`); rgd.addColorStop(1, `rgba(${ink},.45)`); x.strokeStyle = '#fff'; x.lineWidth = 3; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx, py); x.lineTo(bx, by); x.stroke();
   x.fillStyle = '#fff'; x.fillRect(cx - 30, 4, 60, 5); x.beginPath(); x.arc(cx, py, 5, 0, 7); x.fill();
   x.save(); x.translate(bx, by); x.rotate(-th); infinity(x, 0, 0, 36, spin(tt), lt, 1); x.restore();
@@ -937,6 +1011,8 @@ unitUI(); bellUI(); drawFavs();
 if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) navigator.serviceWorker.register('sw.js').catch(() => { });
 
 /* ===================== v5 additions ===================== */
+Object.assign(T.en, { yd: 'yesterday', tm: 'tomorrow' }); Object.assign(T.hi, { yd: 'कल', tm: 'कल' });
+const dsfx = d => d ? ` <small style="display:inline;opacity:.55;font-size:.7rem">${d < 0 ? t('yd') : t('tm')}</small>` : '';
 Object.assign(T.en, { rch: 'Rain chance, next 6 hours', dry: 'Dry spell', sunD: 'Day length', sunN: 'Solar noon', sunG: 'Golden hour', sunL: 'Daylight left', sunC: 'Tomorrow', sunUp: 'Sun is up', sunDn: 'Sun is down', mx: 'Max', mi: 'Min', av: 'Avg', pk: 'Peak', nextH: 'Next 24 hours', line: 'Line', bar: 'Bar', fine: 'Fine', fair: 'Fair', poor: 'Poor', sOut: 'Outdoor score', sRoad: 'Road safety', sCom: 'Comfort', sHome: 'Home safety', sSlp: 'Sleep comfort', sWarm: 'Warmth needed', sUV: 'UV level', sH2O: 'Water today', sAir: 'Air quality', wl: ['Very light', 'Light', 'Medium', 'Warm', 'Heavy'], close: 'Tap outside to close', today: 'Today', hiLo: 'High / Low', feelR: 'Feels range', rainT: 'Rain total', windM: 'Max wind', daylight: 'Daylight', wet: 'Wettest', when: 'When', perDay: 'Per day', rdays: 'Rainy', total: 'Total', cond: 'Condition' });
 Object.assign(T.hi, { rch: 'बारिश की संभावना, अगले 6 घंटे', dry: 'सूखा मौसम', sunD: 'दिन की लंबाई', sunN: 'सूर्य सबसे ऊपर', sunG: 'सुनहरा समय', sunL: 'बची धूप', sunC: 'कल', sunUp: 'सूरज निकला है', sunDn: 'सूरज डूबा है', mx: 'अधिकतम', mi: 'न्यूनतम', av: 'औसत', pk: 'शिखर', nextH: 'अगले 24 घंटे', line: 'लाइन', bar: 'बार', fine: 'बढ़िया', fair: 'ठीक', poor: 'ख़राब', sOut: 'बाहर का स्कोर', sRoad: 'सड़क सुरक्षा', sCom: 'आराम', sHome: 'घर की सुरक्षा', sSlp: 'नींद का आराम', sWarm: 'ज़रूरी गर्माहट', sUV: 'UV स्तर', sH2O: 'आज का पानी', sAir: 'हवा की गुणवत्ता', wl: ['बहुत हल्के', 'हल्के', 'मध्यम', 'गर्म', 'भारी'], close: 'बंद करने के लिए बाहर टैप करें', today: 'आज', hiLo: 'अधिकतम / न्यूनतम', feelR: 'महसूस होने की रेंज', rainT: 'कुल बारिश', windM: 'अधिकतम हवा', daylight: 'दिन की रोशनी', wet: 'सबसे गीला', when: 'कब', perDay: 'प्रति दिन', rdays: 'बारिश वाले', total: 'कुल', cond: 'मौसम' });
 const B2 = (e, h) => L === 'hi' ? h : e, P7 = ['#4da3ff', '#3fd0e0', '#3ddc84', '#f1d84a', '#ff9f1a', '#ff4d4d', '#b455ff'];
@@ -945,42 +1021,40 @@ const B2 = (e, h) => L === 'hi' ? h : e, P7 = ['#4da3ff', '#3fd0e0', '#3ddc84', 
 let DWS = null;
 (function () { const d = document.createElement('div'); d.id = 'dw'; d.innerHTML = '<div class="dwc" id="dwc"></div>'; document.body.appendChild(d); })();
 function openDW(src, slides, start) {
-  closeDW(true); const dw = $('dw'), c = $('dwc'); start = start || 0;
-  const many = slides.length > 1;
-  c.innerHTML = `<div class="dws" id="dws">${slides.map(h => `<div class="dsl">${h}</div>`).join('')}</div>` + (many ? `<div class="dnav"><button id="dpv" aria-label="Previous">‹</button><div class="dots">${slides.map((_, j) => `<i class="${j === start ? 'on' : ''}"></i>`).join('')}</div><button id="dnx" aria-label="Next">›</button></div>` : '');
+  closeDW(true); const dw = $('dw'), c = $('dwc'); start = start || 0; const many = slides.length > 1;
+  c.innerHTML = `<div class="dws" id="dws">${slides.map(h => `<div class="dsl">${h}</div>`).join('')}</div>` + (many ? `<div class="dnav"><div class="dots">${slides.map((_, j) => `<i class="${j === start ? 'on' : ''}"></i>`).join('')}</div></div>` : '');
   dw.style.display = 'flex'; document.body.style.overflow = 'hidden';
-  const r = src && src.getBoundingClientRect ? src.getBoundingClientRect() : null; if (src && src.classList) src.classList.add('up');
-  DWS = { src, many };
-  const sc = $('dws'); sc.scrollLeft = start * c.clientWidth;
-  if (many) {
-    const dots = c.querySelectorAll('.dots i'), go = j => sc.scrollTo({ left: clamp(j, 0, slides.length - 1) * c.clientWidth, behavior: 'smooth' });
-    const upd = () => { const j = Math.round(sc.scrollLeft / c.clientWidth); dots.forEach((q, n) => q.classList.toggle('on', n === j)); DWS.j = j; }; sc.addEventListener('scroll', upd, { passive: true }); DWS.j = start;
-    $('dpv').onclick = () => go((DWS.j || 0) - 1); $('dnx').onclick = () => go((DWS.j || 0) + 1);
-  }
-  const f = c.getBoundingClientRect(); if (r && !RM) { const dx = r.left + r.width / 2 - (f.left + f.width / 2), dy = r.top + r.height / 2 - (f.top + f.height / 2), k = Math.max(.25, Math.min(r.width / f.width, 1));
-    c.style.transition = 'none'; c.style.opacity = '0'; c.style.transform = `translate(${dx}px,${dy}px) scale(${k})`; void c.offsetWidth;
-    c.style.transition = 'transform .42s cubic-bezier(.2,.9,.2,1),opacity .25s'; c.style.opacity = '1'; c.style.transform = 'none'; } else { c.style.transform = 'none'; c.style.opacity = '1'; }
+  const sc = $('dws'), els = [...sc.children], act = els[start], center = e => e.offsetLeft - (sc.clientWidth - e.offsetWidth) / 2;
+  sc.style.scrollSnapType = 'none'; sc.scrollLeft = center(act); sc.style.scrollSnapType = '';
+  if (src && src.classList) src.classList.add('up'); DWS = { src, many, j: start, els };
+  if (many) { const dots = c.querySelectorAll('.dots i'); sc.addEventListener('scroll', () => { let best = 0, bd = 1e9; els.forEach((e, n) => { const d = Math.abs(center(e) - sc.scrollLeft); if (d < bd) { bd = d; best = n; } }); if (DWS) DWS.j = best; dots.forEach((q, n) => q.classList.toggle('on', n === best)); }, { passive: true }); }
+  const r = src && src.getBoundingClientRect ? src.getBoundingClientRect() : null, f = act.getBoundingClientRect();
+  if (r && !RM) { const dx = r.left + r.width / 2 - (f.left + f.width / 2), dy = r.top + r.height / 2 - (f.top + f.height / 2), k = Math.max(.25, Math.min(r.width / f.width, 1));
+    act.style.transition = 'none'; act.style.opacity = '0'; act.style.transform = `translate(${dx}px,${dy}px) scale(${k})`; void act.offsetWidth;
+    act.style.transition = 'transform .42s cubic-bezier(.2,.9,.2,1),opacity .25s'; act.style.opacity = '1'; act.style.transform = 'none';
+    setTimeout(() => { act.style.transition = ''; act.style.transform = ''; act.style.opacity = ''; }, 480); }
   requestAnimationFrame(() => dw.classList.add('on'));
 }
 function closeDW(now) {
   const dw = $('dw'); if (!dw || dw.style.display !== 'flex') return; const c = $('dwc'), S = DWS; DWS = null;
   const fin = () => { dw.style.display = 'none'; dw.classList.remove('on'); document.body.style.overflow = ''; c.innerHTML = ''; if (S && S.src && S.src.classList) S.src.classList.remove('up'); };
-  if (now || RM) { fin(); return; }
-  dw.classList.remove('on'); const r = S && S.src && S.src.isConnected ? S.src.getBoundingClientRect() : null, f = c.getBoundingClientRect();
-  c.style.transition = 'transform .32s cubic-bezier(.4,0,.2,1),opacity .28s'; c.style.opacity = '0';
-  c.style.transform = r ? `translate(${r.left + r.width / 2 - (f.left + f.width / 2)}px,${r.top + r.height / 2 - (f.top + f.height / 2)}px) scale(${Math.max(.25, Math.min(r.width / f.width, 1))})` : 'scale(.9)';
-  if (S && S.src && S.src.classList) S.src.classList.remove('up'); setTimeout(() => { if (!DWS) fin(); }, 340);
+  if (now || RM || !S) { fin(); return; }
+  dw.classList.remove('on'); const cur = S.els[S.j] || S.els[0], r = S.src && S.src.isConnected ? S.src.getBoundingClientRect() : null, f = cur.getBoundingClientRect();
+  S.els.forEach(e => { e.style.transition = 'transform .32s cubic-bezier(.4,0,.2,1),opacity .28s'; e.style.opacity = '0'; });
+  cur.style.transform = r ? `translate(${r.left + r.width / 2 - (f.left + f.width / 2)}px,${r.top + r.height / 2 - (f.top + f.height / 2)}px) scale(${Math.max(.25, Math.min(r.width / f.width, 1))})` : 'scale(.9)';
+  const nv = c.querySelector('.dnav'); if (nv) { nv.style.transition = 'opacity .2s'; nv.style.opacity = '0'; }
+  if (S.src && S.src.classList) S.src.classList.remove('up'); setTimeout(() => { if (!DWS) fin(); }, 340);
 }
-$('dw').addEventListener('click', e => { if (e.target === $('dw')) closeDW(); });
+$('dw').addEventListener('click', e => { if (!e.target.closest('.dsl,.dnav')) closeDW(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDW(); });
 /* any tap outside a tile that opens a window is handled here, before the old lift handler */
 document.addEventListener('click', e => {
   if (e.target.closest('#dw')) return;
   if (DWS) { closeDW(); }
   if (e.target.closest('input,button,select,#map,#sug,#sug2,.cb,.ck,a')) return;
-  const el = e.target.closest('#hero .grid>div,.kpis>div,#daily .dy,.tp2'); if (!el) return;
+  const el = e.target.closest('#hero .grid>div,#dash .kpis>div,#sunK>div,#moonK>div,#daily .dy,.tp2'); if (!el) return;
   e.stopPropagation(); document.querySelectorAll('.up').forEach(x => x.classList.remove('up'));
-  if (el.matches('#hero .grid>div')) heroDW(el); else if (el.matches('.kpis>div')) kpiDW(el); else if (el.matches('#daily .dy')) dailyDW(el); else tipDW(el);
+  if (el.matches('#hero .grid>div')) heroDW(el); else if (el.matches('#dash .kpis>div')) kpiDW(el); else if (el.matches('#sunK>div')) sunDW(el); else if (el.matches('#moonK>div')) moonDW(el); else if (el.matches('#daily .dy')) dailyDW(el); else tipDW(el);
 }, true);
 
 /* ---------- small helpers for the windows ---------- */
@@ -1135,6 +1209,48 @@ function tipDW(el) {
   openDW(el, sl, j);
 }
 
+
+/* ---------- Sun and Moon tile windows ---------- */
+function sunDW(el) {
+  if (!W) return; const w = W.w, d = Math.max(todayIdx(w), 0), idx = [...el.parentNode.children].indexOf(el), nowM = mins(w.current.time);
+  const days = Array.from({ length: 7 }, (_, q) => { const sr = mins(w.daily.sunrise[d + q]), ss = mins(w.daily.sunset[d + q]); return { sr, ss, ln: ss - sr, no: (sr + ss) / 2, gd: ss - 60, ni: 1440 - (ss - sr), date: w.daily.time[d + q] }; });
+  const hm = m => { const x = ((m % 1440) + 1440) % 1440; return pad(Math.floor(x / 60)) + ':' + pad(Math.round(x % 60) % 60); }, dh = m => Math.floor(m / 60) + ' ' + t('hh') + ' ' + pad(Math.round(m % 60)) + ' ' + t('mn');
+  const key = ['sr', 'no', 'ss', 'ln', 'gd', 'ni'][idx], fmt = (idx === 3 || idx === 5) ? dh : hm, ic = ['🌅', '☀️', '🌇', '🌞', '🌆', '🌌'][idx], ti = [t('rise'), t('nn'), t('set'), t('dl'), t('gold'), t('nl')][idx];
+  const ab = [
+    ['The moment the top edge of the sun shows above the horizon. Daylight begins about 25 to 30 minutes earlier.', 'वह पल जब सूरज का ऊपरी किनारा क्षितिज के ऊपर दिखता है। उजाला इससे लगभग 25 से 30 मिनट पहले शुरू हो जाता है।'],
+    ['The sun is at its highest point. Shadows are shortest now, and it is the exact middle of the daylight.', 'सूरज सबसे ऊँचाई पर होता है। परछाइयाँ सबसे छोटी होती हैं, और यह दिन के उजाले का ठीक बीच का समय है।'],
+    ['The moment the top edge of the sun goes below the horizon. Twilight lasts about 25 to 30 minutes more.', 'वह पल जब सूरज का ऊपरी किनारा क्षितिज के नीचे चला जाता है। इसके बाद लगभग 25 से 30 मिनट गोधूलि रहती है।'],
+    ['Time between sunrise and sunset. It changes by seconds every day, a little more in spring and autumn.', 'सूर्योदय और सूर्यास्त के बीच का समय। यह रोज़ कुछ सेकंड बदलता है, वसंत और पतझड़ में थोड़ा ज़्यादा।'],
+    ['The last hour before sunset, with soft warm light. The best time for photos and a walk.', 'सूर्यास्त से पहले का आख़िरी घंटा, नरम सुनहरी रोशनी के साथ। फ़ोटो और टहलने के लिए सबसे अच्छा समय।'],
+    ['Time from sunset to the next sunrise.', 'सूर्यास्त से अगले सूर्योदय तक का समय।']][idx];
+  const big = idx === 4 ? hm(days[0].gd) + '–' + hm(days[0].ss) : fmt(days[0][key]), dv = Math.round((days[1][key] - days[0][key]) * 60), dvs = (dv >= 0 ? '+' : '−') + (Math.abs(dv) >= 60 ? Math.floor(Math.abs(dv) / 60) + ' ' + t('mn') + ' ' + pad(Math.abs(dv) % 60) + ' s' : Math.abs(dv) + ' s');
+  let rel = ''; if (idx === 0 || idx === 2 || idx === 4) { const tgt = idx === 0 ? days[0].sr : idx === 2 ? days[0].ss : days[0].gd, df = tgt - nowM; rel = `<div class="sub">${df >= 0 ? (L === 'hi' ? 'अभी से ' + dh(df) + ' बाद' : 'in ' + dh(df)) : (L === 'hi' ? dh(-df) + ' पहले' : dh(-df) + ' ago')}</div>`; }
+  openDW(el, [`<div class="dh"><span class="e">${ic}</span><div><h4>${ti}</h4><div class="sub">${fmtDate(w.current.time)}</div></div></div><div class="dbig">${big}</div>${rel}<div class="dp">${B2(ab[0], ab[1])}</div>
+    <div class="dst"><div><small>${t('rise')}</small><b>${hm(days[0].sr)}</b></div><div><small>${t('set')}</small><b>${hm(days[0].ss)}</b></div><div><small>${t('sunC')}</small><b>${dvs}</b></div></div>
+    <div class="dtt">${B2('Next 7 days', 'अगले 7 दिन')}</div>${spark(days.map(q => q[key]), 0, x => fmt(x), '#ffb84d')}${days.map(q => `<div class="rw"><span>${dayLabel(q.date)}</span><span>${idx === 4 ? hm(q.gd) + '–' + hm(q.ss) : fmt(q[key])}</span></div>`).join('')}<div class="sub" style="text-align:center;margin-top:8px">${t('close')}</div>`]);
+}
+function moonDW(el) {
+  if (!W || !MI) return; const idx = [...el.parentNode.children].indexOf(el), SY = SYN, ph = MI.ph, ill = Math.round(MI.ill * 100), phn = t('phn');
+  const piF = p => p < .02 || p >= .98 ? 0 : p < .23 ? 1 : p < .27 ? 2 : p < .48 ? 3 : p < .52 ? 4 : p < .73 ? 5 : p < .77 ? 6 : 7, pn = piF(ph), em = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
+  const dFull = ((.5 - ph + 1) % 1) * SY, dNew = ((1 - ph) % 1) * SY, age = ph * SY, dfmt = dd => new Date(Date.now() + dd * 864e5).toLocaleDateString(L === 'hi' ? 'hi-IN' : 'en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+  const img = MSP ? `<img class="mimg" alt="" src="${MSP.toDataURL()}" ${MI.south ? 'style="transform:rotate(180deg)"' : ''}>` : `<span class="e">🌙</span>`;
+  const mr = hmm(MI.mr) + dsfx(W.moon && W.moon.rd), ms = hmm(MI.ms) + dsfx(W.moon && W.moon.sd), tit = [MI.real ? t('mr').replace(' ≈', '') : t('mr'), t('ill'), MI.real ? t('ms').replace(' ≈', '') : t('ms'), t('nf2'), t('nn2'), t('age')][idx];
+  const big = [mr, ill + '%', ms, Math.round(dFull) + ' d', Math.round(dNew) + ' d', age.toFixed(1) + ' d'][idx];
+  const st = MI.up ? t('ab') : t('bl');
+  const ab = [
+    ['The moment the moon comes up over the horizon. It rises about 50 minutes later every day, so some days it has no moonrise at all.', 'वह पल जब चाँद क्षितिज के ऊपर आता है। यह हर दिन लगभग 50 मिनट देर से उगता है, इसलिए किसी दिन चाँद उगता ही नहीं।'],
+    ['How much of the moon\'s face is lit by the sun, as seen from earth.', 'पृथ्वी से देखने पर चाँद का कितना हिस्सा सूरज की रोशनी से चमक रहा है।'],
+    ['The moment the moon goes below the horizon.', 'वह पल जब चाँद क्षितिज के नीचे चला जाता है।'],
+    ['The next night the moon is fully lit. It happens once every 29.5 days.', 'अगली रात जब चाँद पूरा चमकता है। यह हर 29.5 दिन में एक बार होता है।'],
+    ['The next night with no visible moon, the best time to see stars. It happens once every 29.5 days.', 'अगली रात जब चाँद दिखता ही नहीं, तारे देखने का सबसे अच्छा समय। यह हर 29.5 दिन में एक बार होता है।'],
+    ['Days since the last new moon. A full cycle takes 29.5 days.', 'पिछली अमावस्या से कितने दिन हुए। एक पूरा चक्र 29.5 दिन का होता है।']][idx];
+  const strip = `<div class="pstr">${em.map((x, j) => `<i class="${j === pn ? 'on' : ''}">${x}</i>`).join('')}</div>`;
+  const ills = Array.from({ length: 15 }, (_, k) => { const p = phase(Date.now() + k * 864e5); return Math.round((1 - Math.cos(2 * Math.PI * p)) / 2 * 100); });
+  const extra = idx === 1 ? `<div class="dtt">${B2('Next 14 days', 'अगले 14 दिन')}</div>${spark(ills, 0, x => x + '%', '#c8d4ff')}` : (idx === 3 || idx === 4) ? `<div class="dst"><div><small>${B2('Date', 'तारीख')}</small><b>${dfmt(idx === 3 ? dFull : dNew)}</b></div><div><small>${B2('In', 'अभी से')}</small><b>${Math.round(idx === 3 ? dFull : dNew)} d</b></div><div><small>${t('ill')}</small><b>${idx === 3 ? '100%' : '0%'}</b></div></div>` : '';
+  openDW(el, [`<div class="dh">${img}<div><h4>${tit}</h4><div class="sub">${phn[pn]} · ${st}</div></div></div><div class="dbig">${big}</div><div class="dp">${B2(ab[0], ab[1])}</div>${strip}
+    <div class="cyc"><i style="left:${clamp(ph, 0, 1) * 100}%"></i></div><div class="dmt"><span>${phn[0]}</span><span>${phn[4]}</span><span>${phn[0]}</span></div>
+    <div class="dst"><div><small>${t('mr').replace(' ≈', '')}</small><b>${mr}</b></div><div><small>${t('ill')}</small><b>${ill}%</b></div><div><small>${t('ms').replace(' ≈', '')}</small><b>${ms}</b></div></div>${extra}<div class="sub" style="text-align:center;margin-top:8px">${t('close')}</div>`]);
+}
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
