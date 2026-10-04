@@ -11,7 +11,8 @@ html,body{margin:0;background:#0a0a0a}
 body{font-family:"Helvetica Neue",system-ui,'Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Tamil','Noto Sans Telugu','Noto Sans Gujarati','Noto Sans Arabic','Noto Sans JP','Noto Sans KR','Noto Sans SC',Arial,sans-serif;color:#fff}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:0}
 .wrap{position:relative;z-index:1;max-width:600px;margin:auto;padding:calc(14px + var(--gap)) 14px 60px}
-:root{--gap:clamp(150px,27vh,270px)}
+:root{--gap:clamp(300px,50vh,520px)}
+html,body{overscroll-behavior-y:none}
 .win{background:rgba(10,10,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:16px;margin:14px 0}
 .row{display:flex;gap:8px;align-items:center}
 input,select{flex:1;min-width:0;padding:11px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#fff;font-size:1rem;outline:0}
@@ -80,6 +81,17 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 [data-th=space] .wrap>.win:not(:first-child),[data-th=space] #app>.win{animation:sway 7s ease-in-out infinite;animation-delay:calc(var(--fi,0) * -1.4s)}
 [data-th=space] .wrap>.win:first-child,[data-th=space] .stk{animation:none}
 @keyframes sway{0%,100%{transform:translate3d(0,0,0) rotate(0)}22%{transform:translate3d(1.6px,-2px,0) rotate(.12deg)}50%{transform:translate3d(-1.2px,1.6px,0) rotate(-.1deg)}76%{transform:translate3d(1px,1.2px,0) rotate(.08deg)}}
+
+/* ===== v10 sky header + pull to refresh ===== */
+#skyH{position:absolute;left:0;right:0;top:0;height:var(--gap);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:26px;text-align:center;pointer-events:none;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+#skyH .pl{font-size:1.25rem;font-weight:400;letter-spacing:.01em;max-width:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#skyH .tm{font-size:6.4rem;font-weight:200;line-height:1;letter-spacing:-.03em;margin:2px 0 6px;padding-left:.12em}
+#skyH svg{width:44px;height:44px;display:block;margin:0 auto}
+[data-th=white] #skyH{color:#0f1420;text-shadow:none}
+#ptr{position:fixed;left:50%;top:0;z-index:95;width:40px;height:40px;margin-left:-20px;border-radius:50%;background:rgba(20,20,24,.92);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;color:#fff;transform:translateY(-60px);opacity:0;pointer-events:none}
+#ptr svg{width:20px;height:20px}
+#ptr.go svg{animation:spin 1s linear infinite}
+[data-th=white] #ptr{background:#fff;color:#0f1420;border-color:rgba(0,0,0,.2)}
 
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
@@ -263,6 +275,7 @@ input{-webkit-user-select:text;user-select:text}
 <body>
 <canvas id="fx"></canvas>
 <div class="wrap">
+  <div id="skyH"></div>
   <div class="win row" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
   <div id="sug"></div>
   <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="ur">اردو</option><option value="tr">Türkçe</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="id">Bahasa Indonesia</option></select></div></div>
@@ -499,7 +512,7 @@ function setFx() {
   STAR = Array.from({ length: 130 }, () => ({ x: Math.random(), y: Math.random() * .75, r: Math.random() * 1.1 + .3, p: Math.random() * 7 })); GR = null;
 }
 function fit() { cv.width = innerWidth; cv.height = innerHeight; setFx(); }
-const GAPH = h => clamp(h * .27, 150, 270), SP = (w, h, t) => { const c = clamp(t, 0, 1), G = GAPH(h); return [w * (.14 + .72 * c), G * (.9 - .66 * Math.sin(Math.PI * c))]; };
+const GAPH = h => clamp(h * .5, 300, 520), SP = (w, h, t) => { const c = clamp(t, 0, 1), G = GAPH(h) * .56; return [w * (.14 + .72 * c), G * (.92 - .72 * Math.sin(Math.PI * c))]; };
 /* ---------- sky follows the real weather: no sun in rain, clouds instead ---------- */
 function skyVis() { if (!W) return 1; const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || k === 'fog' || EV.rain > 0 || EV.snow > 0) return 0; return clamp(1 - (EV.cl - 35) / 50, 0, 1); }
 function greyAmt() { const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || EV.rain > 0) return .95; if (k === 'fog') return .7; return clamp((EV.cl - 30) / 60, 0, 1); }
@@ -1396,6 +1409,30 @@ function clouds(ms, w, h, e) {
   for (let i = 0; i < n; i++) { const c = CLD2[i], cir = c.k >= 2, sw = c.s * (w * (cir ? 1.15 : .75)), sh2 = sw * (cir ? .26 : .36), span = w + sw, X = ((c.x * span + t0 * .0045 * c.v * (1 + EV.wind / 30)) % span) - sw, Y = (wet ? .05 : -.12) * G + c.y * G * (wet ? 1.1 : 1.0); g.globalAlpha = clamp(c.a * Math.min(1, amt + .35), 0, 1) * (cir ? .9 : 1); g.drawImage(cloudSprite(c.k, R, G2, B), X, Y, sw, sh2); }
   g.globalAlpha = 1;
 }
+
+/* ---------- v10: sky header on the background ---------- */
+function skyHead() {
+  if (!W) return; const c = W.w.current;
+  $('skyH').innerHTML = `<div class="pl">${esc(place.name)}</div><div class="tm">${dT(c.temperature_2m)}</div>${icon(c.weather_code, c.is_day)}`;
+}
+{ const _r = render; render = function () { _r.apply(this, arguments); skyHead(); }; }
+/* ---------- v10: pull down to refresh ---------- */
+(function () {
+  const pt = document.createElement('div'); pt.id = 'ptr'; pt.innerHTML = REF_IC; document.body.appendChild(pt);
+  let y0 = null, x0 = 0, dy = 0;
+  const open = () => document.getElementById('dw') && document.getElementById('dw').classList.contains('on');
+  addEventListener('touchstart', e => { y0 = null; if (scrollY > 0 || open() || REFING || e.touches.length !== 1) return; if (e.target.closest && e.target.closest('#map,.dws,.strip,.cb,input,select')) return; y0 = e.touches[0].clientY; x0 = e.touches[0].clientX; dy = 0; }, { passive: true });
+  addEventListener('touchmove', e => {
+    if (y0 == null) return; dy = e.touches[0].clientY - y0; if (dy <= 0 || scrollY > 0 || Math.abs(e.touches[0].clientX - x0) > dy) { if (dy <= 0) pt.style.opacity = 0; return; }
+    const m = Math.min(dy * .5, 90); pt.style.transition = 'none'; pt.style.opacity = Math.min(1, m / 50); pt.style.transform = `translateY(${m - 50}px) rotate(${m * 4}deg)`;
+  }, { passive: true });
+  addEventListener('touchend', async () => {
+    if (y0 == null) return; const go = dy > 110; y0 = null; pt.style.transition = 'transform .3s,opacity .3s';
+    if (go && W) { pt.style.transform = 'translateY(24px)'; pt.style.opacity = 1; pt.classList.add('go'); await refresh(true); setTimeout(() => { pt.classList.remove('go'); pt.style.opacity = 0; pt.style.transform = 'translateY(-60px)'; }, 400); }
+    else { pt.style.opacity = 0; pt.style.transform = 'translateY(-60px)'; }
+    dy = 0;
+  });
+})();
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
