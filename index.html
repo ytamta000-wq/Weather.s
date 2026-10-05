@@ -133,6 +133,28 @@ html[data-th] .up{box-shadow:none!important}
 #dw.on,[data-th=space] #dw.on{background:rgba(0,0,0,.4);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
 [data-th=white] #dw.on{background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
 
+/* ===== v16: customize panel (transparency + up/down shift, saved per theme) ===== */
+:root{--tp:0;--sh:0px;--tc:10,10,14}
+html[data-th] .win:not(#clkW),html[data-th] .stk,html[data-th] .dsl{background:rgba(var(--tc),calc(var(--tp) * .88))!important;border-color:rgba(var(--bc,255,255,255),calc(var(--tp) * .13))!important;-webkit-backdrop-filter:blur(calc(var(--tp) * 16px))!important;backdrop-filter:blur(calc(var(--tp) * 16px))!important}
+html[data-th] .grid div,html[data-th] .kpis div,html[data-th] .tp,html[data-th] .tp2,html[data-th] .dst div,html[data-th] .dhr div{background:rgba(var(--bc,255,255,255),calc(var(--tp) * .08))!important;border-color:transparent!important}
+[data-th=white]{--tc:255,255,255;--bc:0,0,0}
+.bar2{margin:0;height:0}
+.bar2>.row{position:absolute;top:8px;right:14px;z-index:6}
+#thw #thp{position:fixed;top:60px;right:14px;left:auto}
+.tools{margin-top:calc(4px + var(--sh))}
+#lang{max-width:104px;text-overflow:ellipsis}
+#cst{position:fixed;left:14px;right:14px;max-width:572px;margin:0 auto;bottom:calc(86px + env(safe-area-inset-bottom));z-index:70;display:none;padding:16px 18px 14px;border-radius:26px;background:rgba(14,14,18,.97);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 50px rgba(0,0,0,.55);color:#fff}
+#cst.open{display:block}
+[data-th=white] #cst{background:#fff;color:#0f1420;border-color:rgba(0,0,0,.14);box-shadow:0 18px 50px rgba(0,0,0,.2)}
+#cst h4{margin:0 0 10px;font-weight:500;font-size:1.02rem;display:flex;justify-content:space-between;align-items:center}
+#cst h4 button{padding:0;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);color:inherit;font-size:1rem}
+[data-th=white] #cst h4 button{background:rgba(0,0,0,.08)}
+#cst label{display:flex;justify-content:space-between;font-size:.86rem;opacity:.85;margin-top:10px}
+#cst input[type=range]{width:100%;flex:none;padding:0;border:0;background:none;height:30px;accent-color:#fff;margin:0}
+[data-th=white] #cst input[type=range]{accent-color:#0f1420}
+#cst .cb2{display:flex;gap:8px;margin-top:10px}#cst .cb2 button{flex:1}
+#cst .cb2 button.gh{background:rgba(255,255,255,.1);color:inherit}[data-th=white] #cst .cb2 button.gh{background:rgba(0,0,0,.08)}
+
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .up{transform:translateY(-12px) scale(1.03)!important;box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.28);z-index:30;position:relative}
@@ -318,7 +340,7 @@ input{-webkit-user-select:text;user-select:text}
   <div id="skyH"><div id="skyT"></div></div>
   <div class="win row" id="sbar" style="margin-top:0"><input id="q" data-p="ph" autocomplete="off"><button id="geo">📍</button><button id="go" data-i="go"></button></div>
   <div id="sug"></div>
-  <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="ur">اردو</option><option value="tr">Türkçe</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="id">Bahasa Indonesia</option></select></div></div>
+  <div class="bar2"><span class="brand">WEATHER∞</span><div class="row"><button id="cstb" class="ic2" aria-label="Customize"></button><div id="thw"><button id="thb" class="ic2"></button><div id="thp"></div></div><select id="lang"><option value="en">English</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="ur">اردو</option><option value="tr">Türkçe</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="gu">ગુજરાતી</option><option value="id">Bahasa Indonesia</option></select></div></div>
   <div class="tools row" id="tools"><div class="seg2" id="uT"><button data-u="C">°C</button><button data-u="F">°F</button></div><div class="seg2" id="uS"><button data-u="kmh">km/h</button><button data-u="mph">mph</button></div><button id="bell" class="ic2" aria-label="Alerts"></button></div>
   <div class="favs" id="favs"></div>
   <div id="msg" class="sub"></div>
@@ -1510,6 +1532,37 @@ function drawSun(x, X, Y, e, up, k = 1) {
   q = x.createRadialGradient(X, Y, 0, X, Y, 15 * k); q.addColorStop(0, `rgba(255,252,235,${bl})`); q.addColorStop(.7, `rgba(255,${236 - 40 * low | 0},${150 - 90 * low | 0},${bl})`); q.addColorStop(1, `rgba(255,${200 - 50 * low | 0},${90 - 60 * low | 0},0)`); x.fillStyle = q; x.beginPath(); x.arc(X, Y, 15 * k, 0, 7); x.fill();
 }
 $('sbar').appendChild($('sug'));
+
+/* ---------- v16: customize panel ---------- */
+Object.assign(T.en, { cust: 'Customize', ctp: 'Transparency', csh: 'Move tiles up / down', csv: 'Save', crs: 'Reset', csd: 'Saved', cup: 'up', cdn: 'down' });
+Object.assign(T.hi, { cust: 'अपने हिसाब से', ctp: 'पारदर्शिता', csh: 'टाइल्स ऊपर / नीचे', csv: 'सेव', crs: 'रीसेट', csd: 'सेव हो गया', cup: 'ऊपर', cdn: 'नीचे' });
+const CUSTK = 'cust', CD = { tr: 100, sh: 0 };
+let CUST = {}; try { CUST = JSON.parse(localStorage.getItem(CUSTK)) || {}; } catch (e) { }
+const cur = () => Object.assign({}, CD, CUST[TH] || {});
+function paintCust(v) { const r = document.documentElement.style; r.setProperty('--tp', (1 - v.tr / 100).toFixed(3)); r.setProperty('--sh', v.sh + 'px'); }
+function applyCust() { paintCust(cur()); }
+const GEAR = SV('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>');
+$('cstb').innerHTML = GEAR;
+const cp = document.createElement('div'); cp.id = 'cst'; document.body.appendChild(cp);
+function openCust() {
+  const v = cur(), nm = t('th')[THK.indexOf(TH)];
+  cp.innerHTML = `<h4><span>${t('cust')} · ${nm}</span><button id="cX" aria-label="Close">×</button></h4>
+    <label><span>${t('ctp')}</span><b id="cV1">${v.tr}%</b></label><input id="cR1" type="range" min="0" max="100" step="1" value="${v.tr}">
+    <label><span>${t('csh')}</span><b id="cV2">${v.sh} px</b></label><input id="cR2" type="range" min="-400" max="400" step="10" value="${v.sh}">
+    <div class="cb2"><button class="gh" id="cRs">${t('crs')}</button><button id="cSv">${t('csv')}</button></div>`;
+  const rd = () => ({ tr: +$('cR1').value, sh: +$('cR2').value });
+  const live = () => { const n = rd(); $('cV1').textContent = n.tr + '%'; $('cV2').textContent = n.sh + ' px'; paintCust(n); };
+  $('cR1').oninput = live; $('cR2').oninput = live;
+  $('cRs').onclick = () => { $('cR1').value = CD.tr; $('cR2').value = CD.sh; live(); };
+  $('cSv').onclick = () => { CUST[TH] = rd(); try { localStorage.setItem(CUSTK, JSON.stringify(CUST)); } catch (e) { } toast(t('csd')); cp.classList.remove('open'); };
+  $('cX').onclick = closeCust; cp.classList.add('open');
+}
+function closeCust() { cp.classList.remove('open'); applyCust(); }
+$('cstb').onclick = e => { e.stopPropagation(); cp.classList.contains('open') ? closeCust() : openCust(); };
+document.addEventListener('click', e => { if (cp.classList.contains('open') && !e.target.closest('#cst,#cstb')) closeCust(); });
+{ const _bt = buildTheme; buildTheme = function () { _bt(); applyCust(); }; }
+{ const _ab = applyLang; applyLang = function () { _ab.apply(this, arguments); if (cp.classList.contains('open')) openCust(); }; }
+applyCust();
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
