@@ -11,7 +11,7 @@ html,body{margin:0;background:#0a0a0a}
 body{font-family:"Helvetica Neue",system-ui,'Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Tamil','Noto Sans Telugu','Noto Sans Gujarati','Noto Sans Arabic','Noto Sans JP','Noto Sans KR','Noto Sans SC',Arial,sans-serif;color:#fff}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:0}
 .wrap{position:relative;z-index:1;max-width:600px;margin:auto;padding:calc(14px + var(--gap)) 14px 60px}
-:root{--gap:clamp(340px,50vh,520px)}
+:root{--gap:0px}
 html,body{overscroll-behavior-y:none}
 .win{background:rgba(10,10,10,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);border-radius:26px;padding:16px;margin:14px 0}
 .row{display:flex;gap:8px;align-items:center}
@@ -91,7 +91,9 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 @keyframes sway{0%,100%{transform:translate3d(0,0,0) rotate(0)}22%{transform:translate3d(1.6px,-2px,0) rotate(.12deg)}50%{transform:translate3d(-1.2px,1.6px,0) rotate(-.1deg)}76%{transform:translate3d(1px,1.2px,0) rotate(.08deg)}}
 
 /* ===== v10 sky header + pull to refresh ===== */
-#skyH{position:absolute;left:14px;right:14px;top:0;height:var(--gap);display:flex;flex-direction:column;justify-content:flex-start;padding-top:54px;pointer-events:none;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+#skyH{position:relative;min-height:calc(100vh - 150px);display:flex;flex-direction:column;justify-content:flex-start;padding-top:40px;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.4)}
+#skyH>*{pointer-events:auto}#skyH>#skyT{pointer-events:none}
+#skyH #clkW{margin:18px 0 0;text-shadow:none}
 #skyT{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
 #skyH #aqi{pointer-events:auto;margin:16px 0 0;padding:0;background:transparent!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;text-shadow:none}
 #skyH .pl{font-size:1.08rem;font-weight:400;opacity:.92;margin-bottom:2px;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -118,6 +120,18 @@ html[data-th=black],html[data-th=black] body,html[data-th=space],html[data-th=sp
 [data-th=space] #q{background:rgba(0,0,0,.9);border-color:rgba(255,255,255,.22)}
 [data-th=space] .ic2,[data-th=space] .ic3,[data-th=space] .seg2,[data-th=space] .chip,[data-th=space] .pill{background:transparent}
 [data-th=space] .ic2.on,[data-th=space] .chip.on,[data-th=space] .pill.on{background:#fff}
+
+/* ===== v15: every tile and window fully invisible (clock keeps its black card except in the space theme) ===== */
+html[data-th] .win:not(#clkW),html[data-th] .stk,html[data-th] .dsl,html[data-th] .grid div,html[data-th] .kpis div,html[data-th] .tp,html[data-th] .tp2,html[data-th] .dst div,html[data-th] .dhr div{background:transparent!important;border-color:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-th] .up{box-shadow:none!important}
+[data-th=sky] .win,[data-th=green] .win,[data-th=dots] .win{text-shadow:0 1px 9px rgba(0,0,0,.4)}
+#sbar #q{background:rgba(10,10,14,.82)}[data-th=white] #sbar #q{background:rgba(255,255,255,.92)}
+/* search suggestions sit directly above the search bar */
+#sbar{left:14px;right:14px;width:auto;transform:none;margin-left:auto!important;margin-right:auto!important}
+#sbar #sug{position:absolute;left:0;right:0;top:auto;bottom:calc(100% + 8px);width:auto;max-width:none;transform:none;max-height:min(46vh,380px);overflow-y:auto}
+/* behind a pop-up the page is blurred hard */
+#dw.on,[data-th=space] #dw.on{background:rgba(0,0,0,.4);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+[data-th=white] #dw.on{background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
 
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
@@ -1441,7 +1455,7 @@ function skyHead() {
   if (!W) return; const c = W.w.current, k = kind(c.weather_code), tp = Math.round(c.temperature_2m);
   $('skyT').innerHTML = `<div><div class="pl">${esc(place.name)}</div><div class="tm" style="color:${tc(tp)}">${dT(c.temperature_2m)}</div></div><div class="rt">${icon(c.weather_code, c.is_day)}${t('c')[k]}<div class="sub">${fmtDate(c.time)} · ${c.time.slice(11)}</div></div>`;
 }
-$('skyH').appendChild($('aqi'));
+$('skyH').appendChild($('aqi')); $('skyH').appendChild($('clkW'));
 { const _r = render; render = function () { _r.apply(this, arguments); skyHead(); }; }
 /* ---------- v10: pull down to refresh ---------- */
 (function () {
@@ -1461,6 +1475,7 @@ $('skyH').appendChild($('aqi'));
   });
 })();
 
+for (const c in T) T[c].feel = T[c].feel || T[c].feels;
 /* ---------- v14: real-looking moon and sun, suggestions above the bottom search bar ---------- */
 const MSC = {}, CRT = (() => { const R = rnd(4242), a = []; for (let i = 0; i < 170; i++) { const q = Math.sqrt(R()), t = R() * 6.2832; a.push({ x: Math.cos(t) * q * .93, y: Math.sin(t) * q * .93, r: .011 + Math.pow(R(), 3.2) * .075, d: .5 + R() * .5 }); } return a; })();
 function moonSprite(ph, S = 240) {
@@ -1486,21 +1501,15 @@ function putMoon(x, sp, cx, cy, size, south) {
 }
 function drawSun(x, X, Y, e, up, k = 1) {
   const low = Math.max(0, 1 - e * 2.2), bl = up ? 1 : Math.max(0, 1 + e * 6); if (bl <= 0) return;
-  const warm = [255, 236 - 96 * low | 0, 190 - 150 * low | 0], deep = [255, 170 - 70 * low | 0, 70 - 50 * low | 0];
+  const warm = [255, 226 - 86 * low | 0, 140 - 110 * low | 0], deep = [255, 178 - 60 * low | 0, 70 - 40 * low | 0];
   x.save(); x.globalCompositeOperation = 'lighter';
-  let q = x.createRadialGradient(X, Y, 0, X, Y, 360 * k); q.addColorStop(0, `rgba(${deep},${.30 * bl})`); q.addColorStop(.12, `rgba(${deep},${.15 * bl})`); q.addColorStop(.45, `rgba(${deep},${.045 * bl})`); q.addColorStop(1, `rgba(${deep},0)`); x.fillStyle = q; x.fillRect(X - 360 * k, Y - 360 * k, 720 * k, 720 * k);
-  /* thin star-burst rays like a real camera / eye sees */
-  for (let i = 0; i < 14; i++) { const an = i * Math.PI / 7 + .2 + (i % 3) * .05, L = (150 + (i * 53 % 100)) * k * (i % 2 ? .7 : 1), g2 = x.createLinearGradient(X, Y, X + Math.cos(an) * L, Y + Math.sin(an) * L); g2.addColorStop(0, `rgba(${warm},${.34 * bl})`); g2.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = g2; x.beginPath(); x.moveTo(X + Math.cos(an + 1.57) * 1.6, Y + Math.sin(an + 1.57) * 1.6); x.lineTo(X + Math.cos(an) * L, Y + Math.sin(an) * L); x.lineTo(X + Math.cos(an - 1.57) * 1.6, Y + Math.sin(an - 1.57) * 1.6); x.fill(); }
-  q = x.createLinearGradient(X - 260 * k, Y, X + 260 * k, Y); q.addColorStop(0, 'rgba(255,255,255,0)'); q.addColorStop(.5, `rgba(${warm},${.4 * bl})`); q.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = q; x.fillRect(X - 260 * k, Y - 1, 520 * k, 2);
-  q = x.createRadialGradient(X, Y, 0, X, Y, 64 * k); q.addColorStop(0, `rgba(${warm},${.9 * bl})`); q.addColorStop(.3, `rgba(${warm},${.34 * bl})`); q.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = q; x.fillRect(X - 64 * k, Y - 64 * k, 128 * k, 128 * k);
+  let q = x.createRadialGradient(X, Y, 0, X, Y, 340 * k); q.addColorStop(0, `rgba(${deep},${.26 * bl})`); q.addColorStop(.12, `rgba(${deep},${.13 * bl})`); q.addColorStop(.45, `rgba(${deep},${.04 * bl})`); q.addColorStop(1, `rgba(${deep},0)`); x.fillStyle = q; x.fillRect(X - 340 * k, Y - 340 * k, 680 * k, 680 * k);
+  for (let i = 0; i < 14; i++) { const an = i * Math.PI / 7 + .2 + (i % 3) * .05, L = (140 + (i * 53 % 100)) * k * (i % 2 ? .7 : 1), g2 = x.createLinearGradient(X, Y, X + Math.cos(an) * L, Y + Math.sin(an) * L); g2.addColorStop(0, `rgba(${warm},${.3 * bl})`); g2.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = g2; x.beginPath(); x.moveTo(X + Math.cos(an + 1.57) * 1.5, Y + Math.sin(an + 1.57) * 1.5); x.lineTo(X + Math.cos(an) * L, Y + Math.sin(an) * L); x.lineTo(X + Math.cos(an - 1.57) * 1.5, Y + Math.sin(an - 1.57) * 1.5); x.fill(); }
+  q = x.createRadialGradient(X, Y, 0, X, Y, 60 * k); q.addColorStop(0, `rgba(${warm},${.85 * bl})`); q.addColorStop(.3, `rgba(${warm},${.3 * bl})`); q.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = q; x.fillRect(X - 60 * k, Y - 60 * k, 120 * k, 120 * k);
   x.restore();
-  q = x.createRadialGradient(X, Y, 0, X, Y, 15 * k); q.addColorStop(0, `rgba(255,255,255,${bl})`); q.addColorStop(.72, `rgba(255,${250 - 40 * low | 0},${225 - 130 * low | 0},${bl})`); q.addColorStop(1, `rgba(255,${230 - 60 * low | 0},${170 - 100 * low | 0},0)`); x.fillStyle = q; x.beginPath(); x.arc(X, Y, 15 * k, 0, 7); x.fill();
+  q = x.createRadialGradient(X, Y, 0, X, Y, 15 * k); q.addColorStop(0, `rgba(255,252,235,${bl})`); q.addColorStop(.7, `rgba(255,${236 - 40 * low | 0},${150 - 90 * low | 0},${bl})`); q.addColorStop(1, `rgba(255,${200 - 50 * low | 0},${90 - 60 * low | 0},0)`); x.fillStyle = q; x.beginPath(); x.arc(X, Y, 15 * k, 0, 7); x.fill();
 }
-(function () { /* suggestions open right above the bottom search bar, also when the keyboard is up */
-  const place = () => { const sg = $('sug'), r = $('sbar').getBoundingClientRect(); sg.style.bottom = Math.max(8, innerHeight - r.top + 8) + 'px'; sg.style.maxHeight = Math.max(120, r.top - 24) + 'px'; };
-  const _p = pick; pick = function (r) { _p.apply(this, arguments); place(); };
-  if (window.visualViewport) { visualViewport.addEventListener('resize', place); visualViewport.addEventListener('scroll', place); } addEventListener('resize', place); $('q').addEventListener('focus', () => setTimeout(place, 300));
-})();
+$('sbar').appendChild($('sug'));
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
