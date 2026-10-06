@@ -155,6 +155,14 @@ html[data-th] .grid div,html[data-th] .kpis div,html[data-th] .tp,html[data-th] 
 #cst .cb2{display:flex;gap:8px;margin-top:10px}#cst .cb2 button{flex:1}
 #cst .cb2 button.gh{background:rgba(255,255,255,.1);color:inherit}[data-th=white] #cst .cb2 button.gh{background:rgba(0,0,0,.08)}
 
+/* ===== v17: hold a tile, drag it to a new place ===== */
+.dragging{position:relative;z-index:80;animation:none!important;transition:none!important;outline:1px dashed rgba(255,255,255,.7);outline-offset:-1px;background:rgba(255,255,255,.07)!important;border-radius:26px;box-shadow:0 22px 60px rgba(0,0,0,.5)!important;opacity:.96;-webkit-user-select:none;user-select:none;touch-action:none}
+.armed{outline:1px dashed rgba(255,255,255,.5);outline-offset:-1px;border-radius:26px;transition:outline .15s}
+[data-th=white] .dragging,[data-th=white] .armed{outline-color:rgba(0,0,0,.5)}
+[data-th=white] .dragging{background:rgba(0,0,0,.05)!important;box-shadow:0 22px 60px rgba(0,0,0,.2)!important}
+body.dnd{overscroll-behavior:none}
+#cst .cb2 .wide{flex:1 1 100%}
+
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .up{transform:translateY(-12px) scale(1.03)!important;box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.28);z-index:30;position:relative}
@@ -1563,6 +1571,67 @@ document.addEventListener('click', e => { if (cp.classList.contains('open') && !
 { const _bt = buildTheme; buildTheme = function () { _bt(); applyCust(); }; }
 { const _ab = applyLang; applyLang = function () { _ab.apply(this, arguments); if (cp.classList.contains('open')) openCust(); }; }
 applyCust();
+
+/* ---------- v17: long-press a tile and drag it to a new position; order is saved ---------- */
+Object.assign(T.en, { cor: 'Reset tile order', dhint: 'Hold a tile to move it' });
+Object.assign(T.hi, { cor: 'टाइल क्रम रीसेट', dhint: 'टाइल को दबाए रखकर हिलाओ' });
+(function () {
+  const ORK = 'ord', HOLD = 420, BOXES = ['#app', '#skyH'];
+  const items = box => [...box.children].filter(e => e.tagName === 'SECTION' && e.classList.contains('win'));
+  BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) items(b).forEach((e, i) => { if (!e.dataset.ok) e.dataset.ok = e.id || ('s' + i); e.dataset.def = i; }); });
+  const loadOrd = () => { try { return JSON.parse(localStorage.getItem(ORK)) || {}; } catch (e) { return {}; } };
+  const arrange = (b, list) => { const its = items(b), slots = its.map(e => { const m = document.createComment('s'); b.insertBefore(m, e); return m; }); its.forEach(e => e.remove()); list.forEach((e, i) => b.insertBefore(e, slots[i])); slots.forEach(m => m.remove()); };
+  const applyOrd = () => {
+    const o = loadOrd();
+    BOXES.forEach(sel => { const b = document.querySelector(sel), ids = o[sel]; if (!b || !ids) return; const its = items(b), by = {}; its.forEach(e => by[e.dataset.ok] = e);
+      const out = []; ids.forEach(k => { if (by[k]) { out.push(by[k]); delete by[k]; } }); its.forEach(e => { if (by[e.dataset.ok]) out.push(e); }); arrange(b, out); });
+  };
+  const saveOrd = () => { const o = {}; BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) o[sel] = items(b).map(e => e.dataset.ok); }); try { localStorage.setItem(ORK, JSON.stringify(o)); } catch (e) { } };
+  window.resetOrd = () => { try { localStorage.removeItem(ORK); } catch (e) { } BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) arrange(b, items(b).sort((x, y) => x.dataset.def - y.dataset.def)); }); };
+  applyOrd();
+  let tm = null, D = null, sx = 0, sy = 0, lastY = 0, raf = 0, supp = 0;
+  const cancelHold = () => { clearTimeout(tm); tm = null; if (D && !D.on && D.el) D.el.classList.remove('armed'); if (!D || !D.on) D = null; };
+  const start = (t, x, y) => {
+    const el = t.closest && t.closest('section.win'); if (!el || !el.dataset.ok) return; const box = el.parentElement; if (!BOXES.some(sel => box.matches(sel))) return;
+    if (t.closest('button,input,select,a,.tabs,.dws,#map,.leaflet-container,.strip,.cb')) return;
+    sx = x; sy = y; lastY = y; D = { el, box, on: false }; tm = setTimeout(() => activate(), HOLD); el.classList.add('armed');
+  };
+  function activate() {
+    if (!D) return; D.on = true; D.el.classList.remove('armed'); D.el.classList.add('dragging'); document.body.classList.add('dnd'); try { navigator.vibrate && navigator.vibrate(18); } catch (e) { }
+    const r = D.el.getBoundingClientRect(); D.grab = sy - r.top; D.ty = 0; tick();
+  }
+  const place = () => {
+    if (!D || !D.on) return; const el = D.el, box = D.box, want = lastY - D.grab;                 /* where the top edge should be */
+    const sibs = items(box).filter(e => e !== el);
+    let before = null; for (const e of sibs) { const r = e.getBoundingClientRect(); if (lastY < r.top + r.height / 2) { before = e; break; } }
+    const cur = el.nextElementSibling; const wanted = before || null;
+    const ref = wanted ? wanted : (sibs.length ? sibs[sibs.length - 1].nextElementSibling : null);
+    if ((wanted && wanted !== cur) || (!wanted && sibs.length && items(box).slice(-1)[0] !== el)) { el.style.transform = ''; box.insertBefore(el, ref); }
+    el.style.transform = ''; const nat = el.getBoundingClientRect().top; el.style.transform = `translateY(${want - nat}px) scale(1.02)`;
+  };
+  const tick = () => {
+    if (!D || !D.on) return; const h = innerHeight; if (lastY < 90) scrollBy(0, -(90 - lastY) / 5); else if (lastY > h - 130) scrollBy(0, (lastY - (h - 130)) / 5);
+    place(); raf = requestAnimationFrame(tick);
+  };
+  const end = () => {
+    clearTimeout(tm); tm = null; if (!D) return; const el = D.el; el.classList.remove('armed');
+    if (D.on) { cancelAnimationFrame(raf); el.classList.remove('dragging'); el.style.transform = ''; document.body.classList.remove('dnd'); saveOrd(); supp = Date.now(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) { } if (typeof toast === 'function') toast(t('csd')); }
+    D = null;
+  };
+  const move = (x, y, ev) => {
+    if (!D) return; if (!D.on) { if (Math.hypot(x - sx, y - sy) > 9) cancelHold(); return; }
+    lastY = y; if (ev && ev.cancelable) ev.preventDefault();
+  };
+  addEventListener('touchstart', e => { if (e.touches.length !== 1 || (typeof REFING !== 'undefined' && false)) return; const t0 = e.touches[0]; start(e.target, t0.clientX, t0.clientY); }, { passive: true });
+  addEventListener('touchmove', e => { const t0 = e.touches[0]; move(t0.clientX, t0.clientY, e); }, { passive: false });
+  addEventListener('touchend', end, { passive: true }); addEventListener('touchcancel', end, { passive: true });
+  addEventListener('mousedown', e => { if (e.button === 0) start(e.target, e.clientX, e.clientY); });
+  addEventListener('mousemove', e => move(e.clientX, e.clientY, e)); addEventListener('mouseup', end);
+  addEventListener('contextmenu', e => { if (D) e.preventDefault(); });
+  addEventListener('click', e => { if (Date.now() - supp < 700) { e.stopPropagation(); e.preventDefault(); } }, true);
+  /* reset button inside the customize panel */
+  const _oc = openCust; openCust = function () { _oc(); const row = cp.querySelector('.cb2'); if (row) { row.insertAdjacentHTML('beforeend', `<button class="gh wide" id="cOr">${t('cor')}</button>`); $('cOr').onclick = () => { resetOrd(); try { localStorage.removeItem(ORK); } catch (e) { } toast(t('csd')); }; } };
+})();
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
