@@ -163,6 +163,13 @@ html[data-th] .grid div,html[data-th] .kpis div,html[data-th] .tp,html[data-th] 
 body.dnd{overscroll-behavior:none}
 #cst .cb2 .wide{flex:1 1 100%}
 
+/* ===== v18: space theme, every card fully see-through (sun and moon scenes stay) ===== */
+[data-th=space] .vzc{display:none!important}
+[data-th=space] .vz,[data-th=space] .cb,[data-th=space] .nrh .bb,[data-th=space] .segs i{background:transparent!important}
+[data-th=space] .al{background:transparent!important}
+[data-th=space] .ctg{background:transparent!important}
+[data-th=space] .dsl{background:transparent!important}
+
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .up{transform:translateY(-12px) scale(1.03)!important;box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.28);z-index:30;position:relative}
@@ -1076,7 +1083,7 @@ function drawPend() {
   
   
   const rgd = x.createLinearGradient(cx, py, bx, by); rgd.addColorStop(0, `rgba(${ink},.85)`); rgd.addColorStop(1, `rgba(${ink},.45)`); x.strokeStyle = '#fff'; x.lineWidth = 3; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx, py); x.lineTo(bx, by); x.stroke();
-  x.fillStyle = '#fff'; x.fillRect(cx - 30, 4, 60, 5); x.beginPath(); x.arc(cx, py, 5, 0, 7); x.fill();
+  x.fillStyle = '#fff'; if (TH !== 'space') x.fillRect(cx - 30, 4, 60, 5); x.beginPath(); x.arc(cx, py, TH === 'space' ? 4 : 5, 0, 7); x.fill();
   x.save(); x.translate(bx, by); x.rotate(-th); infinity(x, 0, 0, 36, spin(tt), lt, 1); x.restore();
 }
 (function pendLoop() { requestAnimationFrame(pendLoop); if (PEND.vis && !document.hidden && W) drawPend(); })();
