@@ -220,6 +220,13 @@ html[data-th=white] #clkW .ck #ckS{color:#0a9a42!important}
 #cst .cs-ft button#cSv{background:#fff;color:#0f1420;font-weight:600}
 [data-th=white] #cst .cs-ft button#cSv{background:#0f1420;color:#fff}
 
+/* ===== v21: space theme obeys the transparency setting like every other theme ===== */
+html[data-th=space][data-th=space][data-th=space] .vzc{display:block!important;opacity:var(--tp)}
+html[data-th=space][data-th=space][data-th=space] .vz,html[data-th=space][data-th=space][data-th=space] .cb,html[data-th=space][data-th=space][data-th=space] .nrh .bb,html[data-th=space][data-th=space][data-th=space] .segs i,html[data-th=space][data-th=space][data-th=space] .ctg,html[data-th=space][data-th=space][data-th=space] .dsl{background:rgba(var(--bc,255,255,255),calc(var(--tp) * .08))!important}
+html[data-th=space][data-th=space][data-th=space] .al,html[data-th=space][data-th=space][data-th=space] .al.lv1,html[data-th=space][data-th=space][data-th=space] .al.lv2,html[data-th=space][data-th=space][data-th=space] .al.lv3{background:rgba(var(--bc,255,255,255),calc(var(--tp) * .08))!important;border-color:rgba(var(--bc,255,255,255),calc(var(--tp) * .13))!important}
+html[data-th=space][data-th=space][data-th=space] #map{background:rgba(17,17,17,var(--tp))!important}
+html[data-th=space][data-th=space][data-th=space] #tips,html[data-th=space][data-th=space][data-th=space] #sunW,html[data-th=space][data-th=space][data-th=space] #moonW,html[data-th=space][data-th=space][data-th=space] .vz.win{background:rgba(var(--tc),calc(var(--tp) * .88))!important;border-color:rgba(var(--bc,255,255,255),calc(var(--tp) * .13))!important}
+
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .up{transform:translateY(-12px) scale(1.03)!important;box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.28);z-index:30;position:relative}
@@ -498,7 +505,7 @@ Object.assign(T.hi, { updNow: 'अभी अपडेट हुआ', updAgo: '{n
   shSaved: 'इमेज सेव हो गई। इसे WhatsApp पर भेजें।', favOn: 'शहर सेव हुआ', favOff: 'शहर हटाया गया', refFail: 'रिफ्रेश नहीं हो सका। इंटरनेट जाँचें।' });
 const tcU = v => tc(U.t === 'F' ? (v - 32) * 5 / 9 : v);
 
-async function getJSON(u) { const r = await fetch(u); if (!r.ok) throw new Error('Server error ' + r.status); return r.json(); }
+async function getJSON(u) { const r = await fetch(u, { cache: 'no-store' }); if (!r.ok) throw new Error('Server error ' + r.status); return r.json(); }
 const TS = [[-40, [110, 80, 255]], [-20, [60, 130, 255]], [0, [70, 200, 235]], [12, [90, 220, 140]], [22, [235, 220, 70]], [32, [250, 150, 60]], [42, [240, 70, 60]]], rg = a => `rgb(${a.map(Math.round)})`;
 const tc = v => { if (v <= TS[0][0]) return rg(TS[0][1]); for (let i = 1; i < TS.length; i++) if (v <= TS[i][0]) { const a = TS[i - 1], b = TS[i], k = (v - a[0]) / (b[0] - a[0]); return rg(a[1].map((x, j) => x + (b[1][j] - x) * k)); } return rg(TS[TS.length - 1][1]); };
 const TG = 'linear-gradient(90deg,' + TS.map(([a, c]) => rg(c) + ' ' + (a + 40) / 82 * 100 + '%').join(',') + ')';
@@ -714,9 +721,9 @@ function frame(ms) {
   requestAnimationFrame(frame); const w = cv.width, h = cv.height;
   if (!W) { g.fillStyle = TH === 'white' ? '#f3f5f8' : '#000'; g.fillRect(0, 0, w, h); return; }
   const e = sunE();
-  if (TH === 'black') { g.fillStyle = '#000'; g.fillRect(0, 0, w, h); return; } else if (TH === 'space') { bgSpace(ms, w, h); return; }
+  if (TH === 'black') { g.fillStyle = '#000'; g.fillRect(0, 0, w, h); precip(w, h, ms, false); return; } else if (TH === 'space') { bgSpace(ms, w, h); return; }
   if (TH === 'white') { g.fillStyle = '#f3f5f8'; g.fillRect(0, 0, w, h); } else if (TH === 'dots') bgDots(ms, w, h, e); else if (TH === 'sky') bgSky(ms, w, h, e); else bgGreen(ms, w, h, e);
-  precip(w, h, ms, TH === 'white');
+  darkVeil(w, h); precip(w, h, ms, TH === 'white');
 }
 addEventListener('resize', () => { fit(); if (W) drawSky(); }); fit(); requestAnimationFrame(frame);
 
@@ -1089,14 +1096,14 @@ function drawGauges() {
   const ticks = Array.from({ length: 36 }, (_, k) => { const a = k * 10, l = a % 90 === 0 ? 10 : a % 30 === 0 ? 7 : 4; return `<line x1="80" y1="18" x2="80" y2="${18 + l}" transform="rotate(${a} 80 80)" stroke-opacity="${a % 90 === 0 ? .6 : .3}"/>`; }).join('');
   $('cmpsC').innerHTML = `<svg viewBox="0 0 160 160"><path d="M80 2L87 14H73Z" fill="#fff"/><g id="cdial" style="transform-origin:80px 80px;transform:rotate(${HEAD == null ? 0 : -HEAD}deg)"><circle cx="80" cy="80" r="62" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="2"/><g stroke="currentColor" stroke-width="1.5">${ticks}</g>
     <g fill="currentColor" font-size="11" font-weight="600" text-anchor="middle"><text x="80" y="44" fill="#ff6b6b">N</text><text x="121" y="84" opacity=".7">E</text><text x="80" y="127" opacity=".7">S</text><text x="39" y="84" opacity=".7">W</text></g>
-    ${has ? `<g class="arw" data-to="${to}" style="transform:rotate(0deg);transform-origin:80px 80px"><g class="wob" style="--wa:${clamp(gu / 12, 1, 6).toFixed(1)}deg"><path d="M80 50 L89 72 L80 67 L71 72Z" fill="#dcf56e"/><line x1="80" y1="67" x2="80" y2="108" stroke="#dcf56e" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="80" r="4" fill="#dcf56e"/></g></g>` : ''}</g></svg>
-    <div class="gv">${sp1(ws)} <span>${uS()}</span></div><div class="sub">${has ? t('from').replace('{d}', cdir(dr)) + ' · ' : ''}${t('bf')[bfi]}</div><div class="sub">${t('gust')} ${Math.round(cS(gu))} ${uS()}</div><button id="cmpsB" class="pill"></button>`;
+    ${has ? `<g class="arw" data-to="${to}" style="transform:rotate(${ARW}deg);transform-origin:80px 80px"><g class="wob" style="--wa:${clamp(gu / 12, 1, 6).toFixed(1)}deg"><path d="M80 50 L89 72 L80 67 L71 72Z" fill="#dcf56e"/><line x1="80" y1="67" x2="80" y2="108" stroke="#dcf56e" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="80" r="4" fill="#dcf56e"/></g></g>` : ''}</g></svg>
+    <div class="gv">${sp1(ws)} <span>${uS()}</span></div><div class="sub">${has ? t('from').replace('{d}', cdir(dr) + ' ' + Math.round(dr) + '°') + ' · ' : ''}${t('bf')[bfi]}</div><div class="sub">${t('gust')} ${Math.round(cS(gu))} ${uS()}</div><button id="cmpsB" class="pill"></button>`;
   paintHead();
   const ui = uv < 3 ? 0 : uv < 6 ? 1 : uv < 8 ? 2 : uv < 11 ? 3 : 4, ucol = UVB[Math.min(ui, 4)][2];
   const segs = UVB.map(([a, b, col]) => { const [x1, y1] = pol(a + (a ? .12 : 0), 60), [x2, y2] = pol(b - .12, 60); return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A60 60 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" fill="none" stroke="${col}" stroke-width="12"/>`; }).join('');
   $('uvC').innerHTML = `<svg viewBox="0 0 160 100">${segs}<g class="ndl" data-to="${clamp(uv, 0, 12) / 12 * 180 - 90}" style="transform:rotate(-90deg);transform-origin:80px 86px"><line x1="80" y1="86" x2="80" y2="38" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="80" cy="86" r="6" fill="currentColor"/></g></svg>
     <div class="gv" style="color:${ucol}">${uv.toFixed(1)} <span>${t('uvl')[ui]}</span></div><div class="sub">${t('uvMax').replace('{v}', uvm)}</div><div class="sub">${t('uva')[ui]}</div>`;
-  UVSW.uvm = uvm; requestAnimationFrame(() => requestAnimationFrame(() => { document.querySelectorAll('#gaugeW .arw').forEach(e => { e.style.transform = `rotate(${e.dataset.to}deg)`; }); uvPlay(); }));
+  UVSW.uvm = uvm; requestAnimationFrame(() => requestAnimationFrame(() => { document.querySelectorAll('#gaugeW .arw').forEach(e => { const tg = +e.dataset.to; ARW += ((tg - ARW) % 360 + 540) % 360 - 180; e.style.transform = `rotate(${ARW}deg)`; }); uvPlay(); }));
   if (!AUTOC) { AUTOC = true; try { if (localStorage.getItem('cmps') === '1' && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission !== 'function') startCompass(); } catch (e) { } }
 }
 
@@ -1428,7 +1435,7 @@ function moonDW(el) {
 }
 
 /* ---------- phone compass + UV needle sweep ---------- */
-let HEAD = null, HSM = null, LASTH = null, CMPS_ON = false, CMPS_EV = '', AUTOC = false, UVSW = { key: '', vis: false, uvm: 0 };
+var ARW = 0; let HEAD = null, HSM = null, LASTH = null, CMPS_ON = false, CMPS_EV = '', AUTOC = false, UVSW = { key: '', vis: false, uvm: 0 };
 const compassHeading = (al, be, ga) => { const r = Math.PI / 180, a = al * r, b = be * r, g2 = ga * r, cA = Math.cos(a), sA = Math.sin(a), sB = Math.sin(b), cB = Math.cos(b), sG = Math.sin(g2), cG = Math.cos(g2); let h; if (Math.abs(cB * cG) > .7) h = Math.atan2(-sA, cA); /* phone lying flat: use its top edge */ else h = Math.atan2(-cA * sG - sA * sB * cG, -sA * sG + cA * sB * cG); /* phone upright: use the back */ if (h < 0) h += 2 * Math.PI; return h / r; };
 function onOri(e) { let h = null; if (e.webkitCompassHeading != null) h = e.webkitCompassHeading; else if (e.alpha != null && (e.absolute || e.type === 'deviceorientationabsolute')) h = compassHeading(e.alpha, e.beta || 0, e.gamma || 0); if (h != null && !isNaN(h)) LASTH = h; }
 function paintHead() {
@@ -1727,6 +1734,52 @@ openCust = function () {
   $('cSv').onclick = () => { const n = rd(); if ($('cAll').classList.contains('on')) THK.forEach(k => CUST[k] = n); else CUST[TH] = n; try { localStorage.setItem(CUSTK, JSON.stringify(CUST)); } catch (e) { } toast(t('csd')); cp.classList.remove('open'); };
   $('cX').onclick = closeCust; cp.classList.add('open');
 };
+
+/* ---------- v21: live wind, heavy rain where it really rains, dark weather = dark sky ---------- */
+const RCODE = { 51: .4, 53: .6, 55: .9, 56: .5, 57: .9, 61: 1, 63: 2.5, 65: 7, 66: 1.2, 67: 4, 80: 1.5, 81: 4, 82: 9, 95: 6, 96: 8, 99: 10 };
+function rainRate() {
+  const w = W && W.w; if (!w) return 0; const c = w.current; let r = c.rain || 0;
+  try { const m = w.minutely_15; if (m && m.time && m.precipitation) { let j = 0; for (let i = 0; i < m.time.length; i++) { if (m.time[i] <= c.time) j = i; else break; } r = Math.max(r, (m.precipitation[j] || 0) * 4); } } catch (e) { }
+  return Math.max(r, RCODE[c.weather_code] || 0);
+}
+{ const _sf = setFx; setFx = function () { _sf.apply(this, arguments); if (!W || !W.w) return; EV.rate = rainRate(); EV.wd = W.w.current.wind_direction_10m || 0; RP = null; }; }
+var RP = null, RPK = '', SPL = [];
+function rainLayers(w, h) {
+  const r = Math.min(EV.rate || 0, 12), key = w + 'x' + h + ':' + Math.round(r * 4); if (RP && RPK === key) return; RPK = key; RP = []; SPL = [];
+  const n = Math.min(1800, Math.round(w * h / 1300 * (.3 + r / 2.6)));
+  for (let i = 0; i < n; i++) { const z = Math.random(); RP.push({ x: Math.random() * (w + 240) - 120, y: Math.random() * h, z, v: (16 + r * 2.2) * (.55 + z * .9), l: (12 + r * 2.6) * (.5 + z * .9) }); }
+}
+function darkAmt() { const k = EV.k; let d = 0; if (k === 'storm') d = .6; else if (k === 'rain') d = .3 + Math.min(EV.rate || 0, 8) / 8 * .28; else if (k === 'snow') d = .16; else if (k === 'fog') d = .2; return Math.max(d, clamp((EV.cl - 55) / 45, 0, 1) * .32, Math.min(.5, (EV.rate || 0) / 14)); }
+function darkVeil(w, h) { if (TH === 'dots') return; const d = darkAmt(); if (d <= .01) return; g.fillStyle = TH === 'white' ? `rgba(55,65,82,${(d * .5).toFixed(3)})` : `rgba(3,6,12,${Math.min(.88, d).toFixed(3)})`; g.fillRect(0, 0, w, h); }
+function precip(w, h, ms, lt) {
+  const r = EV.rate || 0;
+  if (r > 0 && !RM) {
+    rainLayers(w, h); const sl = Math.sin((((EV.wd || 0) + 180) % 360) * Math.PI / 180) * Math.min(.6, .1 + (EV.wind || 0) / 45), col = lt ? '40,80,150' : '205,228,255', a0 = lt ? .55 : .42;
+    for (let pass = 0; pass < 2; pass++) {
+      g.strokeStyle = `rgba(${col},${pass ? a0 + .22 : a0 - .12})`; g.lineWidth = pass ? 1.5 + Math.min(r, 10) * .1 : .8; g.beginPath();
+      RP.forEach(p => {
+        if ((p.z > .55) !== (pass === 1)) return; g.moveTo(p.x, p.y); g.lineTo(p.x + sl * p.l, p.y + p.l); p.y += p.v; p.x += sl * p.v;
+        if (p.y > h) { if (pass && SPL.length < 90 && Math.random() < .35) SPL.push({ x: p.x, y: h - 2 - Math.random() * 40, t: 0 }); p.y = -p.l - Math.random() * 60; p.x = Math.random() * (w + 240) - 120; }
+      }); g.stroke();
+    }
+    g.lineWidth = 1; for (let i = SPL.length - 1; i >= 0; i--) { const s0 = SPL[i]; s0.t += .06; if (s0.t >= 1) { SPL.splice(i, 1); continue; } g.strokeStyle = `rgba(${col},${(.5 * (1 - s0.t)).toFixed(3)})`; g.beginPath(); g.ellipse(s0.x, s0.y, 2 + s0.t * 12, .8 + s0.t * 3, 0, 0, 7); g.stroke(); }
+    const mg = g.createLinearGradient(0, h - 240, 0, h); mg.addColorStop(0, `rgba(${col},0)`); mg.addColorStop(1, `rgba(${col},${(.05 + Math.min(r, 10) / 90).toFixed(3)})`); g.fillStyle = mg; g.fillRect(0, h - 240, w, 240);
+  }
+  if (EV.snow > 0) { g.fillStyle = lt ? 'rgba(120,150,190,.85)' : 'rgba(255,255,255,.85)'; PT.forEach(p => { if (!p.r) { g.beginPath(); g.arc(p.x, p.y, p.s, 0, 7); g.fill(); p.y += p.v; p.x += Math.sin(ms / 900 + p.y * .01) * .6; if (p.y > h) { p.y = -5; p.x = Math.random() * w; } } }); }
+  if (EV.k === 'storm' || r >= 8) { if (!RM && Math.random() < (EV.k === 'storm' ? .006 : .002)) flash = 1; if (flash > .02) { g.fillStyle = `rgba(255,255,255,${flash * .22})`; g.fillRect(0, 0, w, h); flash *= .9; } }
+}
+/* live poll: wind, rain and sky are re-read every 2 minutes, no cache */
+async function livePoll() {
+  if (!W || document.hidden || REFING) return; const p = place;
+  try {
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover,wind_direction_10m&minutely_15=precipitation&forecast_minutely_15=24&timezone=auto&_=${Date.now()}`, { cache: 'no-store' });
+    if (!r.ok) return; const d = await r.json(); if (!W || p.lat !== place.lat || p.lon !== place.lon) return;
+    const c = W.w.current, n = d.current; if (!n || (n.time && c.time && n.time < c.time)) return;
+    const ch = ['wind_direction_10m', 'wind_speed_10m', 'wind_gusts_10m', 'rain', 'weather_code', 'cloud_cover'].some(k => n[k] !== c[k]);
+    Object.assign(c, n); if (d.minutely_15) W.w.minutely_15 = d.minutely_15; if (ch) { setFx(); try { drawGauges(); } catch (e) { } }
+  } catch (e) { }
+}
+setInterval(livePoll, 120000); document.addEventListener('visibilitychange', () => { if (!document.hidden) livePoll(); });
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
