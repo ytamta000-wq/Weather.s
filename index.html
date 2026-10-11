@@ -651,6 +651,11 @@ function setFx() {
 function fit() { cv.width = innerWidth; cv.height = innerHeight; setFx(); }
 const GAPH = h => clamp(h * .5, 300, 520), SP = (w, h, t) => { const c = clamp(t, 0, 1), G = GAPH(h) * .56; return [w * (.14 + .72 * c), G * (.92 - .72 * Math.sin(Math.PI * c))]; };
 /* ---------- sky follows the real weather: no sun in rain, clouds instead ---------- */
+function wxTint(c) {
+  const cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm', st = k === 'storm'; let gm = clamp((cl - .2) / .8, 0, 1) * .8; if (wet) gm = Math.max(gm, .9); if (k === 'snow') gm = Math.max(gm, .7); if (k === 'fog') gm = Math.max(gm, .75);
+  const dk = st ? .55 : wet ? .72 : 1 - clamp((cl - .6) / .4, 0, 1) * .28, lum = .3 * c[0] + .59 * c[1] + .11 * c[2], gr = [lum, lum * 1.03, lum * 1.08]; return c.map((v, i) => (v * (1 - gm) + gr[i] * gm) * dk);
+}
+function skyW(e) { const [a, b] = sky(e); return [wxTint(a), wxTint(b)]; }
 function skyVis() { if (!W) return 1; const cl = (EV.cl || 0) / 100, k = EV.k; let v = 1 - clamp((cl - .12) / .75, 0, 1) * .85; if (k === 'rain' || k === 'storm' || k === 'snow') v = Math.min(v, .24); else if (k === 'fog') v = Math.min(v, .3); return Math.max(.24, v); }
 function starVis() { if (!W) return 1; const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow') return 0; return clamp(1 - ((EV.cl || 0) / 100) * 1.1, 0, 1); }
 function greyAmt() { const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || EV.rain > 0) return .95; if (k === 'fog') return .7; return clamp((EV.cl - 30) / 60, 0, 1); }
@@ -663,28 +668,42 @@ function cloudSprite(v, R, G, B) {
   for (let i = 0; i < 9; i++) { const px = 60 + rn() * 240, py = 95 + (rn() - .5) * 40 - Math.sin(i / 9 * Math.PI) * 25, r = 36 + rn() * 34, q = x.createRadialGradient(px, py, 0, px, py, r); q.addColorStop(0, `rgba(${R},${G},${B},.8)`); q.addColorStop(.6, `rgba(${R},${G},${B},.4)`); q.addColorStop(1, `rgba(${R},${G},${B},0)`); x.fillStyle = q; x.fillRect(px - r, py - r, 2 * r, 2 * r); }
   return (CSP[key] = c);
 }
-const CSP2 = {};
-function cloudSprite2(v, R, G, B) {
-  const key = v + '-' + (R >> 4) + '-' + (G >> 4) + '-' + (B >> 4); if (CSP2[key]) return CSP2[key]; if (Object.keys(CSP2).length > 60) Object.keys(CSP2).forEach(k => delete CSP2[k]);
-  const c = document.createElement('canvas'); c.width = 480; c.height = 220; const x = c.getContext('2d'), rn = rnd(v * 977 + 11);
-  for (let i = 0; i < 16; i++) { const t = i / 15, px = 70 + rn() * 340, py = 125 + (rn() - .5) * 40 - Math.sin(t * Math.PI) * 34, r = 34 + rn() * 46, q = x.createRadialGradient(px, py, 0, px, py, r); q.addColorStop(0, 'rgba(255,255,255,.95)'); q.addColorStop(.55, 'rgba(255,255,255,.72)'); q.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = q; x.fillRect(px - r, py - r, 2 * r, 2 * r); }
-  x.globalCompositeOperation = 'source-in'; const gr = x.createLinearGradient(0, 40, 0, 200); gr.addColorStop(0, `rgb(${Math.min(255, R * 1.12) | 0},${Math.min(255, G * 1.12) | 0},${Math.min(255, B * 1.12) | 0})`); gr.addColorStop(1, `rgb(${R * .62 | 0},${G * .62 | 0},${B * .66 | 0})`); x.fillStyle = gr; x.fillRect(0, 0, 480, 220);
-  return (CSP2[key] = c);
+const CUM = {};
+function cumulus(seed, L, S, flat) {
+  const key = seed + (flat ? 'f' : 'c') + '-' + L.map(v => v >> 4) + '-' + S.map(v => v >> 4); if (CUM[key]) return CUM[key]; if (Object.keys(CUM).length > 70) Object.keys(CUM).forEach(q => delete CUM[q]);
+  const W0 = 640, H0 = 300, c = document.createElement('canvas'); c.width = W0; c.height = H0; const x = c.getContext('2d'), rn = rnd(seed * 7919 + 3);
+  const lumps = Array.from({ length: 3 + Math.floor(rn() * 3) }, () => ({ u: .14 + rn() * .72, w: .09 + rn() * .13, h: (flat ? .22 : .5) + rn() * (flat ? .18 : .5) }));
+  const prof = u => { let v = 0; lumps.forEach(l => { v = Math.max(v, l.h * Math.exp(-((u - l.u) ** 2) / (2 * l.w * l.w))); }); return v * (1 - Math.pow(Math.abs(u - .5) * 2, 3) * .55); };
+  const base = 262, P = [], mix = (a, b, f) => a.map((v, i) => Math.round(v * (1 - f) + b[i] * f));
+  const addP = (n, rmin, rmax, surf, kind0) => { for (let i = 0; i < n; i++) { const u = .05 + rn() * .9, hh = prof(u) * 215 + 14; let t = Math.pow(rn(), surf ? .35 : .7); if (surf) t = clamp(.55 + t * .45, 0, 1); const y = base - t * hh, r = rmin + rn() * (rmax - rmin) * (1 - t * .35) * (flat ? 1.2 : 1); P.push({ x: 30 + u * 580, y, r, f: clamp(1 - t, 0, 1), k: kind0, j: (rn() - .5) * .16 }); } };
+  addP(flat ? 70 : 100, 20, 46, false, 0); addP(flat ? 220 : 520, 5, 17, true, 1); addP(flat ? 160 : 260, 6, 18, false, 2);
+  P.sort((a, b) => b.y - a.y);
+  P.forEach(p => {
+    const side = clamp((p.x - W0 / 2) / W0, -.5, .5) * .18, f = clamp(Math.pow(p.f, 1.15) * .92 + side + p.j, 0, 1), cc = mix(L, S, f), top = mix(L, [255, 255, 255], .22 * (1 - f)), q = x.createRadialGradient(p.x - p.r * .12, p.y - p.r * .16, p.r * .05, p.x, p.y, p.r);
+    q.addColorStop(0, `rgba(${p.k === 1 ? top : cc},${p.k === 0 ? .8 : .92})`); q.addColorStop(.6, `rgba(${cc},${p.k === 0 ? .66 : .7})`); q.addColorStop(1, `rgba(${cc},0)`); x.fillStyle = q; x.fillRect(p.x - p.r, p.y - p.r, 2 * p.r, 2 * p.r);
+  });
+  x.globalCompositeOperation = 'destination-out'; const fd = x.createLinearGradient(0, base - 34, 0, base + 22); fd.addColorStop(0, 'rgba(0,0,0,0)'); fd.addColorStop(1, 'rgba(0,0,0,1)'); x.fillStyle = fd; x.fillRect(0, base - 34, W0, H0);
+  return (CUM[key] = c);
 }
-const CLB = Array.from({ length: 26 }, (_, i) => ({ x: (i * .193 + .07) % 1, y: ((i * .41) % 1), s: .7 + ((i * .57) % 1) * .9, v: .4 + ((i * .31) % 1) * 1.1, a: .5 + ((i * .43) % 1) * .5, k: i % 4 }));
+const CLB = Array.from({ length: 14 }, (_, i) => ({ x: (i * .193 + .07) % 1, y: ((i * .41 + .1) % 1), s: ((i * .57) % 1), v: .6 + ((i * .31) % 1) * .8 }));
+function cloudCols(e) {
+  const lerp = (a, b, f) => a.map((v, i) => v * (1 - f) + b[i] * f), cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm', st = k === 'storm';
+  const dayF = clamp((e + .02) / .28, 0, 1), nightF = clamp((-e - .02) / .1, 0, 1);
+  let L = lerp([255, 206, 170], [255, 255, 255], dayF), S = lerp([118, 102, 134], [150, 166, 196], dayF); if (nightF > 0) { L = lerp(L, [84, 94, 120], nightF); S = lerp(S, [26, 32, 48], nightF); }
+  let dk = st ? 1 : wet ? .78 : clamp((cl - .62) / .38, 0, 1) * .6; if (cl > .6) dk = Math.min(1, dk + clamp(((EV.gust || 0) - 45) / 120, 0, .18)); const f = dayF * .6 + .4;
+  L = lerp(L, [132 * f, 138 * f, 150 * f], dk); S = lerp(S, [46 * f, 52 * f, 64 * f], dk); return [L.map(Math.round), S.map(Math.round)];
+}
 function clouds2(ms, w, h, e) {
-  const cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm', st = k === 'storm';
-  let amt = Math.max(cl, wet ? .95 : 0, k === 'snow' ? .85 : 0, k === 'fog' ? .6 : 0, k === 'cloud' ? .7 : 0, k === 'partly' ? .3 : 0); if (amt < .06) return;
-  const lum = clamp(.28 + e * 1.4, .14, 1), dark = st ? .36 : wet ? .5 : k === 'snow' ? .82 : clamp(1 - cl * .4, .6, 1), base = 255 * lum * dark, dusk = e > -.05 && e < .25, t0 = RM ? 0 : ms;
-  const R = Math.round(Math.min(255, base + (dusk ? 30 : 0))), G = Math.round(base * (dusk ? .88 : 1)), B = Math.round(Math.min(255, base * (dusk ? .8 : 1) + (e < -.05 ? 22 : 8)));
-  const hz = g.createLinearGradient(0, 0, 0, h * (wet ? .75 : .55)); hz.addColorStop(0, `rgba(${R},${G},${B},${(.8 * amt * amt).toFixed(3)})`); hz.addColorStop(1, `rgba(${R},${G},${B},0)`); g.fillStyle = hz; g.fillRect(0, 0, w, h * (wet ? .75 : .55));
-  const nB = Math.ceil(amt * CLB.length), spd = .005 * (1 + (EV.wind || 0) / 25);
-  for (let i = 0; i < nB; i++) {
-    const c = CLB[i], sz = (w * .75 + c.s * w * .55), X = ((c.x * (w + sz) + t0 * spd * c.v) % (w + sz)) - sz * .7, Y = c.y * h * (wet ? .62 : .45) - sz * .12;
-    g.globalAlpha = clamp(c.a * (.3 + amt * .8), 0, .96); g.drawImage(cloudSprite2(c.k, R, G, B), X, Y, sz * 1.7, sz * .78);
-  }
+  const cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm';
+  const amt = Math.max(cl, wet ? .95 : 0, k === 'snow' ? .85 : 0, k === 'fog' ? .55 : 0, k === 'cloud' ? .7 : 0, k === 'partly' ? .3 : 0); if (amt < .06) return;
+  const [L, S] = cloudCols(e), t0 = RM ? 0 : ms, spd = .004 * (1 + Math.max(EV.wind || 0, (EV.gust || 0) * .6) / 18), n = Math.round(1 + amt * 11), over = amt > .8;
+  if (amt > .55) { const a = clamp((amt - .5) / .5, 0, 1) * (wet ? .8 : .6), sg = g.createLinearGradient(0, 0, 0, h * .8); sg.addColorStop(0, `rgba(${S[0]},${S[1]},${S[2]},${a.toFixed(3)})`); sg.addColorStop(1, `rgba(${S[0]},${S[1]},${S[2]},0)`); g.fillStyle = sg; g.fillRect(0, 0, w, h * .8); }
+  const list = []; for (let i = 0; i < n; i++) list.push({ c: CLB[i], i, layer: i % 3 }); list.sort((a, b) => a.layer - b.layer);
+  list.forEach(({ c, i, layer }) => {
+    const flat = over ? i % 2 === 0 : i % 4 === 3, sc = (w / 640) * [.8, 1.2, 1.8][layer] * (.85 + c.s * .3), sw = 640 * sc, sh = 300 * sc, X = ((c.x * (w + sw) + t0 * spd * (.5 + layer * .6) * c.v) % (w + sw)) - sw, Y = h * (.14 + c.y * .42) - sh * .87;
+    g.globalAlpha = [.8, .93, 1][layer] * clamp(.55 + amt, 0, 1); g.drawImage(cumulus(i * 3 + 1, L, S, flat), X, Y, sw, sh);
+  });
   g.globalAlpha = 1;
-  if (wet || amt > .8) { const dk = g.createLinearGradient(0, 0, 0, h * .6); dk.addColorStop(0, `rgba(8,12,20,${(st ? .5 : wet ? .32 : .14).toFixed(2)})`); dk.addColorStop(1, 'rgba(8,12,20,0)'); g.fillStyle = dk; g.fillRect(0, 0, w, h * .6); }
 }
 function stars(w, h, ms, e) { g.fillStyle = '#fff'; STAR.forEach(s => { g.globalAlpha = clamp((.1 - e) * 4, 0, 1) * (.35 + .65 * Math.abs(Math.sin(ms / 700 + s.p))) * starVis(); g.fillRect(s.x * w, s.y * h, s.r, s.r); }); g.globalAlpha = 1; }
 function glow(w, h, e) {
@@ -698,9 +717,7 @@ function bgDots(ms, w, h, e) { /* tiny moving dots on pure black */
   glow(w, h, e);
 }
 function bgSky(ms, w, h, e) { /* real time of day: bright / orange dawn+dusk / black starry night */
-  const [tp, bt] = sky(e), gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, rg(tp)); gr.addColorStop(.75, rg(bt)); gr.addColorStop(1, rg(bt.map(v => v * .6))); g.fillStyle = gr; g.fillRect(0, 0, w, h);
-  if (e > 0) { g.fillStyle = `rgba(20,25,35,${Math.min(.5, EV.cl / 100 * .45 + (EV.rain > 0 ? .15 : 0))})`; g.fillRect(0, 0, w, h); }
-  { const ov = greyAmt(); if (ov > 0) { g.fillStyle = `rgba(110,122,140,${ov * .6 * clamp(e * 2.2 + .35, 0, 1)})`; g.fillRect(0, 0, w, h); } }
+  const [tp, bt] = skyW(e), gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, rg(tp)); gr.addColorStop(.75, rg(bt)); gr.addColorStop(1, rg(bt.map(v => v * .6))); g.fillStyle = gr; g.fillRect(0, 0, w, h);
   if (e < .1) stars(w, h, ms, e);
   const sv = skyVis(); if (sv > .2 && e > -.05) { const [X, Y] = SP(w, h, sunI().t); drawSun(g, X, Y, e, e > 0, .8); veil(X, Y, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [X, Y] = SP(w, h, MI.t), q = g.createRadialGradient(X, Y, 8, X, Y, 90); q.addColorStop(0, 'rgba(220,230,255,.3)'); q.addColorStop(1, 'rgba(220,230,255,0)'); g.fillStyle = q; g.fillRect(X - 90, Y - 90, 180, 180); putMoon(g, MSP, X, Y, 78, MI.south); }
   clouds(ms, w, h, e);
@@ -712,8 +729,8 @@ function buildGreen(w, h) { /* skyline is seeded by lat/lon; height from real el
 }
 const ry = (l, x) => l.y - l.a * (.55 + .45 * Math.sin(x * l.f[0] + l.ph[0]) + .28 * Math.sin(x * l.f[1] + l.ph[1]) + .12 * Math.sin(x * l.f[2] + l.ph[2])) * .9;
 function bgGreen(ms, w, h, e) {
-  if (!GR || GR.w !== w) buildGreen(w, h); const G = GR, I = sunI(), [tp, b0] = sky(e), k = clamp(e * 3, 0, 1), bt = b0.map((v, j) => v * (1 - .22 * k) + [30, 110, 95][j] * .22 * k), gr = g.createLinearGradient(0, 0, 0, h * .75), bc = bt.map(Math.round);
-  gr.addColorStop(0, rg(tp)); gr.addColorStop(1, rg(bt)); g.fillStyle = gr; g.fillRect(0, 0, w, h); { const ov = greyAmt(); if (ov > 0) { g.fillStyle = `rgba(110,122,140,${ov * .55 * clamp(e * 2.2 + .35, 0, 1)})`; g.fillRect(0, 0, w, h); } } if (e < .1) stars(w, h, ms, e);
+  if (!GR || GR.w !== w) buildGreen(w, h); const G = GR, I = sunI(), [tp, b0] = skyW(e), k = clamp(e * 3, 0, 1), bt = b0.map((v, j) => v * (1 - .22 * k) + [30, 110, 95][j] * .22 * k), gr = g.createLinearGradient(0, 0, 0, h * .75), bc = bt.map(Math.round);
+  gr.addColorStop(0, rg(tp)); gr.addColorStop(1, rg(bt)); g.fillStyle = gr; g.fillRect(0, 0, w, h); if (e < .1) stars(w, h, ms, e);
   const [X, Y] = SP(w, h, I.t);
   const sv = skyVis(); if (sv > .2 && e > -.05) { drawSun(g, X, Y + h * .04, e, e > 0, .7); veil(X, Y + h * .04, sv, tp); } else if (sv > .2 && MI && MI.up && MSP) { const [mx, my] = SP(w, h, MI.t); putMoon(g, MSP, mx, my, 78, MI.south); }
   clouds(ms, w, h, e);
@@ -728,7 +745,6 @@ function bgGreen(ms, w, h, e) {
       else { g.arc(sx + sw, y - 14 * s2, 8 * s2, 0, 6.3); g.arc(sx + 6 * s2 + sw, y - 10 * s2, 6 * s2, 0, 6.3); g.rect(sx - s2, y - 8 * s2, 2 * s2, 8 * s2); g.fill(); } }); }
   });
   const ma = EV.k === 'fog' ? .5 : EV.rain > 0 ? .25 : .13; for (let i = 0; i < 3; i++) { const yy = h * (.58 + .09 * i), dx = Math.sin(ms / 7000 + i * 2) * 50, mg = g.createLinearGradient(0, yy - 70, 0, yy + 70); mg.addColorStop(0, `rgba(${bc},0)`); mg.addColorStop(.5, `rgba(${bc},${ma})`); mg.addColorStop(1, `rgba(${bc},0)`); g.fillStyle = mg; g.fillRect(dx - 60, yy - 70, w + 120, 140); }
-  if (EV.cl > 60 || EV.rain > 0) { g.fillStyle = 'rgba(30,40,45,.25)'; g.fillRect(0, 0, w, h); }
   const vg = g.createRadialGradient(w / 2, h * .5, Math.min(w, h) * .3, w / 2, h * .5, Math.hypot(w, h) * .62); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.6)'); g.fillStyle = vg; g.fillRect(0, 0, w, h);
   g.fillStyle = 'rgba(255,255,255,.05)'; for (let i = 0; i < 160; i++) g.fillRect(Math.random() * w, Math.random() * h, 1.2, 1.2);
 }
@@ -1610,18 +1626,17 @@ function moonSprite(ph, S = 240) {
   x.putImageData(im, 0, 0); if (Object.keys(MSC).length > 6) Object.keys(MSC).forEach(q => delete MSC[q]); return (MSC[key] = c);
 }
 function putMoon(x, sp, cx, cy, size, south) {
-  x.save(); x.globalCompositeOperation = 'lighter'; const q = x.createRadialGradient(cx, cy, size * .48, cx, cy, size * 1.7); q.addColorStop(0, 'rgba(205,215,240,.10)'); q.addColorStop(.35, 'rgba(180,195,235,.03)'); q.addColorStop(1, 'rgba(180,195,235,0)'); x.fillStyle = q; x.fillRect(cx - size * 1.7, cy - size * 1.7, size * 3.4, size * 3.4); x.restore();
-  x.save(); x.translate(cx, cy); if (south) x.rotate(Math.PI); x.drawImage(sp, -size / 2, -size / 2, size, size); x.restore();
+  x.save(); x.globalCompositeOperation = 'screen'; const q = x.createRadialGradient(cx, cy, size * .45, cx, cy, size * 2.2); q.addColorStop(0, 'rgba(190,205,240,.2)'); q.addColorStop(.3, 'rgba(160,180,230,.07)'); q.addColorStop(1, 'rgba(160,180,230,0)'); x.fillStyle = q; x.fillRect(cx - size * 2.2, cy - size * 2.2, size * 4.4, size * 4.4); x.restore();
+  x.save(); x.translate(cx, cy); if (south) x.rotate(Math.PI); try { x.filter = 'brightness(1.18) contrast(1.08)'; } catch (e) { } x.drawImage(sp, -size / 2, -size / 2, size, size); x.restore();
 }
 function drawSun(x, X, Y, e, up, k = 1) {
   const low = Math.max(0, 1 - e * 2.2), bl = up ? 1 : Math.max(0, 1 + e * 6); if (bl <= 0) return;
-  const warm = [255, 226 - 86 * low | 0, 140 - 110 * low | 0], deep = [255, 178 - 60 * low | 0, 70 - 40 * low | 0];
-  x.save(); x.globalCompositeOperation = 'lighter';
-  let q = x.createRadialGradient(X, Y, 0, X, Y, 340 * k); q.addColorStop(0, `rgba(${deep},${.26 * bl})`); q.addColorStop(.12, `rgba(${deep},${.13 * bl})`); q.addColorStop(.45, `rgba(${deep},${.04 * bl})`); q.addColorStop(1, `rgba(${deep},0)`); x.fillStyle = q; x.fillRect(X - 340 * k, Y - 340 * k, 680 * k, 680 * k);
-  for (let i = 0; i < 14; i++) { const an = i * Math.PI / 7 + .2 + (i % 3) * .05, L = (140 + (i * 53 % 100)) * k * (i % 2 ? .7 : 1), g2 = x.createLinearGradient(X, Y, X + Math.cos(an) * L, Y + Math.sin(an) * L); g2.addColorStop(0, `rgba(${warm},${.3 * bl})`); g2.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = g2; x.beginPath(); x.moveTo(X + Math.cos(an + 1.57) * 1.5, Y + Math.sin(an + 1.57) * 1.5); x.lineTo(X + Math.cos(an) * L, Y + Math.sin(an) * L); x.lineTo(X + Math.cos(an - 1.57) * 1.5, Y + Math.sin(an - 1.57) * 1.5); x.fill(); }
-  q = x.createRadialGradient(X, Y, 0, X, Y, 60 * k); q.addColorStop(0, `rgba(${warm},${.85 * bl})`); q.addColorStop(.3, `rgba(${warm},${.3 * bl})`); q.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = q; x.fillRect(X - 60 * k, Y - 60 * k, 120 * k, 120 * k);
+  const core = [255, 236 - 70 * low | 0, 176 - 110 * low | 0], warm = [255, 196 - 70 * low | 0, 120 - 85 * low | 0];
+  x.save(); x.globalCompositeOperation = 'screen';
+  let q = x.createRadialGradient(X, Y, 0, X, Y, 280 * k); q.addColorStop(0, `rgba(${warm},${.24 * bl})`); q.addColorStop(.16, `rgba(${warm},${.1 * bl})`); q.addColorStop(.55, `rgba(${warm},${.03 * bl})`); q.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = q; x.fillRect(X - 280 * k, Y - 280 * k, 560 * k, 560 * k);
+  q = x.createRadialGradient(X, Y, 0, X, Y, 60 * k); q.addColorStop(0, `rgba(${core},${.4 * bl})`); q.addColorStop(.4, `rgba(${warm},${.16 * bl})`); q.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = q; x.fillRect(X - 60 * k, Y - 60 * k, 120 * k, 120 * k);
   x.restore();
-  q = x.createRadialGradient(X, Y, 0, X, Y, 15 * k); q.addColorStop(0, `rgba(255,252,235,${bl})`); q.addColorStop(.7, `rgba(255,${236 - 40 * low | 0},${150 - 90 * low | 0},${bl})`); q.addColorStop(1, `rgba(255,${200 - 50 * low | 0},${90 - 60 * low | 0},0)`); x.fillStyle = q; x.beginPath(); x.arc(X, Y, 15 * k, 0, 7); x.fill();
+  q = x.createRadialGradient(X, Y, 0, X, Y, 15 * k); q.addColorStop(0, `rgba(${core},${.92 * bl})`); q.addColorStop(.6, `rgba(${core},${.78 * bl})`); q.addColorStop(1, `rgba(${warm},0)`); x.fillStyle = q; x.beginPath(); x.arc(X, Y, 15 * k, 0, 7); x.fill();
 }
 $('sbar').appendChild($('sug'));
 
@@ -1770,9 +1785,9 @@ const RCODE = { 51: .8, 53: 1.2, 55: 1.8, 56: 1, 57: 1.8, 61: 2, 63: 4, 65: 9, 6
 function rainRate() {
   const w = W && W.w; if (!w) return 0; const c = w.current; let r = c.rain || 0;
   try { const m = w.minutely_15; if (m && m.time && m.precipitation) { let j = 0; for (let i = 0; i < m.time.length; i++) { if (m.time[i] <= c.time) j = i; else break; } r = Math.max(r, (m.precipitation[j] || 0) * 4); } } catch (e) { }
-  return Math.max(r, RCODE[c.weather_code] || 0);
+  const k = kind(c.weather_code), rainish = k === 'rain' || k === 'storm'; return (r >= .1 && rainish) || r >= .6 ? r : 0;
 }
-{ const _sf = setFx; setFx = function () { _sf.apply(this, arguments); if (!W || !W.w) return; EV.rate = rainRate(); EV.wd = W.w.current.wind_direction_10m || 0; RP = null; }; }
+{ const _sf = setFx; setFx = function () { _sf.apply(this, arguments); if (!W || !W.w) return; EV.rate = rainRate(); EV.wd = W.w.current.wind_direction_10m || 0; EV.gust = W.w.current.wind_gusts_10m || 0; RP = null; }; }
 { const _ds = drawSun; drawSun = function (c) { if (c === g && W) { c.save(); c.globalAlpha = clamp(skyVis() * 1.1, .18, 1); _ds.apply(this, arguments); c.restore(); } else _ds.apply(this, arguments); }; }
 var RP = null, RPK = '', SPL = [], BOLTS = [], NEXTB = 0;
 function rainLayers(w, h) {
@@ -1780,7 +1795,7 @@ function rainLayers(w, h) {
   const vis = clamp(.45 + Math.sqrt(r) * .62, .45, 2.5), n = Math.min(2600, Math.round(w * h / 560 * vis));
   for (let i = 0; i < n; i++) { const z = Math.random(); RP.push({ x: Math.random() * (w + 300) - 150, y: Math.random() * h, z, v: (22 + r * 2.4) * (.5 + z * .95), l: (13 + r * 2) * (.45 + z * 1.0) }); }
 }
-function darkAmt() { const k = EV.k; let d = 0; if (k === 'storm') d = .72; else if (k === 'rain') d = .36 + Math.min(EV.rate || 0, 9) / 9 * .3; else if (k === 'snow') d = .18; else if (k === 'fog') d = .22; return Math.max(d, clamp(((EV.cl || 0) - 50) / 50, 0, 1) * .38, Math.min(.55, (EV.rate || 0) / 12)); }
+function darkAmt() { if ((EV.rate || 0) <= 0) return 0; const k = EV.k; return Math.min(.5, (k === 'storm' ? .3 : .1) + Math.min(EV.rate || 0, 9) / 9 * .2); }
 function darkVeil(w, h) { if (TH === 'dots') return; const d = darkAmt(); if (d <= .01) return; g.fillStyle = TH === 'white' ? `rgba(55,65,82,${(d * .5).toFixed(3)})` : `rgba(3,6,12,${Math.min(.9, d).toFixed(3)})`; g.fillRect(0, 0, w, h); }
 function mkBolt(w, h) {
   const x0 = w * (.12 + Math.random() * .76); let x = x0, y = -10; const pts = [[x, y]], br = [], end = h * (.4 + Math.random() * .45);
@@ -1802,7 +1817,7 @@ function drawBolts(w, h) {
 function precip(w, h, ms, lt) {
   const r = EV.rate || 0;
   if (r > 0 && !RM) {
-    rainLayers(w, h); const sl = Math.sin((((EV.wd || 0) + 180) % 360) * Math.PI / 180) * Math.min(.65, .12 + (EV.wind || 0) / 40), col = lt ? '40,80,150' : '205,228,255', a0 = lt ? .6 : .5;
+    rainLayers(w, h); const sl = Math.sin((((EV.wd || 0) + 180) % 360) * Math.PI / 180) * Math.min(.3, .05 + (EV.wind || 0) / 120), col = lt ? '40,80,150' : '205,228,255', a0 = lt ? .6 : .5;
     g.fillStyle = `rgba(${col},${(.03 + Math.min(r, 10) / 160).toFixed(3)})`; g.fillRect(0, 0, w, h);
     for (let pass = 0; pass < 3; pass++) {
       g.strokeStyle = `rgba(${col},${[a0 - .3, a0 - .12, a0 + .02][pass]})`; g.lineWidth = [.6, .9, 1.3 + Math.min(r, 10) * .05][pass]; g.beginPath();
@@ -1825,9 +1840,11 @@ async function modelsMerge(p) {
   }
   if (!d || !d.current) return null; const n = d.current, rows = [];
   MODS.forEach(m => { const g2 = k => { const v = n[k + '_' + m]; return v !== undefined ? v : (m === 'best_match' || MODS.every(x => n[k + '_' + x] === undefined) ? n[k] : undefined); }; const wc = g2('weather_code'); if (wc == null) return; rows.push({ wc, cl: g2('cloud_cover') || 0, rain: Math.max(g2('rain') || 0, g2('precipitation') || 0), gust: g2('wind_gusts_10m') || 0, cape: g2('cape') || 0 }); });
-  if (!rows.length) return null; let top = rows[0]; rows.forEach(x => { if ((SEVC[x.wc] || 0) > (SEVC[top.wc] || 0)) top = x; });
-  let code = top.wc; const cl = Math.max(...rows.map(x => x.cl)), rain = Math.max(...rows.map(x => x.rain)), gust = Math.max(...rows.map(x => x.gust)), cape = Math.max(...rows.map(x => x.cape));
-  if (code < 95 && ((cape >= 1800 && (rain > .2 || cl > 70)) || (cape >= 1000 && rain >= 2) || (gust >= 60 && cl >= 80 && rain > 0))) code = 95;
+  if (!rows.length) return null; const base = rows[0], rainy = rows.filter(x => x.rain > .1), thun = rows.filter(x => x.wc >= 95);
+  let code = base.wc, rain = base.rain; const cl = Math.max(...rows.map(x => x.cl)), gust = Math.max(...rows.map(x => x.gust)), cape = Math.max(...rows.map(x => x.cape));
+  if (rainy.length >= 2) { rain = Math.max(...rainy.map(x => x.rain)); let top = rainy[0]; rainy.forEach(x => { if ((SEVC[x.wc] || 0) > (SEVC[top.wc] || 0)) top = x; }); if ((SEVC[top.wc] || 0) > (SEVC[code] || 0) && top.wc < 95) code = top.wc; }
+  if (thun.length >= 2 || (cape >= 2500 && rainy.length >= 2 && rain >= .5)) code = Math.max(code, 95); else if (code >= 95 && thun.length < 2 && rain <= .1) code = cl >= 80 ? 3 : 2;
+  if (code <= 2 && cl >= 85 && rain <= .1) code = 3;
   return { code, cl, rain, gust };
 }
 function applyModels(c, m) { if (!m) return false; const ch = c.weather_code !== m.code; c.weather_code = m.code; c.cloud_cover = Math.max(c.cloud_cover || 0, m.cl); c.rain = Math.max(c.rain || 0, m.rain); c.wind_gusts_10m = Math.max(c.wind_gusts_10m || 0, m.gust); return ch; }
@@ -1846,6 +1863,7 @@ async function livePoll() {
   } catch (e) { }
 }
 setInterval(livePoll, 120000); document.addEventListener('visibilitychange', () => { if (!document.hidden) livePoll(); });
+try { if (!localStorage.getItem('sp22')) { localStorage.setItem('sp22', '1'); if (CUST.space) { CUST.space.tr = 100; localStorage.setItem(CUSTK, JSON.stringify(CUST)); applyCust(); } } } catch (e) { }
 /* ---------- label every hero tile so the window knows which one it is ---------- */
 const _extras = extras; extras = function () { _extras(); if ($('dash') && $('dash').querySelector('.ctg') === null && DS) dashTog(); };
 document.addEventListener('visibilitychange', () => { if (document.hidden) closeDW(true); });
