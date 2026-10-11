@@ -676,32 +676,32 @@ function cumulus(seed, L, S, flat) {
   const prof = u => { let v = 0; lumps.forEach(l => { v = Math.max(v, l.h * Math.exp(-((u - l.u) ** 2) / (2 * l.w * l.w))); }); return v * (1 - Math.pow(Math.abs(u - .5) * 2, 3) * .55); };
   const base = 262, P = [], mix = (a, b, f) => a.map((v, i) => Math.round(v * (1 - f) + b[i] * f));
   const addP = (n, rmin, rmax, surf, kind0) => { for (let i = 0; i < n; i++) { const u = .05 + rn() * .9, hh = prof(u) * 215 + 14; let t = Math.pow(rn(), surf ? .35 : .7); if (surf) t = clamp(.55 + t * .45, 0, 1); const y = base - t * hh, r = rmin + rn() * (rmax - rmin) * (1 - t * .35) * (flat ? 1.2 : 1); P.push({ x: 30 + u * 580, y, r, f: clamp(1 - t, 0, 1), k: kind0, j: (rn() - .5) * .16 }); } };
-  addP(flat ? 70 : 100, 20, 46, false, 0); addP(flat ? 220 : 520, 5, 17, true, 1); addP(flat ? 160 : 260, 6, 18, false, 2);
+  addP(flat ? 80 : 120, 22, 50, false, 0); addP(flat ? 120 : 220, 10, 24, true, 1); addP(flat ? 160 : 240, 8, 22, false, 2);
   P.sort((a, b) => b.y - a.y);
   P.forEach(p => {
     const side = clamp((p.x - W0 / 2) / W0, -.5, .5) * .18, f = clamp(Math.pow(p.f, 1.15) * .92 + side + p.j, 0, 1), cc = mix(L, S, f), top = mix(L, [255, 255, 255], .22 * (1 - f)), q = x.createRadialGradient(p.x - p.r * .12, p.y - p.r * .16, p.r * .05, p.x, p.y, p.r);
-    q.addColorStop(0, `rgba(${p.k === 1 ? top : cc},${p.k === 0 ? .8 : .92})`); q.addColorStop(.6, `rgba(${cc},${p.k === 0 ? .66 : .7})`); q.addColorStop(1, `rgba(${cc},0)`); x.fillStyle = q; x.fillRect(p.x - p.r, p.y - p.r, 2 * p.r, 2 * p.r);
+    q.addColorStop(0, `rgba(${cc},.62)`); q.addColorStop(.55, `rgba(${cc},.42)`); q.addColorStop(1, `rgba(${cc},0)`); x.fillStyle = q; x.fillRect(p.x - p.r, p.y - p.r, 2 * p.r, 2 * p.r);
   });
   x.globalCompositeOperation = 'destination-out'; const fd = x.createLinearGradient(0, base - 34, 0, base + 22); fd.addColorStop(0, 'rgba(0,0,0,0)'); fd.addColorStop(1, 'rgba(0,0,0,1)'); x.fillStyle = fd; x.fillRect(0, base - 34, W0, H0);
-  return (CUM[key] = c);
+  const o = document.createElement('canvas'); o.width = W0; o.height = H0; const ox = o.getContext('2d'); try { ox.filter = 'blur(2.2px)'; } catch (e) { } ox.drawImage(c, 0, 0); return (CUM[key] = o);
 }
 const CLB = Array.from({ length: 14 }, (_, i) => ({ x: (i * .193 + .07) % 1, y: ((i * .41 + .1) % 1), s: ((i * .57) % 1), v: .6 + ((i * .31) % 1) * .8 }));
 function cloudCols(e) {
   const lerp = (a, b, f) => a.map((v, i) => v * (1 - f) + b[i] * f), cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm', st = k === 'storm';
   const dayF = clamp((e + .02) / .28, 0, 1), nightF = clamp((-e - .02) / .1, 0, 1);
-  let L = lerp([255, 206, 170], [255, 255, 255], dayF), S = lerp([118, 102, 134], [150, 166, 196], dayF); if (nightF > 0) { L = lerp(L, [84, 94, 120], nightF); S = lerp(S, [26, 32, 48], nightF); }
+  let L = lerp([255, 206, 170], [255, 255, 255], dayF), S = lerp([118, 102, 134], [150, 166, 196], dayF); if (nightF > 0) { L = lerp(L, [60, 68, 92], nightF); S = lerp(S, [18, 22, 34], nightF); }
   let dk = st ? 1 : wet ? .78 : clamp((cl - .62) / .38, 0, 1) * .6; if (cl > .6) dk = Math.min(1, dk + clamp(((EV.gust || 0) - 45) / 120, 0, .18)); const f = dayF * .6 + .4;
   L = lerp(L, [132 * f, 138 * f, 150 * f], dk); S = lerp(S, [46 * f, 52 * f, 64 * f], dk); return [L.map(Math.round), S.map(Math.round)];
 }
 function clouds2(ms, w, h, e) {
   const cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm';
   const amt = Math.max(cl, wet ? .95 : 0, k === 'snow' ? .85 : 0, k === 'fog' ? .55 : 0, k === 'cloud' ? .7 : 0, k === 'partly' ? .3 : 0); if (amt < .06) return;
-  const [L, S] = cloudCols(e), t0 = RM ? 0 : ms, spd = .004 * (1 + Math.max(EV.wind || 0, (EV.gust || 0) * .6) / 18), n = Math.round(1 + amt * 11), over = amt > .8;
+  const [L, S] = cloudCols(e), t0 = RM ? 0 : ms, spd = .004 * (1 + Math.max(EV.wind || 0, (EV.gust || 0) * .6) / 18), n = Math.round(1 + amt * 8 + (amt > .8 ? 5 : 0)), over = amt > .8;
   if (amt > .55) { const a = clamp((amt - .5) / .5, 0, 1) * (wet ? .8 : .6), sg = g.createLinearGradient(0, 0, 0, h * .8); sg.addColorStop(0, `rgba(${S[0]},${S[1]},${S[2]},${a.toFixed(3)})`); sg.addColorStop(1, `rgba(${S[0]},${S[1]},${S[2]},0)`); g.fillStyle = sg; g.fillRect(0, 0, w, h * .8); }
   const list = []; for (let i = 0; i < n; i++) list.push({ c: CLB[i], i, layer: i % 3 }); list.sort((a, b) => a.layer - b.layer);
   list.forEach(({ c, i, layer }) => {
-    const flat = over ? i % 2 === 0 : i % 4 === 3, sc = (w / 640) * [.8, 1.2, 1.8][layer] * (.85 + c.s * .3), sw = 640 * sc, sh = 300 * sc, X = ((c.x * (w + sw) + t0 * spd * (.5 + layer * .6) * c.v) % (w + sw)) - sw, Y = h * (.14 + c.y * .42) - sh * .87;
-    g.globalAlpha = [.8, .93, 1][layer] * clamp(.55 + amt, 0, 1); g.drawImage(cumulus(i * 3 + 1, L, S, flat), X, Y, sw, sh);
+    const flat = over ? i % 2 === 0 : i % 4 === 3, sc = (w / 640) * [.5, .75, 1.05][layer] * (.85 + c.s * .3), sw = 640 * sc, sh = 300 * sc, X = ((c.x * (w + sw) + t0 * spd * (.5 + layer * .6) * c.v) % (w + sw)) - sw, Y = h * (.14 + c.y * .42) - sh * .87;
+    g.globalAlpha = [.7, .85, .95][layer] * clamp(.5 + amt * .6, 0, 1) * (1 - clamp((-e - .02) / .1, 0, 1) * .25); g.drawImage(cumulus(i * 3 + 1, L, S, flat), X, Y, sw, sh);
   });
   g.globalAlpha = 1;
 }
