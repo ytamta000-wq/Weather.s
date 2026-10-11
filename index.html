@@ -227,6 +227,9 @@ html[data-th=space][data-th=space][data-th=space] .al,html[data-th=space][data-t
 html[data-th=space][data-th=space][data-th=space] #map{background:rgba(17,17,17,var(--tp))!important}
 html[data-th=space][data-th=space][data-th=space] #tips,html[data-th=space][data-th=space][data-th=space] #sunW,html[data-th=space][data-th=space][data-th=space] #moonW,html[data-th=space][data-th=space][data-th=space] .vz.win{background:rgba(var(--tc),calc(var(--tp) * .88))!important;border-color:rgba(var(--bc,255,255,255),calc(var(--tp) * .13))!important}
 
+/* ===== v22 ===== */
+.armed,.dragging,.armed *,.dragging *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
 :root{--fg:#fff}
 .win,.grid div,.kpis div,.tp{cursor:pointer;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
 .up{transform:translateY(-12px) scale(1.03)!important;box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.28);z-index:30;position:relative}
@@ -590,7 +593,7 @@ function drawSky() {
   $('sunK').innerHTML = K(t('rise'), hmm(I.sr)) + K(t('nn'), hmm((I.sr + I.ss) / 2)) + K(t('set'), hmm(I.ss)) + K(t('dl'), dur(I.ss - I.sr)) + K(t('gold'), hmm(I.ss - 36e5)) + K(t('nl'), dur(864e5 - (I.ss - I.sr)));
   scene($('sunC'), 'sun'); scene($('moonC'), 'moon');
   const pi = p => p < .02 || p >= .98 ? 0 : p < .23 ? 1 : p < .27 ? 2 : p < .48 ? 3 : p < .52 ? 4 : p < .73 ? 5 : p < .77 ? 6 : 7, nm = t('phn')[pi(MI.ph)], bc = $('moonB').getContext('2d'); bc.clearRect(0, 0, 190, 190);
-  const q = bc.createRadialGradient(95, 95, 40, 95, 95, 95); q.addColorStop(0, 'rgba(220,230,255,.25)'); q.addColorStop(1, 'rgba(220,230,255,0)'); bc.fillStyle = q; bc.fillRect(0, 0, 190, 190); putMoon(bc, MSP, 95, 95, 150, MI.south);
+  const q = bc.createRadialGradient(95, 95, 40, 95, 95, 95); q.addColorStop(0, 'rgba(220,230,255,.25)'); q.addColorStop(1, 'rgba(220,230,255,0)'); bc.fillStyle = q; bc.fillRect(0, 0, 190, 190); putMoon(bc, MSP, 95, 95, 150, MI.south); bc.globalCompositeOperation = 'destination-in'; { const mk = bc.createRadialGradient(95, 95, 62, 95, 95, 94); mk.addColorStop(0, 'rgba(0,0,0,1)'); mk.addColorStop(1, 'rgba(0,0,0,0)'); bc.fillStyle = mk; bc.fillRect(0, 0, 190, 190); } bc.globalCompositeOperation = 'source-over';
   $('moonS').textContent = `${nm} · ${Math.round(MI.ill * 100)}% ${t('lit')} · ${MI.up ? t('ab') : t('bl')}`;
   $('moonN').innerHTML = `<div style="font-size:1.25rem">${nm}</div><div class="sub">${t('age')} ${(MI.ph * SYN).toFixed(1)} d · ${MI.south ? 'S' : 'N'}</div>`;
   $('moonK').innerHTML = K(MI.real ? t('mr').replace(' ≈', '') : t('mr'), hmm(MI.mr) + dsfx(W.moon && W.moon.rd)) + K(t('ill'), Math.round(MI.ill * 100) + '%') + K(MI.real ? t('ms').replace(' ≈', '') : t('ms'), hmm(MI.ms) + dsfx(W.moon && W.moon.sd)) + K(t('nf2'), Math.round(((.5 - MI.ph + 1) % 1) * SYN) + ' d') + K(t('nn2'), Math.round(((1 - MI.ph) % 1) * SYN) + ' d') + K(t('age'), (MI.ph * SYN).toFixed(1) + ' d');
@@ -648,7 +651,8 @@ function setFx() {
 function fit() { cv.width = innerWidth; cv.height = innerHeight; setFx(); }
 const GAPH = h => clamp(h * .5, 300, 520), SP = (w, h, t) => { const c = clamp(t, 0, 1), G = GAPH(h) * .56; return [w * (.14 + .72 * c), G * (.92 - .72 * Math.sin(Math.PI * c))]; };
 /* ---------- sky follows the real weather: no sun in rain, clouds instead ---------- */
-function skyVis() { if (!W) return 1; const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || k === 'fog' || EV.rain > 0 || EV.snow > 0) return 0; return clamp(1 - (EV.cl - 35) / 50, 0, 1); }
+function skyVis() { if (!W) return 1; const cl = (EV.cl || 0) / 100, k = EV.k; let v = 1 - clamp((cl - .12) / .75, 0, 1) * .85; if (k === 'rain' || k === 'storm' || k === 'snow') v = Math.min(v, .24); else if (k === 'fog') v = Math.min(v, .3); return Math.max(.24, v); }
+function starVis() { if (!W) return 1; const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow') return 0; return clamp(1 - ((EV.cl || 0) / 100) * 1.1, 0, 1); }
 function greyAmt() { const k = EV.k; if (k === 'rain' || k === 'storm' || k === 'snow' || EV.rain > 0) return .95; if (k === 'fog') return .7; return clamp((EV.cl - 30) / 60, 0, 1); }
 function cloudAmt() { const k = EV.k; if (k === 'rain' || k === 'storm') return 1; if (k === 'snow') return .9; if (k === 'fog') return .5; if (k === 'cloud') return Math.max(.7, EV.cl / 100); if (k === 'partly') return .25 + EV.cl / 100 * .5; return EV.cl / 100 * .3; }
 function veil(X, Y, sv, tp) { if (sv >= .98) return; const q = g.createRadialGradient(X, Y, 0, X, Y, 320), c = tp.map(Math.round).join(','); q.addColorStop(0, `rgba(${c},${(1 - sv) * .85})`); q.addColorStop(1, `rgba(${c},0)`); g.fillStyle = q; g.fillRect(X - 320, Y - 320, 640, 640); }
@@ -659,14 +663,30 @@ function cloudSprite(v, R, G, B) {
   for (let i = 0; i < 9; i++) { const px = 60 + rn() * 240, py = 95 + (rn() - .5) * 40 - Math.sin(i / 9 * Math.PI) * 25, r = 36 + rn() * 34, q = x.createRadialGradient(px, py, 0, px, py, r); q.addColorStop(0, `rgba(${R},${G},${B},.8)`); q.addColorStop(.6, `rgba(${R},${G},${B},.4)`); q.addColorStop(1, `rgba(${R},${G},${B},0)`); x.fillStyle = q; x.fillRect(px - r, py - r, 2 * r, 2 * r); }
   return (CSP[key] = c);
 }
-function clouds(ms, w, h, e) {
-  const amt = cloudAmt(); if (amt < .08) return; const n = Math.ceil(amt * CLDS.length), wet = EV.k === 'rain' || EV.k === 'storm', dusk = e > -.05 && e < .25, lum = clamp(.3 + e * 1.3, .16, 1), dk = wet ? .62 : EV.k === 'snow' ? .85 : 1, base = 255 * lum * dk;
-  const R = Math.round(Math.min(255, base + (dusk ? 30 : 0))), G = Math.round(base * (dusk ? .88 : 1)), B = Math.round(Math.min(255, base * (dusk ? .8 : 1) + (e < -.05 ? 22 : 8))), t0 = RM ? 0 : ms;
-  const hz = g.createLinearGradient(0, 0, 0, h * .55); hz.addColorStop(0, `rgba(${R},${G},${B},${.42 * amt})`); hz.addColorStop(1, `rgba(${R},${G},${B},0)`); g.fillStyle = hz; g.fillRect(0, 0, w, h * .55);
-  for (let i = 0; i < n; i++) { const c = CLDS[i], sz = c.s * (w / 400 + .6) * 150, X = ((c.x * (w + 500) + t0 * .006 * c.v * (1 + EV.wind / 30)) % (w + 500)) - 250, Y = c.y * h * (wet ? .8 : 1); g.globalAlpha = clamp(c.a * Math.min(1, amt + .25), 0, 1); g.drawImage(cloudSprite(c.k, R, G, B), X, Y, sz * 2, sz); }
-  g.globalAlpha = 1;
+const CSP2 = {};
+function cloudSprite2(v, R, G, B) {
+  const key = v + '-' + (R >> 4) + '-' + (G >> 4) + '-' + (B >> 4); if (CSP2[key]) return CSP2[key]; if (Object.keys(CSP2).length > 60) Object.keys(CSP2).forEach(k => delete CSP2[k]);
+  const c = document.createElement('canvas'); c.width = 480; c.height = 220; const x = c.getContext('2d'), rn = rnd(v * 977 + 11);
+  for (let i = 0; i < 16; i++) { const t = i / 15, px = 70 + rn() * 340, py = 125 + (rn() - .5) * 40 - Math.sin(t * Math.PI) * 34, r = 34 + rn() * 46, q = x.createRadialGradient(px, py, 0, px, py, r); q.addColorStop(0, 'rgba(255,255,255,.95)'); q.addColorStop(.55, 'rgba(255,255,255,.72)'); q.addColorStop(1, 'rgba(255,255,255,0)'); x.fillStyle = q; x.fillRect(px - r, py - r, 2 * r, 2 * r); }
+  x.globalCompositeOperation = 'source-in'; const gr = x.createLinearGradient(0, 40, 0, 200); gr.addColorStop(0, `rgb(${Math.min(255, R * 1.12) | 0},${Math.min(255, G * 1.12) | 0},${Math.min(255, B * 1.12) | 0})`); gr.addColorStop(1, `rgb(${R * .62 | 0},${G * .62 | 0},${B * .66 | 0})`); x.fillStyle = gr; x.fillRect(0, 0, 480, 220);
+  return (CSP2[key] = c);
 }
-function stars(w, h, ms, e) { g.fillStyle = '#fff'; STAR.forEach(s => { g.globalAlpha = clamp((.1 - e) * 4, 0, 1) * (.35 + .65 * Math.abs(Math.sin(ms / 700 + s.p))) * skyVis(); g.fillRect(s.x * w, s.y * h, s.r, s.r); }); g.globalAlpha = 1; }
+const CLB = Array.from({ length: 26 }, (_, i) => ({ x: (i * .193 + .07) % 1, y: ((i * .41) % 1), s: .7 + ((i * .57) % 1) * .9, v: .4 + ((i * .31) % 1) * 1.1, a: .5 + ((i * .43) % 1) * .5, k: i % 4 }));
+function clouds2(ms, w, h, e) {
+  const cl = clamp((EV.cl || 0) / 100, 0, 1), k = EV.k, wet = k === 'rain' || k === 'storm', st = k === 'storm';
+  let amt = Math.max(cl, wet ? .95 : 0, k === 'snow' ? .85 : 0, k === 'fog' ? .6 : 0, k === 'cloud' ? .7 : 0, k === 'partly' ? .3 : 0); if (amt < .06) return;
+  const lum = clamp(.28 + e * 1.4, .14, 1), dark = st ? .36 : wet ? .5 : k === 'snow' ? .82 : clamp(1 - cl * .4, .6, 1), base = 255 * lum * dark, dusk = e > -.05 && e < .25, t0 = RM ? 0 : ms;
+  const R = Math.round(Math.min(255, base + (dusk ? 30 : 0))), G = Math.round(base * (dusk ? .88 : 1)), B = Math.round(Math.min(255, base * (dusk ? .8 : 1) + (e < -.05 ? 22 : 8)));
+  const hz = g.createLinearGradient(0, 0, 0, h * (wet ? .75 : .55)); hz.addColorStop(0, `rgba(${R},${G},${B},${(.8 * amt * amt).toFixed(3)})`); hz.addColorStop(1, `rgba(${R},${G},${B},0)`); g.fillStyle = hz; g.fillRect(0, 0, w, h * (wet ? .75 : .55));
+  const nB = Math.ceil(amt * CLB.length), spd = .005 * (1 + (EV.wind || 0) / 25);
+  for (let i = 0; i < nB; i++) {
+    const c = CLB[i], sz = (w * .75 + c.s * w * .55), X = ((c.x * (w + sz) + t0 * spd * c.v) % (w + sz)) - sz * .7, Y = c.y * h * (wet ? .62 : .45) - sz * .12;
+    g.globalAlpha = clamp(c.a * (.3 + amt * .8), 0, .96); g.drawImage(cloudSprite2(c.k, R, G, B), X, Y, sz * 1.7, sz * .78);
+  }
+  g.globalAlpha = 1;
+  if (wet || amt > .8) { const dk = g.createLinearGradient(0, 0, 0, h * .6); dk.addColorStop(0, `rgba(8,12,20,${(st ? .5 : wet ? .32 : .14).toFixed(2)})`); dk.addColorStop(1, 'rgba(8,12,20,0)'); g.fillStyle = dk; g.fillRect(0, 0, w, h * .6); }
+}
+function stars(w, h, ms, e) { g.fillStyle = '#fff'; STAR.forEach(s => { g.globalAlpha = clamp((.1 - e) * 4, 0, 1) * (.35 + .65 * Math.abs(Math.sin(ms / 700 + s.p))) * starVis(); g.fillRect(s.x * w, s.y * h, s.r, s.r); }); g.globalAlpha = 1; }
 function glow(w, h, e) {
   if ((EV.k !== 'clear' && EV.k !== 'partly') || skyVis() < .3) return; let X, Y, col; if (e > -.05) { [X, Y] = SP(w, h, sunI().t); col = e < .2 ? '255,170,90' : '255,240,200'; } else if (MI && MI.up) { [X, Y] = SP(w, h, MI.t); col = '210,220,255'; } else return;
   const q = g.createRadialGradient(X, Y, 0, X, Y, 150); q.addColorStop(0, `rgba(${col},.3)`); q.addColorStop(1, `rgba(${col},0)`); g.fillStyle = q; g.fillRect(0, 0, w, h);
@@ -1640,34 +1660,42 @@ applyCust();
 Object.assign(T.en, { cor: 'Reset tile order', dhint: 'Hold a tile to move it' });
 Object.assign(T.hi, { cor: 'टाइल क्रम रीसेट', dhint: 'टाइल को दबाए रखकर हिलाओ' });
 (function () {
-  const ORK = 'ord', HOLD = 380, BOXES = ['#skyH', '#app'];
-  const bxs = () => BOXES.map(q => document.querySelector(q)).filter(Boolean);
+  const ORK = 'ord2', HOLD = 360, MAIN = ['#skyH', '#app'];
   const items = box => [...box.children].filter(e => e.tagName === 'SECTION' && e.classList.contains('win'));
-  const all = () => bxs().flatMap(items);
-  BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) items(b).forEach((e, i) => { if (!e.dataset.ok) e.dataset.ok = e.id || ('s' + i); e.dataset.def = sel; e.dataset.di = i; }); });
-  const loadOrd = () => { try { return JSON.parse(localStorage.getItem(ORK)) || {}; } catch (e) { return {}; } };
-  const saveOrd = () => { const o = {}; BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) o[sel] = items(b).map(e => e.dataset.ok); }); try { localStorage.setItem(ORK, JSON.stringify(o)); } catch (e) { } };
+  const keyOf = e => { if (e.dataset.ok) return e.dataset.ok; if (e.parentElement && e.parentElement.id === 'dash') { const z = e.querySelector('.vzc'); return 'd:' + (z && z.dataset.k || 'kpi'); } return e.id || '?'; };
+  const mainAll = () => MAIN.map(q => document.querySelector(q)).filter(Boolean).flatMap(items);
+  MAIN.forEach(sel => { const b = document.querySelector(sel); if (b) items(b).forEach((e, i) => { if (!e.dataset.ok) e.dataset.ok = e.id || ('s' + i); e.dataset.def = sel; e.dataset.di = i; }); });
+  const allSaved = () => { try { return JSON.parse(localStorage.getItem(ORK)) || {}; } catch (e) { return {}; } };
+  const saveBox = (sel, list) => { const a = allSaved(); a[TH] = a[TH] || {}; a[TH][sel] = list; try { localStorage.setItem(ORK, JSON.stringify(a)); } catch (e) { } };
+  const saveMain = () => MAIN.forEach(sel => { const b = document.querySelector(sel); if (b) saveBox(sel, items(b).map(keyOf)); });
+  const saveDash = () => { const d = document.getElementById('dash'); if (d) saveBox('#dash', items(d).map(keyOf)); };
   const arrange = (b, list) => {
     const cur = items(b), slots = cur.map(e => { const m = document.createComment('s'); b.insertBefore(m, e); return m; });
     cur.forEach(e => e.remove());
     while (slots.length < list.length) { const m = document.createComment('s'), last = slots[slots.length - 1]; if (last) last.after(m); else b.appendChild(m); slots.push(m); }
     list.forEach((e, i) => slots[i].before(e)); slots.forEach(m => m.remove());
   };
-  const applyOrd = () => {
-    const o = loadOrd(); if (!o['#app'] && !o['#skyH']) return;
-    const map = {}; all().forEach(e => map[e.dataset.ok] = e); const used = new Set(), lists = {};
-    BOXES.forEach(sel => { lists[sel] = []; (o[sel] || []).forEach(k => { if (map[k] && !used.has(k)) { used.add(k); lists[sel].push(map[k]); } }); });
-    all().forEach(e => { if (!used.has(e.dataset.ok)) lists[e.dataset.def].push(e); });
-    BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) arrange(b, lists[sel]); });
+  const applyMain = () => {
+    const o = allSaved()[TH] || {}, map = {}, used = new Set(), lists = {}; mainAll().forEach(e => map[keyOf(e)] = e);
+    MAIN.forEach(sel => { lists[sel] = []; (o[sel] || []).forEach(k => { if (map[k] && !used.has(k)) { used.add(k); lists[sel].push(map[k]); } }); });
+    mainAll().filter(e => !used.has(keyOf(e))).sort((a, b) => a.dataset.di - b.dataset.di).forEach(e => lists[e.dataset.def].push(e));
+    if (!(o['#skyH'] || o['#app'])) MAIN.forEach(sel => lists[sel].sort((a, b) => a.dataset.di - b.dataset.di));
+    MAIN.forEach(sel => { const b = document.querySelector(sel); if (b) arrange(b, lists[sel]); });
   };
-  window.resetOrd = () => { try { localStorage.removeItem(ORK); } catch (e) { } const lists = {}; BOXES.forEach(sel => lists[sel] = all().filter(e => e.dataset.def === sel).sort((x, y) => x.dataset.di - y.dataset.di)); BOXES.forEach(sel => { const b = document.querySelector(sel); if (b) arrange(b, lists[sel]); }); };
-  applyOrd();
+  const applyDash = () => {
+    const d = document.getElementById('dash'), ids = (allSaved()[TH] || {})['#dash']; if (!d || !ids) return; const its = items(d), by = {}; its.forEach(e => by[keyOf(e)] = e);
+    const out = []; ids.forEach(k => { if (by[k]) { out.push(by[k]); delete by[k]; } }); its.forEach(e => { if (by[keyOf(e)]) out.push(e); }); if (out.length === its.length) arrange(d, out);
+  };
+  window.resetOrd = () => { const a = allSaved(); delete a[TH]; try { localStorage.setItem(ORK, JSON.stringify(a)); } catch (e) { } applyMain(); const d = document.getElementById('dash'); if (d) arrange(d, items(d).sort((x, y) => ['d:kpi', 'd:temp', 'd:rain', 'd:snow', 'd:wind', 'd:pres'].indexOf(keyOf(x)) - ['d:kpi', 'd:temp', 'd:rain', 'd:snow', 'd:wind', 'd:pres'].indexOf(keyOf(y)))); };
+  applyMain();
+  { const _bt = buildTheme; buildTheme = function () { _bt.apply(this, arguments); applyMain(); applyDash(); }; }
+  { const _vi = vzInit; vzInit = function () { _vi.apply(this, arguments); applyDash(); }; }
   let tm = null, D = null, sx = 0, sy = 0, lastY = 0, raf = 0, supp = 0;
   const cancelHold = () => { clearTimeout(tm); tm = null; if (D && !D.on && D.el) D.el.classList.remove('armed'); if (!D || !D.on) D = null; };
   const start = (t0, x, y) => {
-    const el = t0.closest && t0.closest('section.win'); if (!el || !el.dataset.ok) return;
-    if (t0.closest('button,input,select,a,.tabs,.dws,#map,.leaflet-container,.strip,.cb,#cst')) return;
-    sx = x; sy = y; lastY = y; D = { el, on: false }; tm = setTimeout(() => activate(), HOLD); el.classList.add('armed');
+    const el = t0.closest && t0.closest('section.win'); if (!el) return; const inDash = !!(el.parentElement && el.parentElement.id === 'dash'); if (!inDash && !el.dataset.ok) return;
+    if (t0.closest('button,input,select,a,.tabs,.dws,#map,.leaflet-container,.strip,#cst,#sbar')) return;
+    sx = x; sy = y; lastY = y; D = { el, on: false, dash: inDash, box: el.parentElement }; tm = setTimeout(() => activate(), HOLD); el.classList.add('armed');
   };
   function activate() {
     if (!D) return; D.on = true; D.el.classList.remove('armed'); D.el.classList.add('dragging'); document.body.classList.add('dnd'); try { navigator.vibrate && navigator.vibrate(18); } catch (e) { }
@@ -1675,7 +1703,7 @@ Object.assign(T.hi, { cor: 'टाइल क्रम रीसेट', dhint: '
   }
   const place = () => {
     if (!D || !D.on) return; const el = D.el, want = lastY - D.grab;
-    const sibs = all().filter(e => e !== el), vis = sibs.filter(e => e.getBoundingClientRect().height > 0);
+    const pool = D.dash ? items(D.box) : mainAll(), sibs = pool.filter(e => e !== el), vis = sibs.filter(e => e.getBoundingClientRect().height > 0);
     let before = null; for (const e of vis) { const r = e.getBoundingClientRect(); if (lastY < r.top + r.height / 2) { before = e; break; } }
     el.style.transform = '';
     if (before) { if (el.nextElementSibling !== before) before.parentElement.insertBefore(el, before); }
@@ -1688,27 +1716,28 @@ Object.assign(T.hi, { cor: 'टाइल क्रम रीसेट', dhint: '
   };
   const end = () => {
     clearTimeout(tm); tm = null; if (!D) return; const el = D.el; el.classList.remove('armed');
-    if (D.on) { cancelAnimationFrame(raf); el.classList.remove('dragging'); el.style.transform = ''; document.body.classList.remove('dnd'); saveOrd(); supp = Date.now(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) { } if (typeof toast === 'function') toast(t('csd')); }
+    if (D.on) { cancelAnimationFrame(raf); el.classList.remove('dragging'); el.style.transform = ''; document.body.classList.remove('dnd'); if (D.dash) saveDash(); else saveMain(); supp = Date.now(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) { } if (typeof toast === 'function') toast(t('csd')); }
     D = null;
   };
   const move = (x, y, ev) => {
-    if (!D) return; if (!D.on) { if (Math.hypot(x - sx, y - sy) > 9) cancelHold(); return; }
+    if (!D) return; if (!D.on) { if (Math.hypot(x - sx, y - sy) > 10) cancelHold(); return; }
     lastY = y; if (ev && ev.cancelable) ev.preventDefault();
   };
   addEventListener('touchstart', e => { if (e.touches.length !== 1) return; const t0 = e.touches[0]; start(e.target, t0.clientX, t0.clientY); }, { passive: true });
   addEventListener('touchmove', e => { const t0 = e.touches[0]; move(t0.clientX, t0.clientY, e); }, { passive: false });
-  addEventListener('touchend', end, { passive: true }); addEventListener('touchcancel', end, { passive: true });
+  addEventListener('touchend', end, { passive: true }); addEventListener('touchcancel', () => { if (D && D.on) end(); else cancelHold(); }, { passive: true });
   addEventListener('mousedown', e => { if (e.button === 0) start(e.target, e.clientX, e.clientY); });
   addEventListener('mousemove', e => move(e.clientX, e.clientY, e)); addEventListener('mouseup', end);
   addEventListener('contextmenu', e => { if (D) e.preventDefault(); });
+  addEventListener('selectstart', e => { if (D) e.preventDefault(); });
   addEventListener('click', e => { if (Date.now() - supp < 700) { e.stopPropagation(); e.preventDefault(); } }, true);
 })();
 
 /* ---------- v20: settings sheet (same in every theme) ---------- */
 Object.assign(T.en, { cust: 'Customize', capp: 'Appearance', clay: 'Layout', ctp: 'Tile transparency', csh: 'Vertical offset', csl: 'Solid', cin: 'Invisible', cup: '↑ Up', cdn: 'Down ↓',
-  cord: 'Tile order', cordd: 'Hold any tile, then drag it anywhere. It stays where you drop it.', cor: 'Reset order', call: 'Apply to all themes', csv: 'Save', crs: 'Reset', csd: 'Saved' });
+  cord: 'Tile order', cordd: 'Hold any tile, then drag it anywhere. It stays where you drop it.', cor: 'Reset order', call: 'Apply to all themes except Space', csv: 'Save', crs: 'Reset', csd: 'Saved' });
 Object.assign(T.hi, { cust: 'अपने हिसाब से', capp: 'दिखावट', clay: 'लेआउट', ctp: 'टाइल पारदर्शिता', csh: 'ऊपर / नीचे खिसकाएँ', csl: 'ठोस', cin: 'अदृश्य', cup: '↑ ऊपर', cdn: 'नीचे ↓',
-  cord: 'टाइल क्रम', cordd: 'किसी भी टाइल को दबाए रखो और कहीं भी छोड़ो। वह वहीं रहेगी।', cor: 'क्रम रीसेट', call: 'सभी थीम पर लागू करें', csv: 'सेव', crs: 'रीसेट', csd: 'सेव हो गया' });
+  cord: 'टाइल क्रम', cordd: 'किसी भी टाइल को दबाए रखो और कहीं भी छोड़ो। वह वहीं रहेगी।', cor: 'क्रम रीसेट', call: 'सभी थीम (स्पेस छोड़कर)', csv: 'सेव', crs: 'रीसेट', csd: 'सेव हो गया' });
 openCust = function () {
   const v = cur(), nm = t('th')[THK.indexOf(TH)];
   cp.innerHTML = `<div class="cs-gr"></div>
@@ -1731,52 +1760,89 @@ openCust = function () {
   $('cRs').onclick = () => { $('cR1').value = CD.tr; $('cR2').value = CD.sh; live(); };
   $('cOr').onclick = () => { resetOrd(); toast(t('csd')); };
   $('cAll').onclick = () => $('cAll').classList.toggle('on');
-  $('cSv').onclick = () => { const n = rd(); if ($('cAll').classList.contains('on')) THK.forEach(k => CUST[k] = n); else CUST[TH] = n; try { localStorage.setItem(CUSTK, JSON.stringify(CUST)); } catch (e) { } toast(t('csd')); cp.classList.remove('open'); };
+  $('cSv').onclick = () => { const n = rd(); if ($('cAll').classList.contains('on')) THK.forEach(k => { if (k !== 'space') CUST[k] = n; }); else CUST[TH] = n; try { localStorage.setItem(CUSTK, JSON.stringify(CUST)); } catch (e) { } toast(t('csd')); cp.classList.remove('open'); };
   $('cX').onclick = closeCust; cp.classList.add('open');
 };
 
-/* ---------- v21: live wind, heavy rain where it really rains, dark weather = dark sky ---------- */
-const RCODE = { 51: .4, 53: .6, 55: .9, 56: .5, 57: .9, 61: 1, 63: 2.5, 65: 7, 66: 1.2, 67: 4, 80: 1.5, 81: 4, 82: 9, 95: 6, 96: 8, 99: 10 };
+/* ---------- v22: live wind, heavy rain, real lightning, several weather models, dark weather = dark sky ---------- */
+clouds = clouds2;
+const RCODE = { 51: .8, 53: 1.2, 55: 1.8, 56: 1, 57: 1.8, 61: 2, 63: 4, 65: 9, 66: 2, 67: 6, 80: 3, 81: 6, 82: 11, 95: 8, 96: 10, 99: 12 };
 function rainRate() {
   const w = W && W.w; if (!w) return 0; const c = w.current; let r = c.rain || 0;
   try { const m = w.minutely_15; if (m && m.time && m.precipitation) { let j = 0; for (let i = 0; i < m.time.length; i++) { if (m.time[i] <= c.time) j = i; else break; } r = Math.max(r, (m.precipitation[j] || 0) * 4); } } catch (e) { }
   return Math.max(r, RCODE[c.weather_code] || 0);
 }
 { const _sf = setFx; setFx = function () { _sf.apply(this, arguments); if (!W || !W.w) return; EV.rate = rainRate(); EV.wd = W.w.current.wind_direction_10m || 0; RP = null; }; }
-var RP = null, RPK = '', SPL = [];
+{ const _ds = drawSun; drawSun = function (c) { if (c === g && W) { c.save(); c.globalAlpha = clamp(skyVis() * 1.1, .18, 1); _ds.apply(this, arguments); c.restore(); } else _ds.apply(this, arguments); }; }
+var RP = null, RPK = '', SPL = [], BOLTS = [], NEXTB = 0;
 function rainLayers(w, h) {
-  const r = Math.min(EV.rate || 0, 12), key = w + 'x' + h + ':' + Math.round(r * 4); if (RP && RPK === key) return; RPK = key; RP = []; SPL = [];
-  const n = Math.min(1800, Math.round(w * h / 1300 * (.3 + r / 2.6)));
-  for (let i = 0; i < n; i++) { const z = Math.random(); RP.push({ x: Math.random() * (w + 240) - 120, y: Math.random() * h, z, v: (16 + r * 2.2) * (.55 + z * .9), l: (12 + r * 2.6) * (.5 + z * .9) }); }
+  const r = Math.min(EV.rate || 0, 14), key = w + 'x' + h + ':' + Math.round(r * 4); if (RP && RPK === key) return; RPK = key; RP = []; SPL = [];
+  const vis = clamp(.45 + Math.sqrt(r) * .62, .45, 2.5), n = Math.min(2600, Math.round(w * h / 560 * vis));
+  for (let i = 0; i < n; i++) { const z = Math.random(); RP.push({ x: Math.random() * (w + 300) - 150, y: Math.random() * h, z, v: (22 + r * 2.4) * (.5 + z * .95), l: (13 + r * 2) * (.45 + z * 1.0) }); }
 }
-function darkAmt() { const k = EV.k; let d = 0; if (k === 'storm') d = .6; else if (k === 'rain') d = .3 + Math.min(EV.rate || 0, 8) / 8 * .28; else if (k === 'snow') d = .16; else if (k === 'fog') d = .2; return Math.max(d, clamp((EV.cl - 55) / 45, 0, 1) * .32, Math.min(.5, (EV.rate || 0) / 14)); }
-function darkVeil(w, h) { if (TH === 'dots') return; const d = darkAmt(); if (d <= .01) return; g.fillStyle = TH === 'white' ? `rgba(55,65,82,${(d * .5).toFixed(3)})` : `rgba(3,6,12,${Math.min(.88, d).toFixed(3)})`; g.fillRect(0, 0, w, h); }
+function darkAmt() { const k = EV.k; let d = 0; if (k === 'storm') d = .72; else if (k === 'rain') d = .36 + Math.min(EV.rate || 0, 9) / 9 * .3; else if (k === 'snow') d = .18; else if (k === 'fog') d = .22; return Math.max(d, clamp(((EV.cl || 0) - 50) / 50, 0, 1) * .38, Math.min(.55, (EV.rate || 0) / 12)); }
+function darkVeil(w, h) { if (TH === 'dots') return; const d = darkAmt(); if (d <= .01) return; g.fillStyle = TH === 'white' ? `rgba(55,65,82,${(d * .5).toFixed(3)})` : `rgba(3,6,12,${Math.min(.9, d).toFixed(3)})`; g.fillRect(0, 0, w, h); }
+function mkBolt(w, h) {
+  const x0 = w * (.12 + Math.random() * .76); let x = x0, y = -10; const pts = [[x, y]], br = [], end = h * (.4 + Math.random() * .45);
+  while (y < end) {
+    const dx = (Math.random() - .5) * 70; x += dx; y += 14 + Math.random() * 30; pts.push([x, y]);
+    if (Math.random() < .17 && y > h * .06) { const bp = [[x, y]]; let bx = x, by = y; const dir = Math.random() < .5 ? -1 : 1, len = 3 + Math.floor(Math.random() * 6); for (let i = 0; i < len; i++) { bx += dir * (8 + Math.random() * 26) + (Math.random() - .5) * 14; by += 10 + Math.random() * 24; bp.push([bx, by]); if (Math.random() < .12 && i > 1) { const sp = [[bx, by]]; let sx2 = bx, sy2 = by; for (let q = 0; q < 3; q++) { sx2 += -dir * (6 + Math.random() * 14); sy2 += 8 + Math.random() * 16; sp.push([sx2, sy2]); } br.push(sp); } } br.push(bp); }
+  }
+  return { pts, br, t: 0, pat: [1, .2, .95, .1, .75, .3, .55, .15, .35, .1, .2, 0] };
+}
+function drawBolts(w, h) {
+  for (let i = BOLTS.length - 1; i >= 0; i--) {
+    const b = BOLTS[i]; b.t++; const idx = Math.floor(b.t / 2); if (idx >= b.pat.length) { BOLTS.splice(i, 1); continue; } const a = b.pat[idx];
+    g.fillStyle = `rgba(190,205,255,${(a * .22).toFixed(3)})`; g.fillRect(0, 0, w, h);
+    g.lineJoin = 'round'; g.lineCap = 'round';
+    const stroke = pts => { g.beginPath(); pts.forEach((p, j) => j ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.stroke(); };
+    [[26, .12, '140,165,255'], [13, .25, '165,185,255'], [5.5, .7, '215,225,255'], [2.6, 1, '255,255,255']].forEach(([lw, al, c]) => { g.strokeStyle = `rgba(${c},${(al * a).toFixed(3)})`; g.lineWidth = lw; stroke(b.pts); g.lineWidth = lw * .5; b.br.forEach(stroke); });
+  }
+}
 function precip(w, h, ms, lt) {
   const r = EV.rate || 0;
   if (r > 0 && !RM) {
-    rainLayers(w, h); const sl = Math.sin((((EV.wd || 0) + 180) % 360) * Math.PI / 180) * Math.min(.6, .1 + (EV.wind || 0) / 45), col = lt ? '40,80,150' : '205,228,255', a0 = lt ? .55 : .42;
-    for (let pass = 0; pass < 2; pass++) {
-      g.strokeStyle = `rgba(${col},${pass ? a0 + .22 : a0 - .12})`; g.lineWidth = pass ? 1.5 + Math.min(r, 10) * .1 : .8; g.beginPath();
+    rainLayers(w, h); const sl = Math.sin((((EV.wd || 0) + 180) % 360) * Math.PI / 180) * Math.min(.65, .12 + (EV.wind || 0) / 40), col = lt ? '40,80,150' : '205,228,255', a0 = lt ? .6 : .5;
+    g.fillStyle = `rgba(${col},${(.03 + Math.min(r, 10) / 160).toFixed(3)})`; g.fillRect(0, 0, w, h);
+    for (let pass = 0; pass < 3; pass++) {
+      g.strokeStyle = `rgba(${col},${[a0 - .3, a0 - .12, a0 + .02][pass]})`; g.lineWidth = [.6, .9, 1.3 + Math.min(r, 10) * .05][pass]; g.beginPath();
       RP.forEach(p => {
-        if ((p.z > .55) !== (pass === 1)) return; g.moveTo(p.x, p.y); g.lineTo(p.x + sl * p.l, p.y + p.l); p.y += p.v; p.x += sl * p.v;
-        if (p.y > h) { if (pass && SPL.length < 90 && Math.random() < .35) SPL.push({ x: p.x, y: h - 2 - Math.random() * 40, t: 0 }); p.y = -p.l - Math.random() * 60; p.x = Math.random() * (w + 240) - 120; }
+        const lv = p.z < .4 ? 0 : p.z < .75 ? 1 : 2; if (lv !== pass) return; g.moveTo(p.x, p.y); g.lineTo(p.x + sl * p.l, p.y + p.l); p.y += p.v; p.x += sl * p.v;
+        if (p.y > h) { if (lv && SPL.length < 140 && Math.random() < .45) SPL.push({ x: p.x, y: h - 2 - Math.random() * 60, t: 0 }); p.y = -p.l - Math.random() * 80; p.x = Math.random() * (w + 300) - 150; }
       }); g.stroke();
     }
-    g.lineWidth = 1; for (let i = SPL.length - 1; i >= 0; i--) { const s0 = SPL[i]; s0.t += .06; if (s0.t >= 1) { SPL.splice(i, 1); continue; } g.strokeStyle = `rgba(${col},${(.5 * (1 - s0.t)).toFixed(3)})`; g.beginPath(); g.ellipse(s0.x, s0.y, 2 + s0.t * 12, .8 + s0.t * 3, 0, 0, 7); g.stroke(); }
-    const mg = g.createLinearGradient(0, h - 240, 0, h); mg.addColorStop(0, `rgba(${col},0)`); mg.addColorStop(1, `rgba(${col},${(.05 + Math.min(r, 10) / 90).toFixed(3)})`); g.fillStyle = mg; g.fillRect(0, h - 240, w, 240);
+    g.lineWidth = 1; for (let i = SPL.length - 1; i >= 0; i--) { const s0 = SPL[i]; s0.t += .07; if (s0.t >= 1) { SPL.splice(i, 1); continue; } g.strokeStyle = `rgba(${col},${(.55 * (1 - s0.t)).toFixed(3)})`; g.beginPath(); g.ellipse(s0.x, s0.y, 2 + s0.t * 14, .8 + s0.t * 3.4, 0, 0, 7); g.stroke(); }
+    const mg = g.createLinearGradient(0, h - 280, 0, h); mg.addColorStop(0, `rgba(${col},0)`); mg.addColorStop(1, `rgba(${col},${(.06 + Math.min(r, 10) / 70).toFixed(3)})`); g.fillStyle = mg; g.fillRect(0, h - 280, w, 280);
+    if (EV.k === 'storm' || r >= 8) { if (ms > NEXTB) { BOLTS.push(mkBolt(w, h)); if (Math.random() < .45) setTimeout(() => BOLTS.push(mkBolt(w, h)), 180 + Math.random() * 260); NEXTB = ms + 2200 + Math.random() * 6500; } drawBolts(w, h); }
   }
   if (EV.snow > 0) { g.fillStyle = lt ? 'rgba(120,150,190,.85)' : 'rgba(255,255,255,.85)'; PT.forEach(p => { if (!p.r) { g.beginPath(); g.arc(p.x, p.y, p.s, 0, 7); g.fill(); p.y += p.v; p.x += Math.sin(ms / 900 + p.y * .01) * .6; if (p.y > h) { p.y = -5; p.x = Math.random() * w; } } }); }
-  if (EV.k === 'storm' || r >= 8) { if (!RM && Math.random() < (EV.k === 'storm' ? .006 : .002)) flash = 1; if (flash > .02) { g.fillStyle = `rgba(255,255,255,${flash * .22})`; g.fillRect(0, 0, w, h); flash *= .9; } }
 }
-/* live poll: wind, rain and sky are re-read every 2 minutes, no cache */
+/* several weather models: the stormiest one wins, CAPE and gusts can raise a storm */
+const MODS = ['best_match', 'icon_seamless', 'gfs_seamless', 'ecmwf_ifs025'], SEVC = { 0: 0, 1: 1, 2: 1, 3: 2, 45: 2, 48: 2, 51: 3, 53: 3, 55: 4, 56: 4, 57: 4, 61: 4, 63: 5, 65: 7, 66: 5, 67: 7, 71: 3, 73: 5, 75: 6, 77: 3, 80: 4, 81: 6, 82: 8, 85: 5, 86: 7, 95: 9, 96: 10, 99: 10 };
+async function modelsMerge(p) {
+  let d = null; for (const vars of ['weather_code,cloud_cover,rain,precipitation,wind_gusts_10m,cape', 'weather_code,cloud_cover,rain,precipitation,wind_gusts_10m']) {
+    try { const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=${vars}&models=${MODS.join(',')}&timezone=auto&_=${Date.now()}`, { cache: 'no-store' }); if (r.ok) { d = await r.json(); break; } } catch (e) { }
+  }
+  if (!d || !d.current) return null; const n = d.current, rows = [];
+  MODS.forEach(m => { const g2 = k => { const v = n[k + '_' + m]; return v !== undefined ? v : (m === 'best_match' || MODS.every(x => n[k + '_' + x] === undefined) ? n[k] : undefined); }; const wc = g2('weather_code'); if (wc == null) return; rows.push({ wc, cl: g2('cloud_cover') || 0, rain: Math.max(g2('rain') || 0, g2('precipitation') || 0), gust: g2('wind_gusts_10m') || 0, cape: g2('cape') || 0 }); });
+  if (!rows.length) return null; let top = rows[0]; rows.forEach(x => { if ((SEVC[x.wc] || 0) > (SEVC[top.wc] || 0)) top = x; });
+  let code = top.wc; const cl = Math.max(...rows.map(x => x.cl)), rain = Math.max(...rows.map(x => x.rain)), gust = Math.max(...rows.map(x => x.gust)), cape = Math.max(...rows.map(x => x.cape));
+  if (code < 95 && ((cape >= 1800 && (rain > .2 || cl > 70)) || (cape >= 1000 && rain >= 2) || (gust >= 60 && cl >= 80 && rain > 0))) code = 95;
+  return { code, cl, rain, gust };
+}
+function applyModels(c, m) { if (!m) return false; const ch = c.weather_code !== m.code; c.weather_code = m.code; c.cloud_cover = Math.max(c.cloud_cover || 0, m.cl); c.rain = Math.max(c.rain || 0, m.rain); c.wind_gusts_10m = Math.max(c.wind_gusts_10m || 0, m.gust); return ch; }
+{ const _gw = getWeather; getWeather = async function (p) { const mp = Promise.race([modelsMerge(p), new Promise(res => setTimeout(() => res(null), 4000))]).catch(() => null); const r = await _gw(p); try { applyModels(r.w.current, await mp); } catch (e) { } return r; }; }
+/* live poll every 2 minutes, never cached */
 async function livePoll() {
   if (!W || document.hidden || REFING) return; const p = place;
   try {
-    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover,wind_direction_10m&minutely_15=precipitation&forecast_minutely_15=24&timezone=auto&_=${Date.now()}`, { cache: 'no-store' });
+    const [r, m] = await Promise.all([fetch(`https://api.open-meteo.com/v1/forecast?latitude=${p.lat}&longitude=${p.lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m,pressure_msl,wind_gusts_10m,rain,snowfall,cloud_cover,wind_direction_10m&minutely_15=precipitation&forecast_minutely_15=24&timezone=auto&_=${Date.now()}`, { cache: 'no-store' }), modelsMerge(p)]);
     if (!r.ok) return; const d = await r.json(); if (!W || p.lat !== place.lat || p.lon !== place.lon) return;
     const c = W.w.current, n = d.current; if (!n || (n.time && c.time && n.time < c.time)) return;
-    const ch = ['wind_direction_10m', 'wind_speed_10m', 'wind_gusts_10m', 'rain', 'weather_code', 'cloud_cover'].some(k => n[k] !== c[k]);
-    Object.assign(c, n); if (d.minutely_15) W.w.minutely_15 = d.minutely_15; if (ch) { setFx(); try { drawGauges(); } catch (e) { } }
+    const was = ['wind_direction_10m', 'wind_speed_10m', 'wind_gusts_10m', 'rain', 'weather_code', 'cloud_cover'].map(k => c[k]);
+    Object.assign(c, n); if (d.minutely_15) W.w.minutely_15 = d.minutely_15; const chm = applyModels(c, m);
+    const now = ['wind_direction_10m', 'wind_speed_10m', 'wind_gusts_10m', 'rain', 'weather_code', 'cloud_cover'].map(k => c[k]);
+    if (was.some((v, i) => v !== now[i])) { setFx(); try { drawGauges(); } catch (e) { } if (was[4] !== now[4]) { try { render(true); } catch (e) { } } }
   } catch (e) { }
 }
 setInterval(livePoll, 120000); document.addEventListener('visibilitychange', () => { if (!document.hidden) livePoll(); });
